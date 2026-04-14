@@ -16,5 +16,7 @@ function getENV(name) {
 export const ENV = {
     PORT: getENV("PORT") || 5000,
     NODE_ENV: getENV("NODE_ENV"),
-    MONGO_URI: getENV("MONGO_URI")
+    MONGO_URI: getENV("MONGO_URI"),
+    JWT_SECRET: getENV("JWT_SECRET"),
+    JWT_EXPIRES_IN: getENV("JWT_EXPIRES_IN")
 }
