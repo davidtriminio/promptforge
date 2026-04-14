@@ -1,7 +1,7 @@
 ﻿import mongoose from "mongoose";
 import {ENV} from "./ENV.js";
 
-export const dbConnect = async () => {
+export const connectDB = async () => {
     try {
         const mongoUri = ENV.MONGO_URI
         if (!mongoUri) {
