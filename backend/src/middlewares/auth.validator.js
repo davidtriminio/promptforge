@@ -20,7 +20,7 @@ export const registerValidator = [
     .notEmpty()
     .withMessage("Password is required.")
     .isLength({min: 6})
-    .withMessage("Passwort must be at least 6 characters.")
+    .withMessage("Password must be at least 6 characters.")
 ]
 
 export const loginValidator = [
