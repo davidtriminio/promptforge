@@ -2,7 +2,7 @@
 import {ENV} from "../config/ENV.js";
 
 const generateToken = (userId) => {
-    jwt.sign(
+    return jwt.sign(
         {id: userId},
         ENV.JWT_SECRET,
         {
