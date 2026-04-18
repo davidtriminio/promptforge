@@ -1,7 +1,7 @@
 ﻿import express from "express";
 import protect from "../middlewares/auth.middleware.js";
 import {
-    createPrompt,
+    createPrompt, deletePrompt,
     getPromptById,
     getPrompts,
     toggleFavoritePrompt,
@@ -23,6 +23,7 @@ router
 .route("/:id")
 .get(getPromptById)
 .put(updatePromptValidator, validate, updatePrompt)
+.delete(deletePrompt)
 
 router
 .patch("/:id/favorite", toggleFavoritePrompt)
