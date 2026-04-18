@@ -40,7 +40,7 @@ export const getPrompts = async (req, res) => {
 
         return res.status(200).json({
             count: prompts.length,
-            prompt
+            prompts
         })
     } catch (e) {
         return res.status(500).json({
