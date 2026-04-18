@@ -51,15 +51,15 @@ export const getPrompts = async (req, res) => {
 
 export const getPromptById = async (req, res) => {
     try {
-        const {id} = req.para
+        const {id} = req.params
 
         if (!isValidId(id)) {
             return res.status(400).json({
-                message: "Invalid promptId"
+                message: "Invalid prompt Id"
             })
         }
 
-        const prompt = Prompt.findOne({
+        const prompt = await Prompt.findOne({
             _id: id,
             user: req.user._id
         })
