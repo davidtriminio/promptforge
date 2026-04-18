@@ -1,5 +1,5 @@
 ﻿import {Router} from "express";
-import {loginValidator, registerValidator} from "../middlewares/auth.validator.js";
+import {loginValidator, registerValidator} from "../validators/auth.validator.js";
 import validate from "../middlewares/validate.middleware.js";
 import {getMe, login, register} from "../controllers/auth.controller.js";
 import protect from "../middlewares/auth.middleware.js";
