@@ -41,17 +41,17 @@ export const createCategory = async (req, res) => {
 
 export const getCategories = async (req, res) => {
     try {
-        const categories = Category.find({
+        const categories = await Category.find({
             user: req.user._id
         }).sort({name: 1})
 
-        return res.status.json({
+        return res.status(200).json({
             count: categories.length,
             categories
         })
     } catch (e) {
         return res.status(500).json({
-            message: "Failed fetching categories."
+            message: `Failed fetching categories.`
         })
     }
 }
@@ -106,7 +106,7 @@ export const updateCategory = async (req, res) => {
         })
     } catch (e) {
         return res.status(500).json({
-            message: "Error updating category."
+            message: `Error updating category.`
         })
     }
 }
@@ -144,7 +144,7 @@ export const deleteCategory = async (req, res) => {
         })
     } catch (e) {
         return res.status(500).json({
-            message: "Error deleting category."
+            message: `Error deleting category.`
         })
     }
 }
