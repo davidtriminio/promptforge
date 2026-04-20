@@ -1,5 +1,6 @@
 ﻿import mongoose from "mongoose";
 import Prompt from "../models/Prompt.model.js";
+import Category from "../models/Category.model.js";
 
 const normalizeTags = (tags = []) => {
     return [...new Set(
@@ -13,10 +14,22 @@ const isValidId = (id) => mongoose.Types.ObjectId.isValid(id)
 
 export const createPrompt = async (req, res) => {
     try {
-        const {title, description, content, tags} = req.body
+        const {title, description, content, tags, category} = req.body
+
+        const isCategoryValid = await validateCategoryOwnership(
+            category,
+            req.user._id
+        )
+
+        if (!isCategoryValid) {
+            return res.status(400).json({
+                message: "Invalid category"
+            })
+        }
 
         const prompt = await Prompt.create({
             user: req.user._id,
+            category: category || null,
             title,
             description,
             content,
@@ -94,6 +107,24 @@ export const updatePrompt = async (req, res) => {
 
         if (updateData.tags) {
             updateData.tags = normalizeTags(updateData.tags)
+        }
+
+        if (updateData.category === null) {
+            updateData.$unset = {category: ""}
+            delete updateData.category
+        }
+
+        if (updateData.category) {
+            const isCategoryValid = await validateCategoryOwnership(
+                updateData.category,
+                req.user._id
+            )
+
+            if (!isCategoryValid) {
+                return res.status(400).json({
+                    message: "Invalid category"
+                })
+            }
         }
 
         const prompt = await Prompt.findOneAndUpdate({
@@ -186,4 +217,17 @@ export const toggleFavoritePrompt = async (req, res) => {
     } catch (e) {
         return res.status(500).json("Error updating favorite status.")
     }
+}
+
+export const validateCategoryOwnership = async (categoryId, userId) => {
+    if (!categoryId) {
+        return true
+    }
+
+    const category = await Category.findOne({
+        _id: categoryId,
+        user: userId
+    })
+
+    return Boolean(category)
 }
