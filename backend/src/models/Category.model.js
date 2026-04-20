@@ -1,4 +1,4 @@
-﻿import mongoose, {mongo} from "mongoose";
+﻿import mongoose from "mongoose";
 
 const categorySchema = new mongoose.Schema({
         user: {
@@ -32,6 +32,6 @@ const categorySchema = new mongoose.Schema({
 
 categorySchema.index({user: 1, normalizedName: 1}, {unique: true})
 
-const Category = new mongoose.Model("Category", categorySchema)
+const Category = new mongoose.model("Category", categorySchema)
 
 export default Category
