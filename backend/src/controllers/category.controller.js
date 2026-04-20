@@ -25,6 +25,7 @@ export const createCategory = async (req, res) => {
         const category = await Category.create({
             user: req.user._id,
             name,
+            normalizedName,
             color
         })
 
@@ -33,7 +34,7 @@ export const createCategory = async (req, res) => {
         })
     } catch (e) {
         return res.status(500).json({
-            message: "Error creating category."
+            message: `Error creating category.`
         })
     }
 }
