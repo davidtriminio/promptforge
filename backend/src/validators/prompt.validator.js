@@ -33,6 +33,11 @@ export const createPromptValidator = [
     .trim()
     .isLength({min: 1, max: 30})
     .withMessage("Each tag must be between 1 and 30 characters."),
+
+    body("category")
+    .optional({nullable: true})
+    .isMongoId()
+    .withMessage("Category must be a valid ID.")
 ]
 
 export const updatePromptValidator = [
@@ -65,5 +70,10 @@ export const updatePromptValidator = [
     .withMessage("Each tag must be String.")
     .trim()
     .isLength({min: 1, max: 300})
-    .withMessage("")
+    .withMessage(""),
+
+    body("category")
+    .optional({nullable: true})
+    .isMongoId()
+    .withMessage("Category must be a valid ID.")
 ]
