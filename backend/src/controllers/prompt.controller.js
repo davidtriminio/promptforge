@@ -155,7 +155,7 @@ export const getPrompts = async (req, res) => {
             Prompt.countDocuments(query)
         ])
 
-        const totalPages = Math.ceil(totla / limitNumber)
+        const totalPages = Math.ceil(total / limitNumber)
 
         return res.status(200).json({
             count: prompts.length,
@@ -178,7 +178,7 @@ export const getPrompts = async (req, res) => {
         })
     } catch (e) {
         return res.status(500).json({
-            message: "Error fetching prompts."
+            message: `Error fetching prompts.`
         })
     }
 }
