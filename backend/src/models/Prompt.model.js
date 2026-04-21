@@ -7,6 +7,12 @@ const promptSchema = new mongoose.Schema({
         required: true,
         index: true
     },
+    category: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Category",
+        default: null,
+        index: true
+    },
     title: {
         type: String,
         required: [true, "Title is required."],
@@ -21,7 +27,7 @@ const promptSchema = new mongoose.Schema({
         maxLength: [300, "Description cannot exceed 300 characters."],
         default: ""
     },
-    content:{
+    content: {
         type: String,
         required: [true, "Prompt is required."],
         trim: true,
