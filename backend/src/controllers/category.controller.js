@@ -67,7 +67,7 @@ export const updateCategory = async (req, res) => {
         }
 
         const category = await Category.findOne({
-            id: id,
+            _id: id,
             user: req.user._id
         })
 
@@ -101,7 +101,7 @@ export const updateCategory = async (req, res) => {
 
         await category.save()
 
-        return res.status(200).message({
+        return res.status(200).json({
             message: "Category updated successfully."
         })
     } catch (e) {
@@ -113,7 +113,7 @@ export const updateCategory = async (req, res) => {
 
 export const deleteCategory = async (req, res) => {
     try {
-        const {id} = req.params
+        const { id } = req.params
 
         if (!isValidId(id)) {
             return res.status(400).json({
@@ -121,7 +121,7 @@ export const deleteCategory = async (req, res) => {
             })
         }
 
-        const category = await Category.findOne({
+        const category = await Category.findOneAndDelete({
             _id: id,
             user: req.user._id
         })
