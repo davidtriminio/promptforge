@@ -12,6 +12,19 @@ const normalizeTags = (tags = []) => {
 
 const isValidId = (id) => mongoose.Types.ObjectId.isValid(id)
 
+export const validateCategoryOwnership = async (categoryId, userId) => {
+    if (!categoryId) {
+        return true
+    }
+
+    const category = await Category.findOne({
+        _id: categoryId,
+        user: userId
+    })
+
+    return Boolean(category)
+}
+
 export const createPrompt = async (req, res) => {
     try {
         const {title, description, content, tags, category} = req.body
@@ -48,11 +61,119 @@ export const createPrompt = async (req, res) => {
 
 export const getPrompts = async (req, res) => {
     try {
-        const prompts = await Prompt.find({user: req.user._id})
-        .sort({createdAt: -1})
+
+        const {
+            search = "",
+            category,
+            tag,
+            favorite,
+            sort = "newest",
+            page = 1,
+            limit = 10
+        } = req.query
+
+        const query = {
+            user: req.user._id
+        }
+
+        if (search.trim()) {
+            query.$or = [
+                {title: {$regex: search.trim(), $options: "i"}},
+                {description: {$regex: search.trim(), $options: "i"}},
+                {content: {$regex: search.trim(), $options: "i"}}
+            ]
+        }
+
+        if (category) {
+            if (!isValidId(category)) {
+                return res.status(400).json({
+                    message: "Invalid category ID."
+                })
+            }
+
+            const isCategoryValid = await validateCategoryOwnership(
+                category,
+                req.user._id
+            )
+
+            if (!isCategoryValid) {
+                return res.status(400).json({
+                    message: "Invalid category."
+                })
+            }
+
+            query.category = category
+        }
+
+        if (tag) {
+            query.tags = tag.trim().toLowerCase()
+        }
+
+        if (favorite !== undefined) {
+            if (favorite !== "true" && favorite !== "false") {
+                return res.status(400).json({
+                    message: "Favorite must be true or false."
+                })
+            }
+
+            query.isFavorite = favorite === "true"
+        }
+
+        const allowedSorts = {
+            newest: {createdAt: -1},
+            oldest: {createdAt: 1},
+            updated: {updatedAt: -1},
+            titleAsc: {title: 1},
+            titleDesc: {title: -1}
+        }
+
+        const sortOptions = allowedSorts[sort] || allowedSorts.newest
+
+        const pageNumber = Number(page)
+        const limitNumber = Number(limit)
+
+        if (
+            !Number.isInteger(pageNumber) ||
+            pageNumber < 1 ||
+            !Number.isInteger(limitNumber) ||
+            limitNumber < 1 ||
+            limitNumber > 100
+        ) {
+            return res.status(400).json({
+                message: "Page and limit must be valid positive integers."
+            })
+        }
+
+        const skip = (pageNumber - 1) * limitNumber
+
+        const [prompts, total] = await Promise.all([
+            Prompt.find(query)
+            .populate("category", "name color")
+            .sort(sortOptions)
+            .skip(skip)
+            .limit(limitNumber),
+            Prompt.countDocuments(query)
+        ])
+
+        const totalPages = Math.ceil(totla / limitNumber)
 
         return res.status(200).json({
             count: prompts.length,
+            pagination: {
+                total,
+                page: pageNumber,
+                limit: limitNumber,
+                totalPages,
+                hasNextPage: pageNumber < totalPages,
+                hasPrevPage: pageNumber > 1
+            },
+            filters: {
+                search,
+                category: category || null,
+                tag: tag || null,
+                favorite: favorite ?? null,
+                sort
+            },
             prompts
         })
     } catch (e) {
@@ -75,7 +196,7 @@ export const getPromptById = async (req, res) => {
         const prompt = await Prompt.findOne({
             _id: id,
             user: req.user._id
-        })
+        }).populate("category", "name color")
 
         if (!prompt) {
             return res.status(404).json({
@@ -136,7 +257,7 @@ export const updatePrompt = async (req, res) => {
                 new: true,
                 runValidators: true
             }
-        )
+        ).populate("category", "name color")
 
         if (!prompt) {
             return res.status(404).json({
@@ -217,17 +338,4 @@ export const toggleFavoritePrompt = async (req, res) => {
     } catch (e) {
         return res.status(500).json("Error updating favorite status.")
     }
-}
-
-export const validateCategoryOwnership = async (categoryId, userId) => {
-    if (!categoryId) {
-        return true
-    }
-
-    const category = await Category.findOne({
-        _id: categoryId,
-        user: userId
-    })
-
-    return Boolean(category)
 }
