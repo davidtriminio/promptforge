@@ -1,18 +1,25 @@
 ﻿import axios from "axios";
 import {ENV} from "../utils/ENV.js";
 
-const axiosClient = axios.create({
-    baseURL: ENV.VITE_API_URL
-})
+let axiosClientInstance = null;
 
-axiosClient.interceptors.request.use((config) => {
-    const token = localStorage.getItem("promptforge_token")
+function getAxiosClient() {
+    if (!axiosClientInstance) {
+        axiosClientInstance = axios.create({
+            baseURL: ENV.VITE_API_URL
+        })
 
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`
+        axiosClientInstance.interceptors.request.use((config) => {
+            const token = localStorage.getItem("promptforge_token")
+
+            if (token) {
+                config.headers.Authorization = `Bearer ${token}`
+            }
+
+            return config
+        })
     }
+    return axiosClientInstance
+}
 
-    return config
-})
-
-export default axiosClient
+export default getAxiosClient
