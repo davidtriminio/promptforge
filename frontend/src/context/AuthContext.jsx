@@ -51,10 +51,8 @@ export const AuthProvider = ({children}) => {
     }
 
     useEffect(() => {
-        return () => {
-            loadAuthenticatedUser()
-        };
-    }, [[]])
+        loadAuthenticatedUser()
+    }, [])
 
     const value = useMemo(() => ({
         user,

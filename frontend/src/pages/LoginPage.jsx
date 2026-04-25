@@ -20,6 +20,7 @@ const LoginPage = () => {
             await login(formData)
             navigate("/dashboard")
         } catch (e) {
+            console.log(e)
             setServerError(
                 e.response?.data?.message || "Unable to login"
             )
