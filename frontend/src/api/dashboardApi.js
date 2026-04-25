@@ -1,6 +1,6 @@
 ﻿import axiosClient from "./axiosClient.js";
 
-export const dashboardApi = async () => {
+export const getDashboardStatsRequest = async () => {
     try {
         const {data} = await axiosClient.get("/dashboard/stats")
         return data
