@@ -9,21 +9,29 @@ export const AuthProvider = ({children}) => {
     const [authLoading, setAuthLoading] = useState(true)
 
     const register = async (formData) => {
-        const data = await registerRequest(formData)
+        try {
+            const data = await registerRequest(formData)
 
-        storage.setToken(data.token)
-        setUser(data.user)
+            storage.setToken(data.token)
+            setUser(data.user)
 
-        return data
+            return data
+        } catch (e) {
+            throw e
+        }
     }
 
     const login = async (formData) => {
-        const data = await loginRequest(formData)
+        try {
+            const data = await loginRequest(formData)
 
-        storage.setToken(data.token)
-        setUser(data.user)
+            storage.setToken(data.token)
+            setUser(data.user)
 
-        return data
+            return data
+        } catch (e) {
+            throw e
+        }
     }
 
     const logout = async () => {
