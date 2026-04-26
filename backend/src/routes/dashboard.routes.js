@@ -2,8 +2,8 @@
 import {getDashboardStats} from "../controllers/dashboard.controller.js";
 import protect from "../middlewares/auth.middleware.js";
 
-const router = express.router()
+const router = express.Router()
 
-router.get("/stats", protect, getDashboardStats())
+router.get("/stats", protect, getDashboardStats)
 
 export default router
