@@ -42,10 +42,10 @@ const promptSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     }
-})
+}, {timestamps: true})
 
 promptSchema.index({user: 1, createdAt: -1})
 
-export const Prompt = mongoose.model("Prompst", promptSchema)
+export const Prompt = mongoose.model("Prompt", promptSchema)
 
 export default Prompt
