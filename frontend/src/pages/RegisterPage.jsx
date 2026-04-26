@@ -22,7 +22,7 @@ const RegisterPage = () => {
             navigate("/dashboard")
         } catch (e) {
             setServerError(
-                errors.response?.data?.message || "Unable to register"
+                e.response?.data?.message || "Unable to register"
             )
         }
     }
