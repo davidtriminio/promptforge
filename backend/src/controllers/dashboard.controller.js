@@ -29,13 +29,13 @@ export const getDashboardStats = async (req, res) => {
                     $ifNull: ["$categoryData._id", null]
                 }, name: {
                     $first: {
-                        $ifNull: ["$categaryDCata.name", "Uncategorized"]
+                        $ifNull: ["$categoryData.name", "Uncategorized"]
                     }
                 }, color: {
                     $first: {
                         $ifNull: ["$categoryData.color", "#94a3b8"]
                     }
-                }, $count: {
+                }, count: {
                     $sum: 1
                 }
             },
@@ -48,7 +48,7 @@ export const getDashboardStats = async (req, res) => {
             }])])
 
         const usedCategoriesCount = promptsByCategory.filter(
-            (item) => item_id !== null
+            (item) => item._id !== null
         ).length
 
         return res.status(200).json({
