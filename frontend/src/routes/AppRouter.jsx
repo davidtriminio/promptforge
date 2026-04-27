@@ -18,9 +18,10 @@ const AppRouter = () => {
                 </Route>
 
                 <Route element={<ProtectedRoute/>}>
-                    <Route element={<AppLayout/>}/>
-                    <Route path="/dashboard" element={<DashboardPage/>}/>
-                    <Route path="/prompts" element={<PromptsPage/>}/>
+                    <Route element={<AppLayout/>}>
+                        <Route path="/dashboard" element={<DashboardPage/>}/>
+                        <Route path="/prompts" element={<PromptsPage/>}/>
+                    </Route>
                 </Route>
 
                 <Route path="/" element={<Navigate to="/dashboard" replace/>}/>
