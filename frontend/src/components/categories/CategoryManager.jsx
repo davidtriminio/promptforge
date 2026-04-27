@@ -1,4 +1,6 @@
-﻿const CategoryManager = ({
+﻿import {useState} from "react";
+
+const CategoryManager = ({
                              categories,
                              onCrete,
                              onDelete,
@@ -39,13 +41,13 @@
                     value={color}
                     onChange={(event) => setColor(event.target.value)}
                 />
-                <input
+                <button
                     type={"submit"}
                     className={"btn btn-neutral rounded-md"}
                     disabled={isCreating}
                 >
                     {isCreating ? "Adding..." : "Add"}
-                </input>
+                </button>
             </form>
             <div className={"mt-4 flex flex-wrap gap-2"}>
                 {categories.map((category) => (
