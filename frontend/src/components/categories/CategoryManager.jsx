@@ -2,7 +2,7 @@
 
 const CategoryManager = ({
                              categories,
-                             onCrete,
+                             onCreate,
                              onDelete,
                              isCreating = false
                          }) => {
@@ -14,7 +14,7 @@ const CategoryManager = ({
 
         if (!name.trim()) return
 
-        onCrete({
+        onCreate({
             name: name.trim(),
             color
         })
