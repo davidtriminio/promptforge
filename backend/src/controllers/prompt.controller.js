@@ -333,9 +333,10 @@ export const toggleFavoritePrompt = async (req, res) => {
         await prompt.save()
 
         return res.status(200).json({
-            message: "Favorite status updated successfully."
+            message: "Favorite status updated successfully.",
+            prompt
         })
     } catch (e) {
-        return res.status(500).json("Error updating favorite status.")
+        return res.status(500).json({message: "Error updating favorite status."})
     }
 }
