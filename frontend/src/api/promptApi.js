@@ -22,7 +22,7 @@ export const deletePromptRequest = async (id) => {
     return data
 }
 
-export const toggleFavoritePrompt = async (id) => {
+export const toggleFavoritePromptRequest = async (id) => {
     const {data} = await axiosClient.patch(`/prompts/${id}`)
     return data
 }
