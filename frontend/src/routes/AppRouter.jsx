@@ -7,6 +7,7 @@ import ProtectedRoute from "./ProtectedRoute.jsx";
 import AppLayout from "../components/layout/AppLayout.jsx";
 import DashboardPage from "../pages/DashboardPage.jsx";
 import PromptsPage from "../pages/PromptsPage.jsx";
+import CategoriesPage from "@/pages/CategoriesPage.jsx";
 
 const AppRouter = () => {
     return (
@@ -21,6 +22,7 @@ const AppRouter = () => {
                     <Route element={<AppLayout/>}>
                         <Route path="/dashboard" element={<DashboardPage/>}/>
                         <Route path="/prompts" element={<PromptsPage/>}/>
+                        <Route path="/categories" element={<CategoriesPage/>}/>
                     </Route>
                 </Route>
 
