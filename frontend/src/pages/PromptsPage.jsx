@@ -14,6 +14,7 @@ import PromptFilter from "../components/prompts/PromptFilter.jsx";
 import LoadingState from "../components/common/LoadingState.jsx";
 import PromptList from "../components/prompts/PromptList.jsx";
 import ConfirmModal from "../components/common/ConfirmModal.jsx";
+import PromptToolbar from "@/components/prompts/PromptToolbar.jsx";
 
 const defaultFilters = {
     search: "",
@@ -37,8 +38,6 @@ const PromptsPage = () => {
 
     const [deleteTarget, setDeleteTarget] = useState(null)
     const [deletingPrompt, setDeletingPrompt] = useState(false)
-
-    const [creatingCategory, setCreatingCategory] = useState(false)
 
     const formTitle = useMemo(() => {
         return editingPrompt ? "Edit prompt" : "Create Prompt"
@@ -65,7 +64,6 @@ const PromptsPage = () => {
     const loadCategories = async () => {
         try {
             setLoadingCategories(true)
-
             const data = await getCategoriesRequest()
             setCategories(data.categories || [])
         } catch (e) {
@@ -107,7 +105,8 @@ const PromptsPage = () => {
 
     const handleEditPrompt = (prompt) => {
         setEditingPrompt(prompt)
-        window.scrollTo({top: 0, behavior: "smooth"})
+        document.getElementById("prompt-form-section")
+        ?.scrollIntoView({behavior: "smooth", block: "start"})
     }
 
     const handleAskDeletePrompt = (prompt) => {
@@ -140,46 +139,27 @@ const PromptsPage = () => {
         }
     }
 
-    const handleCreateCategory = async (payload) => {
-        try {
-            setCreatingCategory(true)
-            setError("")
-
-            await createCategoryRequest(payload)
-            await loadCategories()
-        } catch (e) {
-            setError(e.response?.data?.message || "Unable to create category.")
-        } finally {
-            setCreatingCategory(false)
-        }
-    }
-
-    const handleDeleteCategory = async (category) => {
-        try {
-            setError("")
-            await deleteCategoryRequest(category._id)
-            await Promise.all([loadCategories(), loadPrompts()])
-        } catch (e) {
-            setError(e.response?.data?.message)
-        }
+    const handleScrollToForm = () => {
+        document.getElementById("prompt-form-section")
+        ?.scrollIntoView({behavior: "smooth", block: "start"})
     }
 
     return (
         <div className="space-y-6">
-            <section className="rounded-lg border bg-white p-6 shadow-sm">
-                <div className="flex flex-col gap-2">
-                    <h1 className="text-2xl font-semibold text-slate-900">Prompts</h1>
-                    <p className="text-slate-600">
-                        Create, organize, update, and refine your private prompt library.
-                    </p>
-                </div>
-            </section>
+            <PromptToolbar
+                isEditing={Boolean(editingPrompt)}
+                onCancelEditing={()=> setEditingPrompt(null)}
+                onScrollToForm={handleScrollToForm}
+                />
+
             {error ? <ErrorAlert message={error}/> : null}
 
-            <section className={"rounded-lg border bg-white p-6 shadow-sm"}>
+            <section
+                id={"prompt-form-section"}
+                className={"rounded-lg border bg-white p-6 shadow-sm"}>
                 <h2 className={"text-lg font-semibold text-slate-900"}>{formTitle}</h2>
                 <p className={"mt-1 text-sm text-slate-600"}>
-                    {editingPrompt ? "Update the selected prompt." : "Add new prompt to your workspace."}
+                    {editingPrompt ? "Actualizar Prompt seleccionado." : "Agregar nuevo prompt a tu Workspace."}
                 </p>
 
                 <div className={"mt-5"}>
@@ -187,36 +167,17 @@ const PromptsPage = () => {
                         initialValues={editingPrompt}
                         categories={categories}
                         onSubmit={handleSubmitPrompt}
-                        submitLabel={editingPrompt ? "Update prompt" : "Create prompt"}
+                        submitLabel={editingPrompt ? "Actualizar prompt" : "Crear prompt"}
                         isSubmitting={savingPrompt}
                     />
                 </div>
-
-                {editingPrompt ? (
-                    <div className={"mt-4 flex justify-end"}>
-                        <button
-                            type={"button"}
-                            className={"btn btn-ghost rounded-md"}
-                            onClick={() => setEditingPrompt(null)}
-                        >
-                            Cancel editing
-                        </button>
-                    </div>
-                ) : null}
             </section>
-
-            <CategoryManager
-                categories={categories}
-                onCreate={handleCreateCategory}
-                onDelete={handleDeleteCategory}
-                isCreating={creatingCategory}
-            />
 
             <PromptFilter
                 filters={filters}
                 categories={categories}
                 onApply={handleApplyFilters}
-            />
+                />
 
             {loadingCategories ? (
                 <LoadingState message={"Loading categories..."}/>
@@ -235,8 +196,8 @@ const PromptsPage = () => {
 
             <ConfirmModal
                 isOpen={Boolean(deleteTarget)}
-                title={"Delete prompt"}
-                message={`Are you sure you want to delete "${deleteTarget?.title}"? This action cannot be undone.`}
+                title={"Borrar prompt"}
+                message={`¿Seguro que quieres borrar el prompt "${deleteTarget?.title}"? Esta acción no se puede deshacer.`}
                 confirmText={"Delete"}
                 onConfirm={handleConfirmDeletePrompt}
                 onCancel={() => setDeleteTarget(null)}
