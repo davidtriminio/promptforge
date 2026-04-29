@@ -13,6 +13,9 @@ const Sidebar = () => {
                 <NavLink to={"/prompts"} className={getLinkClass}>
                     Prompts
                 </NavLink>
+                <NavLink to={"/categories"} className={getLinkClass}>
+                    Categories
+                </NavLink>
             </nav>
         </aside>
     )
