@@ -10,8 +10,8 @@ const PromptList = ({
     if (!prompts.length)
         return (
             <EmptyState
-                title={"No prompts found"}
-                description={"Try changing your filters or create your first prompt."}
+                title={"No se encontraron prompts."}
+                description={"Prueba a cambiar los filtros o a crear tu primer Prompt."}
             />
         )
 
