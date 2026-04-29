@@ -1,10 +1,16 @@
-﻿const LoadingState = ({message = "Loading..."}) => {
+﻿import {Card, CardContent} from "@/components/ui/card.tsx";
+import {Icon} from "@iconify/react";
+
+const LoadingState = ({message = "Cargando..."}) => {
     return (
-        <div className={"flex items-center gap-3 rounded-lg border bg-white px-4 py-4 text-sm text-slate-600"}>
-            <span className={"loading loading-spinner loading-sm"}>
-                <span>{message}</span>
-            </span>
-        </div>
+        <Card className={"border-border/70 shadow-sm"}>
+            <CardContent className={"flex items-center gap-3 py-5"}>
+                <Icon icon={"solar:refresh-circle-bold-duotone"}
+                      className={"h-5 w-5 animate-spin text-primary"}
+                />
+                <p className={"text-sm text-muted-foreground"}>{message}</p>
+            </CardContent>
+        </Card>
     )
 }
 export default LoadingState
