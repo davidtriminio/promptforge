@@ -6,10 +6,9 @@ import {
     toggleFavoritePromptRequest,
     updatePromptRequest
 } from "../api/promptApi.js";
-import {createCategoryRequest, deleteCategoryRequest, getCategoriesRequest} from "../api/categoryApi.js";
+import {getCategoriesRequest} from "../api/categoryApi.js";
 import ErrorAlert from "../components/common/ErrorAlert.jsx";
 import PromptForm from "../components/prompts/PromptForm.jsx";
-import CategoryManager from "../components/categories/CategoryManager.jsx";
 import PromptFilter from "../components/prompts/PromptFilter.jsx";
 import LoadingState from "../components/common/LoadingState.jsx";
 import PromptList from "../components/prompts/PromptList.jsx";
