@@ -68,12 +68,12 @@ const PromptFilter = ({filters, categories, onApply}) => {
 
                         <Select
                             value={localFilters.favorite || "__all__"}
-                            onValueChange={(value) => updateFilter("favorite", value === "all" ? "" : value)}>
+                            onValueChange={(value) => updateFilter("favorite", value === "__all__" ? "" : value)}>
                             <SelectTrigger className={"w-full"}>
                                 <SelectValue placeholder={"Todos los prompts"}/>
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value={__all__}>Todos</SelectItem>
+                                <SelectItem value={"__all__"}>Todos</SelectItem>
                                 <SelectItem value={"true"}>Favoritos</SelectItem>
                                 <SelectItem value={"false"}>No Favoritos</SelectItem>
                             </SelectContent>
