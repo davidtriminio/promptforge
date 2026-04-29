@@ -1,10 +1,21 @@
 ﻿import {useState} from "react";
+import {Card, CardContent} from "@/components/ui/card.tsx";
+import {Input} from "@/components/ui/input.tsx";
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select.tsx";
+import {Button} from "@/components/ui/button.tsx";
+import {Icon} from "@iconify/react";
 
+const defaultFilters = {
+    search: "",
+    category: "",
+    tag: "",
+    favorite: "",
+    sort: "newest"
+}
 const PromptFilter = ({filters, categories, onApply}) => {
     const [localFilters, setLocalFilters] = useState(filters);
 
-    const handleChange = (event) => {
-        const {name, value} = event.target
+    const updateFilter = (name, value) => {
         setLocalFilters((prev) => ({
             ...prev,
             [name]: value
@@ -17,96 +28,88 @@ const PromptFilter = ({filters, categories, onApply}) => {
     }
 
     const handleReset = () => {
-        const resetFilters = {
-            search: "",
-            category: "",
-            tag: "",
-            favorite: "",
-            sort: "newest"
-        }
-
-        setLocalFilters(resetFilters)
-        onApply(resetFilters)
+        setLocalFilters(defaultFilters)
+        onApply(defaultFilters)
     }
 
     return (
-        <form
-            onSubmit={handleSubmit}
-            className={"rounded-lg border bg-white p-4 shadow-sm"}
-        >
-            <div className={"grid gap-3 md:grid-cols-2 xl:grid-cols-5"}>
-                <input
-                    type={"text"}
-                    name={"search"}
-                    placeholder={"Search Prompts"}
-                    className={"input input-bordered w-full rounded-md"}
-                    value={localFilters.search}
-                    onChange={handleChange}
-                />
+        <Card className={"border-border/70 shadow-sm"}>
+            <CardContent className={"pt-6"}>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-5">
+                        <Input
+                            placeholder={"Buscar Prompts"}
+                            value={localFilters.search}
+                            onChange={(event) => updateFilter("search", event.target.value)}/>
 
-                <select
-                    name={"category"}
-                    className={"select select-bordered w-full rounded-md"}
-                    value={localFilters.category}
-                    onChange={handleChange}
-                >
-                    <option value={""}>
-                        All Categories
-                    </option>
-                    {categories.map((category) => (
-                        <option key={category._id} value={category._id}>
-                            {category.name}
-                        </option>
-                    ))}
-                </select>
 
-                <input
-                    type={"text"}
-                    name={"tag"}
-                    placeholder={"Filter by tag"}
-                    className={"input input-bordered w-full rounded-md"}
-                    value={localFilters.tag}
-                    onChange={handleChange}
-                />
+                        <Select
+                            value={localFilters.category || "__all__"}
+                            onValueChange={(value) =>
+                        updateFilter("category", value === "__all__" ? "" : value)}>
+                            <SelectTrigger className={"w-full"}>
+                                <SelectValue placeholder={"Todas las Categorias"}/>
+                            </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value={"__all__"}>todas las Categorias</SelectItem>
+                                    {categories.map((category) => (
+                                        <SelectItem key={category._id} value={category._id}>
+                                    {category.name}
+                                        </SelectItem>
+                                        ))}
+                                </SelectContent>
+                        </Select>
 
-                <select
-                    name={"favorite"}
-                    className={"select select-bordered w-full rounded-md"}
-                    value={localFilters.favorite}
-                    onChange={handleChange}
-                >
-                    <option value={""}>All prompts</option>
-                    <option value={"true"}>Favorites</option>
-                    <option value={"false"}>Non-Favorites</option>
-                </select>
+                        <Input
+                            placeholder={"Filtrar por Etiqueta"}
+                            value={localFilters.tag}
+                            onChange={(event) => updateFilter("tag", event.target.value)}
+                            />
 
-                <select
-                    name={"sort"}
-                    className={"select select-bordered w-full rounded-md"}
-                    value={localFilters.sort}
-                    onChange={handleChange}
-                >
-                    <option value={"newest"}>Newest</option>
-                    <option value={"oldest"}>Oldest</option>
-                    <option value={"updated"}>Recently Updated</option>
-                    <option value={"title_asc"}>Title A-Z</option>
-                    <option value={"title_desc"}>Title Z-A</option>
-                </select>
-            </div>
+                        <Select
+                            value={localFilters.favorite || "__all__"}
+                            onValueChange={(value) => updateFilter("favorite", value === "all" ? "" : value)}>
+                            <SelectTrigger className={"w-full"}>
+                                <SelectValue placeholder={"Todos los prompts"}/>
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value={__all__}>Todos</SelectItem>
+                                <SelectItem value={"true"}>Favoritos</SelectItem>
+                                <SelectItem value={"false"}>No Favoritos</SelectItem>
+                            </SelectContent>
+                        </Select>
 
-            <div className={"mt-4 flex flex-wrap gap-3"}>
-                <button type={"submit"} className={"btn btn-neutral rounded-md"}>
-                    Apply filters
-                </button>
-                <button
-                    type={"button"}
-                    className={"btn btn-ghost rounded-md"}
-                    onClick={handleReset}>
-                    Reset
-                </button>
-            </div>
+                        <Select
+                            value={localFilters.sort}
+                            onValueChange={(value)=> updateFilter("sort", value)}>
+                            <SelectTrigger className={"w-full"}>
+                                <SelectValue placeholder={"Ordenar por"}/>
+                            </SelectTrigger>
 
-        </form>
+                            <SelectContent>
+                                <SelectItem value={"newest"}>Más Nuevos</SelectItem>
+                                <SelectItem value={"oldest"}>Más Antiguos</SelectItem>
+                                <SelectItem value={"updated"}>Recientemente Modificados</SelectItem>
+                                <SelectItem value={"title_asc"}>Título A-Z</SelectItem>
+                                <SelectItem value={"title_desc"}>Título Z-A</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+
+                    <div className={"flex flex-wrap gap-3"}>
+                        <Button type={"submit"}>
+                            <Icon icon={"solar:filter-bold-duotone"} className={"mr-2 h-4 w-4"}/>
+                            Aplicar Filtros
+                        </Button>
+
+                        <Button type={"button"} variant={"outline"} onClick={handleReset}>
+                            <Icon icon={"solar:restart-bold-duotone"} className={"mr-2 h-4 w-4"}/>
+                            Reiniciar Filtros
+                        </Button>
+                    </div>
+                </form>
+            </CardContent>
+        </Card>
     )
 }
 export default PromptFilter
