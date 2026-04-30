@@ -2,6 +2,11 @@
 import {Link, useNavigate} from "react-router-dom";
 import {useAuth} from "../hooks/useAuth.js";
 import {useForm} from "react-hook-form";
+import {Icon} from "@iconify/react";
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card.tsx";
+import ErrorAlert from "@/components/common/ErrorAlert.jsx";
+import {Input} from "@/components/ui/input.tsx";
+import {Button} from "@/components/ui/button.tsx";
 
 const RegisterPage = () => {
     const navigate = useNavigate()
@@ -22,94 +27,114 @@ const RegisterPage = () => {
             navigate("/dashboard")
         } catch (e) {
             setServerError(
-                e.response?.data?.message || "Unable to register"
+                e.response?.data?.message || "No se puede completar el registro."
             )
         }
     }
     return (
-        <div className="flex min-h-screen items-center justify-center bg-slate-100 px-4">
-            <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-sm">
-                <h1 className="text-2xl font-semibold">Create account</h1>
-                <p className="mt-2 text-sm text-slate-600">
-                    Start organizing your prompts privately.
-                </p>
+        <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-muted/35 px-4 py-10">
+            <div
+                className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(120,119,198,0.10),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(15,23,42,0.06),transparent_26%)]"/>
 
-                <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-4">
-                    <div>
-                        <label className="mb-1 block text-sm font-medium">Name</label>
-                        <input
-                            type="text"
-                            className="w-full rounded-md border px-3 py-2"
-                            {...register("name", {
-                                required: "Name is required",
-                                minLength: {
-                                    value: 2,
-                                    message: "Name must be at least 2 characters",
-                                },
-                            })}
-                        />
-                        {errors.name && (
-                            <p className="mt-1 text-sm text-red-600">
-                                {errors.name.message}
-                            </p>
-                        )}
+            <div className="w-full max-w-md">
+                <div className="mb-6 space-y-3 text-center">
+                    <div
+                        className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-sm">
+                        <Icon icon={"solar:user-plus-bold-duotone"} className={"h-6"}/>
                     </div>
 
                     <div>
-                        <label className="mb-1 block text-sm font-medium">Email</label>
-                        <input
-                            type="email"
-                            className="w-full rounded-md border px-3 py-2"
-                            {...register("email", {
-                                required: "Email is required",
-                            })}
-                        />
-                        {errors.email && (
-                            <p className="mt-1 text-sm text-red-600">
-                                {errors.email.message}
-                            </p>
-                        )}
+                        <p className={"text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground"}>PromptForge</p>
+                        <h1 className={"mt-2 text-3xl font-semibold tracking-tight text-foreground"}>Crea tu cuenta</h1>
+                        <p className={"mt-2 text-sm text-muted-foreground"}>Empieza a organizar tus prompts en un
+                            workspace privado.</p>
                     </div>
+                </div>
 
-                    <div>
-                        <label className="mb-1 block text-sm font-medium">Password</label>
-                        <input
-                            type="password"
-                            className="w-full rounded-md border px-3 py-2"
-                            {...register("password", {
-                                required: "Password is required",
-                                minLength: {
-                                    value: 6,
-                                    message: "Password must be at least 6 characters",
-                                },
-                            })}
-                        />
-                        {errors.password && (
-                            <p className="mt-1 text-sm text-red-600">
-                                {errors.password.message}
-                            </p>
-                        )}
-                    </div>
+                <Card className={"border-border/70 shadow-sm"}>
+                    <CardHeader>
+                        <CardTitle>Register</CardTitle>
+                        <CardDescription>
+                            Crea tu cuenta para comenzar a guardar y reutilizar prompts.
+                        </CardDescription>
+                    </CardHeader>
 
-                    {serverError && (
-                        <p className="text-sm text-red-600">{serverError}</p>
-                    )}
+                    <CardContent>
+                        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                            {serverError ? <ErrorAlert message={serverError}/> : null}
+                            <div className={"space-y-2"}>
+                                <label className={"text-sm font-medium text-foreground"}>Nombre</label>
+                                <Input
+                                    type="text"
+                                    placeholder={"Tu Nombre"}
+                                    {...register("name", {
+                                        required: "Debe ingresar un nombre.",
+                                        minLength: {
+                                            value: 2,
+                                            message: "El nombre debe contener 2 o más carácteres.",
+                                        },
+                                    })}
+                                />
+                                {errors.name ? (
+                                    <p className="text-sm text-destructive">
+                                        {errors.name.message}
+                                    </p>
+                                ) : null}
+                            </div>
 
-                    <button
-                        type="submit"
-                        disabled={isSubmitting}
-                        className="w-full rounded-md bg-slate-900 px-4 py-2 text-white"
-                    >
-                        {isSubmitting ? "Creating account..." : "Register"}
-                    </button>
-                </form>
+                            <div className={"space-y-2"}>
+                                <label className="text-sm font-medium text-foreground">Correo Electrónico</label>
+                                <Input
+                                    type="email"
+                                    placeholder={"tu@email.com"}
+                                    {...register("email", {
+                                        required: "Debe ingresar un correo.",
+                                    })}
+                                />
+                                {errors.email ? (
+                                    <p className="text-sm text-destructive">
+                                        {errors.email.message}
+                                    </p>
+                                ) : null}
+                            </div>
 
-                <p className="mt-4 text-sm text-slate-600">
-                    Already have an account? <Link to="/login" className="underline">Login</Link>
-                </p>
+                            <div className={"space-y-2"}>
+                                <label className="text-sm font-medium text-foreground">Contraseña</label>
+                                <Input
+                                    type="password"
+                                    {...register("password", {
+                                        required: "Debe ingresar una contraseña.",
+                                        minLength: {
+                                            value: 6,
+                                            message: "La contraseña debe contener al menos 6 carácteres",
+                                        },
+                                    })}
+                                />
+                                {errors.password ? (
+                                    <p className="text-sm text-destructive">
+                                        {errors.password.message}
+                                    </p>
+                                ) : null}
+                            </div>
+
+                            <Button
+                                type="submit"
+                                className={"w-full"}
+                                disabled={isSubmitting}
+                            >
+                                <Icon icon={"solar:user-plus-bold-duotone"} className={"mr-2 h-4 w-4"}/>
+                                {isSubmitting ? "Creando Cuenta..." : "Registrarse"}
+                            </Button>
+                        </form>
+                        <p className="mt-5 text-sm text-muted-foreground">
+                            ¿Ya tienes una cuenta? {" "}
+                            <Link to="/login" className={"font-medium text-foreground underline underline-offset-4"}>Iniciar
+                                Sesión</Link>
+                        </p>
+                    </CardContent>
+                </Card>
             </div>
         </div>
     )
-
 }
 export default RegisterPage
