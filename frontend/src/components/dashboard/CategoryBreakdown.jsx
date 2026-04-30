@@ -1,13 +1,23 @@
-﻿const CategoryBreakdown = ({items = []}) => {
-    return (<section className="rounded-lg border bg-white p-6 shadow-sm">
-        <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-slate-900">
-                Prompts by Category
-            </h2>
-        </div>
+﻿import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card.tsx";
+import EmptyState from "@/components/common/EmptyState.jsx";
 
-        {items.length === 0 ? (<p className="mt-4 text-sm text-slate-500">
-            No prompts yet.
+const CategoryBreakdown = ({items = []}) => {
+    return(
+<Card className={"border-border/70 shadow-sm"}>
+    <CardHeader>
+        <CardTitle>Prompts por categoría</CardTitle>
+        <CardDescription>
+            Distribución actual de prompts por categoría.
+        </CardDescription>
+    </CardHeader>
+
+    <CardContent>
+        {items.length === 0 ? (<p className="text-sm text-muted-foreground">
+            <EmptyState
+                icon="solar:chart-square-bold-duotone"
+                title="Sin distribución todavía"
+                description="Cuando clasifiques prompts con categorías, aquí verás su distribución."
+            />
         </p>) : (<div className="mt-5 space-y-4">
             {items.map((item) => (<div
                 key={item._id ?? "uncategorized"}
@@ -18,15 +28,15 @@
                     className="h-3 w-3 rounded-full"
                     style={{backgroundColor: item.color}}
                 />
-                    <span className="text-sm font-medium text-slate-700">
+                    <span className="text-sm font-medium text-foreground">
                   {item.name}
                 </span>
                 </div>
 
-                <span className="text-sm text-slate-500">{item.count}</span>
+                <span className="text-sm text-muted-foreground">{item.count}</span>
             </div>))}
         </div>)}
-
-    </section>)
+    </CardContent>
+</Card> )
 }
 export default CategoryBreakdown
