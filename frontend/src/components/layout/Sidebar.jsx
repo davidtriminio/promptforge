@@ -7,7 +7,7 @@ const Sidebar = ({onNavigate}) => {
     return (
         <aside className={"flex h-full flex-col rounded-3xl border border-border/70 bg-card/95 p-4 shadow-sm backdrop-blur"}>
             <div className={"border-b border-border/60 px-2 pb-4"}>
-                <p className={"text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground"}>Workspace</p>
+                <p className={"text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground"}>Espacio De Trabajo</p>
                 <h2 className={"mt-2 text-lg font-semibold tracking-tight text-foreground"}>PromptForge</h2>
                 <p className={"mt-1 text-sm text-muted-foreground"}>Tu sistema privado para guardar y reutilizar prompts.</p>
             </div>
@@ -63,7 +63,7 @@ const Sidebar = ({onNavigate}) => {
             <div className={"mt-4 rounded-2xl border border-dashed border-border/70 bg-muted/40 p-3"}>
                 <p className={"text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground"}>Estado</p>
                 <p className={"mt-2 text-sm text-foreground"}>
-                    Base del workspace lista para seguir con el refactor visual.
+                    Espacio De Trabajo Activo
                 </p>
             </div>
 

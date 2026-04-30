@@ -25,13 +25,13 @@ const CategoryManager = ({
 
     return (
         <section className={"rounded-lg border bg-white p-5 shadow-sm"}>
-            <h2 className={"text-lg font-semibold text-slate-900"}>Categories</h2>
+            <h2 className={"text-lg font-semibold text-slate-900"}>Categorías</h2>
 
             <form onSubmit={handleSubmit} className={"mt-4 flex flex-col gap-3 md:flex-row"}>
                 <input
                     type={"text"}
                     className={"input input-bordered w-full rounded-md"}
-                    placeholder={"New category name"}
+                    placeholder={"Nombre de la Nueva Categoría"}
                     value={name}
                     onChange={(event) => setName(event.target.value)}
                 />

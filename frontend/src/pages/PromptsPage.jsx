@@ -39,7 +39,7 @@ const PromptsPage = () => {
     const [deletingPrompt, setDeletingPrompt] = useState(false)
 
     const formTitle = useMemo(() => {
-        return editingPrompt ? "Edit prompt" : "Create Prompt"
+        return editingPrompt ? "Editar prompt" : "Crear Prompt"
     });
 
     const loadPrompts = async (activeFilters = filters) => {
@@ -54,7 +54,7 @@ const PromptsPage = () => {
             const data = await getPromptRequest(params)
             setPrompts(data.prompts || [])
         } catch (e) {
-            setError(e.response?.data?.message || "Unable to load prompts.")
+            setError(e.response?.data?.message || "No se pudieron cargar los prompts.")
         } finally {
             setLoadingPrompts(false)
         }
@@ -66,7 +66,7 @@ const PromptsPage = () => {
             const data = await getCategoriesRequest()
             setCategories(data.categories || [])
         } catch (e) {
-            setError(e.response?.data?.message || "Unable to load categories.")
+            setError(e.response?.data?.message || "No se pudieron cargar las categorías.")
         } finally {
             setLoadingCategories(false)
         }
@@ -96,7 +96,7 @@ const PromptsPage = () => {
             setEditingPrompt(null)
             await loadPrompts()
         } catch (e) {
-            setError(e.response?.data?.message || "Unable to save prompt.")
+            setError(e.response?.data?.message || "No se pudo guardar el prompt.")
         } finally {
             setSavingPrompt(false)
         }
@@ -122,7 +122,7 @@ const PromptsPage = () => {
             setDeleteTarget(null)
             await loadPrompts()
         } catch (e) {
-            setError(e.response?.data?.message || "Unable to delete prompt.")
+            setError(e.response?.data?.message || "No se pudo eliminar el prompt.")
         } finally {
             setDeletingPrompt(false)
         }
@@ -134,7 +134,7 @@ const PromptsPage = () => {
             await toggleFavoritePromptRequest(prompt._id)
             await loadPrompts()
         } catch (e) {
-            setError(e.response?.data?.message || "Unable to update favorite.")
+            setError(e.response?.data?.message || "No se pudo actualizar el favorito.")
         }
     }
 
@@ -158,7 +158,7 @@ const PromptsPage = () => {
                 className={"rounded-lg border bg-white p-6 shadow-sm"}>
                 <h2 className={"text-lg font-semibold text-slate-900"}>{formTitle}</h2>
                 <p className={"mt-1 text-sm text-slate-600"}>
-                    {editingPrompt ? "Actualizar Prompt seleccionado." : "Agregar nuevo prompt a tu Workspace."}
+                    {editingPrompt ? "Actualizar Prompt seleccionado." : "Agregar nuevo prompt a tu Espacio De Trabajo."}
                 </p>
 
                 <div className={"mt-5"}>
@@ -179,11 +179,11 @@ const PromptsPage = () => {
                 />
 
             {loadingCategories ? (
-                <LoadingState message={"Loading categories..."}/>
+                <LoadingState message={"Cargando Categorías..."}/>
             ) : null}
 
             {loadingPrompts ? (
-                <LoadingState message={"Loading prompts..."}/>
+                <LoadingState message={"Cargando Prompts..."}/>
             ) : (
                 <PromptList
                     prompts={prompts}

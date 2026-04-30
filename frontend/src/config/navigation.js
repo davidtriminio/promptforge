@@ -1,9 +1,9 @@
 ﻿export const workspaceNavigation = [
     {
-        label: "Dashboard",
+        label: "Panel",
         href: "/dashboard",
         icon: "solar:widget-5-bold-duotone",
-        description: "Resumen generla del workspace"
+        description: "Resumen general del Espacio De Trabajo"
     },
     {
       label: "Prompts",
@@ -12,7 +12,7 @@
       description: "Biblioteca privada de prompts"
     },
     {
-        label: "Categories",
+        label: "Categorías",
         href: "/categories",
         icon: "solar:folder-with-files-bold-duotone",
         description: "Organización y gestión de categorías"

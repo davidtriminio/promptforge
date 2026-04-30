@@ -28,7 +28,7 @@ const PromptToolbar = ({
     )
     return (
         <PageHeader
-            eyebrow={"Workspace"}
+            eyebrow={"Espacio De Trabajo"}
             title={"Prompts"}
             description={"Crea, organiza, filtra y reutiliza tu biblioteca privada de prompts."}
             icon={"solar:document-text-bold-duotone"}

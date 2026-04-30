@@ -36,7 +36,7 @@ const PromptForm = ({
     return (
         <form onSubmit={handleSubmit(submitHandler)} className={"space-y-4"}>
             <div>
-                <label className={"mb-1 block text-sm font-medium"}>Title</label>
+                <label className={"mb-1 block text-sm font-medium"}>Título</label>
                 <input
                 type={"text"}
                 className={"input input-bordered w-full rounded-md"}
@@ -82,7 +82,7 @@ const PromptForm = ({
 
             <div className={"grid gap-4 md:grid-cols-2"}>
                 <div>
-                    <label className={"mb-1 block text-sm font-medium"}>Category</label>
+                    <label className={"mb-1 block text-sm font-medium"}>Categoría</label>
                     <select
                     className={"select select-bordered w-full rounded-md"}
                     {...register("category")}>
@@ -96,7 +96,7 @@ const PromptForm = ({
                 </div>
 
                 <div>
-                    <label className={"mb-1 block text-sm font-medium"}>Tags</label>
+                    <label className={"mb-1 block text-sm font-medium"}>Etiquetas</label>
                     <input
                     type={"text"}
                     placeholder={"marketing, ai, linkeding"}

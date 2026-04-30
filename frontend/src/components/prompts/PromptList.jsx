@@ -10,8 +10,9 @@ const PromptList = ({
     if (!prompts.length)
         return (
             <EmptyState
+                icon={"solar:document-text-bold-duotone"}
                 title={"No se encontraron prompts."}
-                description={"Prueba a cambiar los filtros o a crear tu primer Prompt."}
+                description={"Prueba a cambiar los filtros o crea tu primer prompt para empezar a construir tu biblioteca."}
             />
         )
 

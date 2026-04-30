@@ -24,7 +24,7 @@ const PromptCard = ({
                     <div className="flex flex-wrap items-center gap-2">
                         <CardTitle className={"text-lg"}>{prompt.title}</CardTitle>
                         {prompt.isFavorite ? (
-                            <Badge variant={"secondary"}>Favorite</Badge>
+                            <Badge variant={"secondary"}>Favorito</Badge>
                         ) : null}
                     </div>
 

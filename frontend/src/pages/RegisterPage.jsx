@@ -27,7 +27,7 @@ const RegisterPage = () => {
             navigate("/dashboard")
         } catch (e) {
             setServerError(
-                e.response?.data?.message || "No se puede completar el registro."
+                e.response?.data?.message || "No se pudo completar el registro."
             )
         }
     }
@@ -47,7 +47,7 @@ const RegisterPage = () => {
                         <p className={"text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground"}>PromptForge</p>
                         <h1 className={"mt-2 text-3xl font-semibold tracking-tight text-foreground"}>Crea tu cuenta</h1>
                         <p className={"mt-2 text-sm text-muted-foreground"}>Empieza a organizar tus prompts en un
-                            workspace privado.</p>
+                            Espacio De Trabajo privado.</p>
                     </div>
                 </div>
 

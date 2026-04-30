@@ -5,9 +5,9 @@ import EmptyState from "@/components/common/EmptyState.jsx";
 const RecentPrompts = ({items = []}) => {
     return (<Card className={"border-border/70 shadow-sm"}>
             <CardHeader>
-                <CardTitle>Recent Prompts</CardTitle>
+                <CardTitle>Prompts recientes</CardTitle>
                 <CardDescription>
-                    Los últimos prompts creados en tu workspace.
+                    Los últimos prompts creados en tu Espacio De Trabajo.
                 </CardDescription>
             </CardHeader>
 
@@ -33,7 +33,7 @@ const RecentPrompts = ({items = []}) => {
                                     </p>
                                 </div>
 
-                                {prompt.isFavorite ? (<Badge variant={"secondary"}>Favorite</Badge>) : null}
+                                {prompt.isFavorite ? (<Badge variant={"secondary"}>Favorito</Badge>) : null}
                             </div>
 
                             <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
