@@ -1,12 +1,14 @@
-﻿import React from 'react'
+﻿import {Card, CardContent} from "@/components/ui/card.tsx";
 
 const StatsCard = ({label, value, hint}) => {
     return (
-        <div className="rounded-lg border bg-white p-5 shadow-sm">
-            <p className="text-sm text-slate-500">{label}</p>
-            <h3 className="mt-2 text-3xl font-semibold text-slate-900">{value}</h3>
-            {hint ? <p className="mt-2 text-sm text-slate-600">{hint}</p> : null}
-        </div>
+        <Card className={"border-border/70 shadow-sm"}>
+            <CardContent className={"space-y-2 py-6"}>
+                <p className={"text-sm text-muted-foreground"}>{label}</p>
+                <h3 className={"text-3xl font-semibold tracking-tight text-foreground"}>{value}</h3>
+                {hint ? <p className="text-sm text-muted-foreground"> {hint} </p> : null}
+            </CardContent>
+        </Card>
     )
 }
 export default StatsCard
