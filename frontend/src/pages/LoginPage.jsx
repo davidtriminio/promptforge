@@ -2,6 +2,11 @@
 import {Link, useNavigate} from "react-router-dom";
 import {useAuth} from "../hooks/useAuth.js";
 import {useForm} from "react-hook-form";
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card.tsx";
+import {Icon} from "@iconify/react";
+import ErrorAlert from "@/components/common/ErrorAlert.jsx";
+import {Input} from "@/components/ui/input.tsx";
+import {Button} from "@/components/ui/button.tsx";
 
 const LoginPage = () => {
     const navigate = useNavigate()
@@ -21,68 +26,94 @@ const LoginPage = () => {
             navigate("/dashboard")
         } catch (e) {
             setServerError(
-                e.response?.data?.message || "Unable to login"
+                e.response?.data?.message || "No se puede iniciar sesión."
             )
         }
     }
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-slate-100 px-4">
-            <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-sm">
-                <h1 className="text-2xl font-semibold">Login</h1>
-                <p className="mt-2 text-sm text-slate-600">
-                    Access your private prompt workspace.
-                </p>
+        <div
+            className={"relative flex min-h-screen items-center justify-center overflow-hidden bg-muted/35 px-4 py-10"}>
+            <div
+                className={"absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(120,119,198,0.10),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(15,23,42,0.06),transparent_26%)]"}/>
 
-                <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-4">
-                    <div>
-                        <label className="mb-1 block text-sm font-medium">Email</label>
-                        <input type="email"
-                               className="w-full rounded-md border px-3 py-2"
-                               {...register("email", {
-                                   required: "Email is required"
-                               })}
-                        />
-                        {errors.email && (
-                            <p className="mt-1 text-sm text-red-600">
-                                {errors.email.message}
-                            </p>
-                        )}
+            <div className={"w-full max-w-md"}>
+                <div className={"mb-6 space-y-3 text-center"}>
+                    <div
+                        className={"mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-sm"}>
+                        <Icon icon="solar:document-add-bold-duotone" className={"h-6 w-6"}/>
                     </div>
 
                     <div>
-                        <label className="mb-1 block text-sm font-medium">Password</label>
-                        <input type="password"
-                               className="w-full rounded-md border px-3 py-2"
-                               {...register("password", {
-                                   required: "Password is required"
-                               })}
-                        />
-                        {errors.password && (
-                            <p className="mt-1 text-sm text-red-600">
-                                {errors.password.message}
-                            </p>
-                        )}
-                    </div>
-
-                    {serverError && (
-                        <p className="text-sm text-red-600">
-                            {serverError}
+                        <p className={"text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground"}>
+                            PromptForge
                         </p>
-                    )}
+                        <h1 className={"mt-2 text-3xl font-semibold tracking-tight text-foreground"}>
+                            Bienvenido de nuevo
+                        </h1>
+                        <p className={"mt-2 text-sm text-muted-foreground"}>
+                            Accede a tu workspace privado de prompts.
+                        </p>
+                    </div>
+                </div>
 
-                    <button
-                        type="submit"
-                        disabled={isSubmitting}
-                        className="w-full rounded-md bg-slate-900 px-4 py-2 text-white">
-                        {isSubmitting ? "Signing in..." : "Login"}
-                    </button>
-                </form>
+                <Card className={"border-border/70 shadow-sm"}>
+                    <CardHeader>
+                        <CardTitle>Iniciar Sesión</CardTitle>
+                        <CardDescription>
+                            Inicia sesión para continuar trabajando en tu biblioteca.
+                        </CardDescription>
+                    </CardHeader>
 
-                <p className="mt-4 text-sm text-slate-600">
-                    No account yet? <Link to="/register" className="underline">Create One</Link>
-                </p>
+                    <CardContent>
+                        <form onSubmit={handleSubmit(onSubmit)} className={"space-y-4"}>
+                            {serverError ? <ErrorAlert message={serverError}/> : null}
 
+                            <div className={"space-y-2"}>
+                                <label className={"text-sm font-medium text-foreground"}>Correo Electrónico</label>
+                                <Input
+                                    type={"email"}
+                                    placeholder={"tu@email.com"}
+                                    {...register("email", {
+                                        required: "Debe ingresar un correo."
+                                    })}
+                                />
+
+                                {errors.email ? (
+                                    <p className={"text-sm text-destructive"}>{errors.email.message}</p>
+                                ) : null
+                                }
+                            </div>
+
+                            <div className="space-y-2">
+                                <label className="text-sm font-medium text-foreground">Password</label>
+                                <Input
+                                    type="password"
+                                    placeholder="Tu contraseña"
+                                    {...register("password", {
+                                            required: "Debe ingresar una contraseña."
+                                        }
+                                    )}/>
+                                {errors.password ? (
+                                    <p className="text-sm text-destructive">{errors.password.message}</p>
+                                ) : null}
+                            </div>
+
+                            <Button type={"submit"} className={"w-full"} disabled={isSubmitting}>
+                                <Icon icon={"solar:login-3-bold-duotone"} className={"mr-2 h-4 w-4"}/>
+                                {isSubmitting ? "Iniciando Sesión" : "Iniciar Sesión"}
+                            </Button>
+                        </form>
+
+                        <p className={"mt-5 text-sm text-muted-foreground"}>
+                            ¿No tienes cuenta?{" "}
+                            <Link to={"/register"}
+                                  className={"font-medium text-foreground underline underline-offset-4"}>
+                                Crear cuenta
+                            </Link>
+                        </p>
+                    </CardContent>
+                </Card>
             </div>
         </div>
     )
