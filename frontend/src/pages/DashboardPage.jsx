@@ -23,7 +23,7 @@ const DashboardPage = () => {
                 setDashboardData(data)
             } catch (e) {
                 setError(
-                    e.response?.data?.message || "No se puede cargar el dashboard."
+                    e.response?.data?.message || "No se puede cargar el Panel."
                 )
             } finally {
                 setLoading(false)
@@ -33,7 +33,7 @@ const DashboardPage = () => {
     }, [])
 
     if (loading) {
-        return <LoadingState message={"Cargando Dashboard..."}/>
+        return <LoadingState message={"Cargando Panel..."}/>
     }
 
     if (error) {
@@ -51,7 +51,7 @@ const DashboardPage = () => {
     return (
         <div className="space-y-6">
             <PageHeader
-                eyebrow={"Workspace"}
+                eyebrow={"Espacio De Trabajo"}
                 title={`Bienvenido de nuevo, ${user?.name || "Usuario"}`}
                 description={"Aquí tienes una vista rápida del estado de tu biblioteca privada de prompts."}
                 icon={"solar:widget-5-bold-duotone"}

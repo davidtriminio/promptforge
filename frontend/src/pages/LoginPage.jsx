@@ -52,7 +52,7 @@ const LoginPage = () => {
                             Bienvenido de nuevo
                         </h1>
                         <p className={"mt-2 text-sm text-muted-foreground"}>
-                            Accede a tu workspace privado de prompts.
+                            Accede a tu Espacio De Trabajo privado de prompts.
                         </p>
                     </div>
                 </div>

@@ -18,7 +18,7 @@ const CategoriesPage = () => {
             const data = await getCategoriesRequest()
             setCategories(data.categories || [])
         } catch (e) {
-            setError(e.response?.data?.message || "Unable to load categories.")
+            setError(e.response?.data?.message || "No se puedieron cargar las categorías.")
         } finally {
             setLoading(false)
         }
@@ -35,7 +35,7 @@ const CategoriesPage = () => {
             await createCategoryRequest(payload)
             await loadCategories()
         } catch (e) {
-            setError(e.response?.data?.message || "Unable to create category.")
+            setError(e.response?.data?.message || "No se pudieron cargar las categorías.")
         } finally {
             setCreating(false)
         }
@@ -47,14 +47,14 @@ const CategoriesPage = () => {
             await deleteCategoryRequest(category._id)
             await loadCategories()
         } catch (e) {
-            setError(e.response?.data?.message || "Unable to delete category.")
+            setError(e.response?.data?.message || "No se pudo eliminar la categoría.")
         }
     }
 
     return (
         <div className={"space-y-6"}>
             <PageHeader
-                eyebrow={"Workspace"}
+                eyebrow={"Espacio De Trabajo"}
                 title={"Categories"}
                 description={"Administra las categorías que usarás para organizar tu biblioteca de prompts."}
                 icon={"solar:folder-with-files-bold-duotone"}
@@ -64,7 +64,7 @@ const CategoriesPage = () => {
 
 
             {loading ? (
-                <LoadingState message={"Loading categories..."}/>
+                <LoadingState message={"Cargando Categorías..."}/>
             ) : (
                 <CategoryManager
                     categories={categories}
