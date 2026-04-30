@@ -57,7 +57,7 @@ const Header = () => {
                     <Button type={"button"} variant={"outline"} onClick={logout}>
                         <Icon icon={"solar:logout-2-outline"}
                               className={"mr-2 h-4 w-4"}/>
-                            Logout
+                            Cerrar Sesión
                     </Button>
                     
                 </div>
