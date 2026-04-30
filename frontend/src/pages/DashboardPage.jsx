@@ -4,6 +4,9 @@ import {getDashboardStatsRequest} from "../api/dashboardApi.js";
 import StatsCard from "../components/dashboard/StatsCard.jsx";
 import RecentPrompts from "../components/dashboard/RecentPrompts.jsx";
 import CategoryBreakdown from "../components/dashboard/CategoryBreakdown.jsx";
+import LoadingState from "@/components/common/LoadingState.jsx";
+import ErrorAlert from "@/components/common/ErrorAlert.jsx";
+import PageHeader from "@/components/common/PageHeader.jsx";
 
 const DashboardPage = () => {
     const {user} = useAuth()
@@ -20,7 +23,7 @@ const DashboardPage = () => {
                 setDashboardData(data)
             } catch (e) {
                 setError(
-                    e.response?.data?.message || "Unable to load dashboard"
+                    e.response?.data?.message || "No se puede cargar el dashboard."
                 )
             } finally {
                 setLoading(false)
@@ -30,11 +33,11 @@ const DashboardPage = () => {
     }, [])
 
     if (loading) {
-        return <p className="text-slate-500">Loading dashboard...</p>
+        return <LoadingState message={"Cargando Dashboard..."}/>
     }
 
     if (error) {
-        return <p className="text-red-600">{error}</p>
+        return <ErrorAlert message={error}/>
     }
 
     const stats = dashboardData?.stats || {
@@ -47,30 +50,28 @@ const DashboardPage = () => {
     const promptsByCategory = dashboardData?.promptsByCategory || []
     return (
         <div className="space-y-6">
-            <div>
-                <h1 className="text-2xl font-semibold text-slate-900">
-                    Welcome back, {user?.name}
-                </h1>
-                <p className="mt-2 text-slate-600">
-                    Here is a quick look at your prompt workspace.
-                </p>
-            </div>
+            <PageHeader
+                eyebrow={"Workspace"}
+                title={`Bienvenido de nuevo, ${user?.name || "Usuario"}`}
+                description={"Aquí tienes una vista rápida del estado de tu biblioteca privada de prompts."}
+                icon={"solar:widget-5-bold-duotone"}
+                />
 
             <section className="grid gap-4 md:grid-cols-3">
                 <StatsCard
-                    label="Total Prompts"
+                    label="Prompts Totales"
                     value={stats.totalPrompts}
-                    hint={"All prompts in your private library."}
+                    hint={"Todos los prompts de tu biblioteca privada."}
                 />
                 <StatsCard
-                    label="Favorites"
+                    label="Favoritos"
                     value={stats.totalFavorites}
-                    hint={"Prompts marked for quick access."}
+                    hint={"Prompts marcados para acceso rápido."}
                 />
                 <StatsCard
-                    label="Categories in use"
+                    label="Categorías en uso"
                     value={stats.usedCategoriesCount}
-                    hint={"Categories currently assignet to prompts."}
+                    hint={"Categorías actualmente asignadas a Prompts."}
                 />
             </section>
             <section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
