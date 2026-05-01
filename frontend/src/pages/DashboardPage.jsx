@@ -33,7 +33,7 @@ const DashboardPage = () => {
     }, [])
 
     if (loading) {
-        return <LoadingState message={"Cargando Panel..."}/>
+        return <LoadingState message={"Cargando panel..."}/>
     }
 
     if (error) {
@@ -51,7 +51,7 @@ const DashboardPage = () => {
     return (
         <div className="space-y-6">
             <PageHeader
-                eyebrow={"Espacio De Trabajo"}
+                eyebrow={"Espacio De trabajo"}
                 title={`Bienvenido de nuevo, ${user?.name || "Usuario"}`}
                 description={"Aquí tienes una vista rápida del estado de tu biblioteca privada de prompts."}
                 icon={"solar:widget-5-bold-duotone"}
