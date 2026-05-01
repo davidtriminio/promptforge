@@ -124,7 +124,9 @@ export const getPrompts = async (req, res) => {
             oldest: {createdAt: 1},
             updated: {updatedAt: -1},
             titleAsc: {title: 1},
-            titleDesc: {title: -1}
+            titleDesc: {title: -1},
+            title_asc: {title: 1},
+            title_desc: {title: -1}
         }
 
         const sortOptions = allowedSorts[sort] || allowedSorts.newest
