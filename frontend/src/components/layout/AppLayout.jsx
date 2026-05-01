@@ -1,40 +1,29 @@
-﻿import React from 'react'
-import {useAuth} from "../../hooks/useAuth.js";
-import {Link, NavLink, Outlet} from "react-router-dom";
+﻿import Header from "./Header.jsx";
+import Sidebar from "./Sidebar.jsx";
+import {Outlet} from "react-router-dom";
 
 const AppLayout = () => {
-    const {user, logout} = useAuth()
     return (
-        <div className="min-h-screen bg-slate-100 text-slate-900">
-            <header className="border-b bg-white">
-                <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-                    <Link to="/dashboard" className="text-xl font-semibold">
-                        PromptForge
-                    </Link>
+        <div className={"min-h-screen bg-muted/35 text-foreground"}>
+            <div className={"absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(120,119,198,0.08),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(15,23,42,0.05),transparent_26%)]"}/>
 
-                    <div className="flex items-cente gap-4">
-                        <span className="text-sm text-slate-600">
-                            {user?.name}
-                        </span>
-                        <button onClick={logout}
-                                className="rounded-md bg-slate-900 px-4 py-2 text-sm text-white">
-                            Logout
-                        </button>
+                <div className={"mx-auto max-w-7xl px-4 py-4 lg:px-6 lg:py-6"}>
+                    <div className={"grid min-h-[calc(100vh-2rem)] gap-4 lg:grid-cols-[290px_minmax(0,1fr)] lg:gap-6"}>
+                        <div className={"hidden lg:block"}>
+                            <div className={"sticky top-6 h-[calc(100vh-3rem)]"}>
+                                <Sidebar/>
+                            </div>
+                        </div>
+
+                        <div className={"min-w-0 overflow-hidden rounded-[28px] border border-border/60 bg-background/90 shadow-sm backdrop-blur"}>
+                            <Header/>
+
+                            <main className={"min-w-0 px-4 py-6 sm:px-6 lg:px-8"}>
+                                <Outlet/>
+                            </main>
                     </div>
                 </div>
-            </header>
 
-            <div className="mx-auto grid max-w-6xl gap-6 px-4 py-6 md:grid-cols-[220px_1fr]">
-                <aside className="rounded-lg bg-white p-4 shadow-sm">
-                    <nav className="flex flex-col gap-2">
-                        <NavLink to="/dashboard">Dashboard</NavLink>
-                        <NavLink to="/prompts">Prompts</NavLink>
-                    </nav>
-                </aside>
-
-                <main className="rounded-lg bg-white p-6 shadow-sm">
-                    <Outlet/>
-                </main>
             </div>
         </div>
     )

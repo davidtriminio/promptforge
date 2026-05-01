@@ -124,7 +124,9 @@ export const getPrompts = async (req, res) => {
             oldest: {createdAt: 1},
             updated: {updatedAt: -1},
             titleAsc: {title: 1},
-            titleDesc: {title: -1}
+            titleDesc: {title: -1},
+            title_asc: {title: 1},
+            title_desc: {title: -1}
         }
 
         const sortOptions = allowedSorts[sort] || allowedSorts.newest
@@ -333,9 +335,10 @@ export const toggleFavoritePrompt = async (req, res) => {
         await prompt.save()
 
         return res.status(200).json({
-            message: "Favorite status updated successfully."
+            message: "Favorite status updated successfully.",
+            prompt
         })
     } catch (e) {
-        return res.status(500).json("Error updating favorite status.")
+        return res.status(500).json({message: "Error updating favorite status."})
     }
 }

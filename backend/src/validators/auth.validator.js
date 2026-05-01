@@ -4,35 +4,35 @@ export const registerValidator = [
     body("name")
     .trim()
     .notEmpty()
-    .withMessage("Name is required")
+    .withMessage("El nombre es obligatorio")
     .isLength({min: 2, max: 50})
-    .withMessage("Name must be between 2 and 50 characters."),
+    .withMessage("El nombre debe tener entre 2 y 50 caracteres."),
 
     body("email")
     .trim()
     .notEmpty()
-    .withMessage("Email is required")
+    .withMessage("El correo electrónico es obligatorio")
     .isEmail()
-    .withMessage("Please provide a valid email.")
+    .withMessage("Por favor ingrese un correo electrónico válido.")
     .normalizeEmail(),
 
     body("password")
     .notEmpty()
-    .withMessage("Password is required.")
+    .withMessage("La contraseña es obligatoria.")
     .isLength({min: 6})
-    .withMessage("Password must be at least 6 characters.")
+    .withMessage("La contraseña debe tener al menos 6 caracteres.")
 ]
 
 export const loginValidator = [
     body("email")
     .trim()
     .notEmpty()
-    .withMessage("Email is required.")
+    .withMessage("El correo electrónico es obligatorio.")
     .isEmail()
-    .withMessage("Please provide a valid email.")
+    .withMessage("Por favor ingrese un correo electrónico válido.")
     .normalizeEmail(),
 
     body("password")
     .notEmpty()
-    .withMessage("Password is required.")
+    .withMessage("La contraseña es obligatoria.")
 ]
