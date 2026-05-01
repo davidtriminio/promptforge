@@ -155,3 +155,6 @@ config/keys.json
 build/
 dist/
 public/uploads/
+
+# Local agent policy
+AGENT.md
