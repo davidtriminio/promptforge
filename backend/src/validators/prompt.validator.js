@@ -4,40 +4,40 @@ export const createPromptValidator = [
     body("title")
     .trim()
     .notEmpty()
-    .withMessage("Title is required")
+    .withMessage("El título es obligatorio")
     .isLength({min: 3, max: 100})
-    .withMessage("Title must be between 3 and 100 characters."),
+    .withMessage("El título debe tener entre 3 y 100 caracteres."),
 
     body("description")
     .optional()
     .trim()
     .isLength({max: 300})
-    .withMessage("Description cannot exceed 300 characters."),
+    .withMessage("La descripción no puede exceder los 300 caracteres."),
 
     body("content")
     .trim()
     .notEmpty()
-    .withMessage("Prompt content is required.")
+    .withMessage("El contenido del prompt es obligatorio.")
     .isLength({min: 10, max: 10000})
-    .withMessage("Prompt content must be between 10 and 10000 characters."),
+    .withMessage("El contenido del prompt debe tener entre 10 y 10000 caracteres."),
 
     body("tags")
     .optional()
     .isArray()
-    .withMessage("Tag must be an array."),
+    .withMessage("Las etiquetas deben ser un arreglo."),
 
     body("tags.*")
     .optional()
     .isString()
-    .withMessage("Each tag must be String.")
+    .withMessage("Cada etiqueta debe ser una cadena de texto.")
     .trim()
     .isLength({min: 1, max: 30})
-    .withMessage("Each tag must be between 1 and 30 characters."),
+    .withMessage("Cada etiqueta debe tener entre 1 y 30 caracteres."),
 
     body("category")
     .optional({nullable: true})
     .isMongoId()
-    .withMessage("Category must be a valid ID.")
+    .withMessage("La categoría debe ser un ID válido.")
 ]
 
 export const updatePromptValidator = [
@@ -45,35 +45,35 @@ export const updatePromptValidator = [
     .optional()
     .trim()
     .isLength({min: 3, max: 100})
-    .withMessage("Title must be between 3 and 100 characters."),
+    .withMessage("El título debe tener entre 3 y 100 caracteres."),
 
     body("description")
     .optional()
     .trim()
     .isLength({max: 300})
-    .withMessage("Description cannot exceed 300 characters."),
+    .withMessage("La descripción no puede exceder los 300 caracteres."),
 
     body("content")
     .optional()
     .trim()
     .isLength({min: 10, max: 10000})
-    .withMessage("Prompt content must be between 10 and 10000 characters."),
+    .withMessage("El contenido del prompt debe tener entre 10 y 10000 caracteres."),
 
     body("tags")
     .optional()
     .isArray()
-    .withMessage("Tags must be array."),
+    .withMessage("Las etiquetas deben ser un arreglo."),
 
     body("tags.*")
     .optional()
     .isString()
-    .withMessage("Each tag must be String.")
+    .withMessage("Cada etiqueta debe ser una cadena de texto.")
     .trim()
     .isLength({min: 1, max: 300})
-    .withMessage(""),
+    .withMessage("Cada etiqueta debe tener entre 1 y 300 caracteres."),
 
     body("category")
     .optional({nullable: true})
     .isMongoId()
-    .withMessage("Category must be a valid ID.")
+    .withMessage("La categoría debe ser un ID válido.")
 ]

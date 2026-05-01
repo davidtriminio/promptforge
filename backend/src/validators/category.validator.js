@@ -4,15 +4,15 @@ export const createCategoryValidator = [
     body("name")
     .trim()
     .notEmpty()
-    .withMessage("Category name is required.")
+    .withMessage("El nombre de la categoría es obligatorio.")
     .isLength({min: 2, max: 40})
-    .withMessage("Category name must be between 2 and 40 characters."),
+    .withMessage("El nombre de la categoría debe tener entre 2 y 40 caracteres."),
 
     body("color")
     .optional()
     .trim()
     .matches(/^#([0-9A-F]{3}){1,2}$/i)
-    .withMessage("Color must be a valid hex color.")
+    .withMessage("El color debe ser un color hexadecimal válido.")
 ]
 
 export const updateCategoryValidator = [
@@ -20,11 +20,11 @@ export const updateCategoryValidator = [
     .optional()
     .trim()
     .isLength({min: 2, max: 40})
-    .withMessage("Category name must be between 2 and 40 characters."),
+    .withMessage("El nombre de la categoría debe tener entre 2 y 40 caracteres."),
 
     body("color")
     .optional()
     .trim()
     .matches(/^#([0-9A-F]{3}){1,2}$/i)
-    .withMessage("Color must be a valid hex color.")
+    .withMessage("El color debe ser un color hexadecimal válido.")
 ]

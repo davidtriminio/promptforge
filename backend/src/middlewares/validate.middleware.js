@@ -8,9 +8,9 @@ const validate = (req, res, next) => {
     }
 
     return res.status(400).json({
-        message: "Validation error",
+        message: "Error de validación",
         errors: errors.array().map((error) => ({
-            field: error,
+            field: error.path,
             message: error.msg
         }))
     })

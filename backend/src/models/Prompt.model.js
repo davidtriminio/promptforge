@@ -38,6 +38,11 @@ const promptSchema = new mongoose.Schema({
         type: [String],
         default: []
     },
+    currentVersion: {
+        type: Number,
+        default: 1,
+        min: 1
+    },
     isFavorite: {
         type: Boolean,
         default: false

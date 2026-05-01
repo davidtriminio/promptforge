@@ -23,7 +23,7 @@ const categorySchema = new mongoose.Schema({
         color: {
             type: String,
             default: "#6366f1",
-            match: [/^#([(0-9A-F)]{3}){1,2}$/i, "Please provide a valid hex color"],
+            match: [/^#([0-9A-F]{3}){1,2}$/i, "Please provide a valid hex color"],
         }
     }, {
         timestamps: true
@@ -32,6 +32,6 @@ const categorySchema = new mongoose.Schema({
 
 categorySchema.index({user: 1, normalizedName: 1}, {unique: true})
 
-const Category = new mongoose.model("Category", categorySchema)
+const Category = mongoose.model("Category", categorySchema)
 
 export default Category

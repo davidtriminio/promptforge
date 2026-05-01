@@ -1,43 +1,54 @@
-﻿const RecentPrompts = ({items = []}) => {
-    return (<section className="rounded-lg border bg-white p-6 shadow-sm">
-            <h2 className="text-lg font-semibold text-slate-900">
-                Recent prompts
-            </h2>
-            {items.length === 0 ? (
-                <p className="mt-4 text-sm text-slate-500">
-                    You have not created prompts yet.
-                </p>
-            ) : (
-                <div className="mt-5 space-y-4">
-                    {items.map((prompt) => (<div
-                        key={prompt._id}
-                        className="rounded-md border p-4"
-                    >
-                        <div className="flex items-start justify-between gap-4">
-                            <div>
-                                <h3 className="font-medium text-slate-900">
-                                    {prompt.title}
-                                </h3>
-                                <p className="mt-1 text-sm text-slate-600">
-                                    {prompt.description || "No description provided."}
-                                </p>
+﻿import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card.tsx";
+import {Badge} from "@/components/ui/badge.tsx";
+import EmptyState from "@/components/common/EmptyState.jsx";
+
+const RecentPrompts = ({items = []}) => {
+    return (<Card className={"border-border/70 shadow-sm"}>
+            <CardHeader>
+                <CardTitle>Prompts recientes</CardTitle>
+                <CardDescription>
+                    Los últimos prompts creados en tu espacio De trabajo.
+                </CardDescription>
+            </CardHeader>
+
+            <CardContent>
+                {items.length === 0 ? (
+                    <EmptyState
+                        icon="solar:clock-circle-bold-duotone"
+                        title="Aún no hay prompts recientes"
+                        description="Cuando empieces a crear prompts, aquí verás los más nuevos."/>
+                ) : (
+                    <div className="space-y-4">
+                        {items.map((prompt) => (<div
+                            key={prompt._id}
+                            className="rounded-2xl border border-border/70 bg-muted/20 p-4"
+                        >
+                            <div className="flex items-start justify-between gap-4">
+                                <div className={"space-y-1"}>
+                                    <h3 className={"font-medium text-foreground"}>
+                                        {prompt.title}
+                                    </h3>
+                                    <p className="text-sm text-muted-foreground">
+                                        {prompt.description || "No hay descripción disponible."}
+                                    </p>
+                                </div>
+
+                                {prompt.isFavorite ? (<Badge variant={"secondary"}>Favorito</Badge>) : null}
                             </div>
 
-                            {prompt.isFavorite ? (<span className="text-sm text-amber-600">Favorite</span>) : null}
-                        </div>
-
-                        <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-slate-500">
+                            <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
                 <span>
                   {new Date(prompt.createdAt).toLocaleDateString()}
                 </span>
-                            <span>
-                  {prompt.category?.name || "Uncategorized"}
+                                <span>
+                  {prompt.category?.name || "Sin Categoría"}
                 </span>
-                        </div>
-                    </div>))}
-                </div>
-            )}
-        </section>
+                            </div>
+                        </div>))}
+                    </div>
+                )}
+            </CardContent>
+        </Card>
     )
 }
 export default RecentPrompts
