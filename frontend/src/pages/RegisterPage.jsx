@@ -53,7 +53,7 @@ const RegisterPage = () => {
 
                 <Card className={"border-border/70 shadow-sm"}>
                     <CardHeader>
-                        <CardTitle>Register</CardTitle>
+                        <CardTitle>Crear cuenta</CardTitle>
                         <CardDescription>
                             Crea tu cuenta para comenzar a guardar y reutilizar prompts.
                         </CardDescription>
@@ -123,7 +123,7 @@ const RegisterPage = () => {
                                 disabled={isSubmitting}
                             >
                                 <Icon icon={"solar:user-plus-bold-duotone"} className={"mr-2 h-4 w-4"}/>
-                                {isSubmitting ? "Creando Cuenta..." : "Registrarse"}
+                                {isSubmitting ? "Creando cuenta..." : "Registrarse"}
                             </Button>
                         </form>
                         <p className="mt-5 text-sm text-muted-foreground">

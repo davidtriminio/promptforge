@@ -52,7 +52,7 @@ const LoginPage = () => {
                             Bienvenido de nuevo
                         </h1>
                         <p className={"mt-2 text-sm text-muted-foreground"}>
-                            Accede a tu Espacio de trabajo privado de prompts.
+                            Accede a tu espacio de trabajo privado de prompts.
                         </p>
                     </div>
                 </div>
@@ -86,7 +86,7 @@ const LoginPage = () => {
                             </div>
 
                             <div className="space-y-2">
-                                <label className="text-sm font-medium text-foreground">Password</label>
+                                <label className="text-sm font-medium text-foreground">Contraseña</label>
                                 <Input
                                     type="password"
                                     placeholder="Tu contraseña"
@@ -101,7 +101,7 @@ const LoginPage = () => {
 
                             <Button type={"submit"} className={"w-full"} disabled={isSubmitting}>
                                 <Icon icon={"solar:login-3-bold-duotone"} className={"mr-2 h-4 w-4"}/>
-                                {isSubmitting ? "Iniciando Sesión" : "Iniciar sesión"}
+                                {isSubmitting ? "Iniciando sesión..." : "Iniciar sesión"}
                             </Button>
                         </form>
 

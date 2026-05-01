@@ -21,7 +21,7 @@ const PromptToolbar = ({
                     <Icon icon={"solar:close-circle-bold-duotone"}
                           className={"mr-2 h-4 w-4"}
                     />
-                    Cancelar Edición
+                    Cancelar edición
                 </Button>
             ) : null}
         </div>
