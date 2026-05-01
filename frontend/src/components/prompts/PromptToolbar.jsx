@@ -13,7 +13,7 @@ const PromptToolbar = ({
                 <Icon
                     icon={"solar:add-circle-bold-duotone"}
                     className={"mr-2 h-4 w-4"}/>
-                {isEditing ? "Ir al formulario" : "Nuevo Prompt"}
+                {isEditing ? "Ir al formulario" : "Nuevo prompt"}
             </Button>
 
             {isEditing ? (
@@ -28,7 +28,7 @@ const PromptToolbar = ({
     )
     return (
         <PageHeader
-            eyebrow={"Espacio De Trabajo"}
+            eyebrow={"Espacio de trabajo"}
             title={"Prompts"}
             description={"Crea, organiza, filtra y reutiliza tu biblioteca privada de prompts."}
             icon={"solar:document-text-bold-duotone"}

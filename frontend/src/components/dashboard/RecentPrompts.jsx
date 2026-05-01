@@ -7,7 +7,7 @@ const RecentPrompts = ({items = []}) => {
             <CardHeader>
                 <CardTitle>Prompts recientes</CardTitle>
                 <CardDescription>
-                    Los últimos prompts creados en tu Espacio De Trabajo.
+                    Los últimos prompts creados en tu espacio De trabajo.
                 </CardDescription>
             </CardHeader>
 

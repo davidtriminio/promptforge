@@ -52,14 +52,14 @@ const LoginPage = () => {
                             Bienvenido de nuevo
                         </h1>
                         <p className={"mt-2 text-sm text-muted-foreground"}>
-                            Accede a tu Espacio De Trabajo privado de prompts.
+                            Accede a tu Espacio de trabajo privado de prompts.
                         </p>
                     </div>
                 </div>
 
                 <Card className={"border-border/70 shadow-sm"}>
                     <CardHeader>
-                        <CardTitle>Iniciar Sesión</CardTitle>
+                        <CardTitle>Iniciar sesión</CardTitle>
                         <CardDescription>
                             Inicia sesión para continuar trabajando en tu biblioteca.
                         </CardDescription>
@@ -101,7 +101,7 @@ const LoginPage = () => {
 
                             <Button type={"submit"} className={"w-full"} disabled={isSubmitting}>
                                 <Icon icon={"solar:login-3-bold-duotone"} className={"mr-2 h-4 w-4"}/>
-                                {isSubmitting ? "Iniciando Sesión" : "Iniciar Sesión"}
+                                {isSubmitting ? "Iniciando Sesión" : "Iniciar sesión"}
                             </Button>
                         </form>
 

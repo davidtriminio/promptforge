@@ -3,7 +3,7 @@
         label: "Panel",
         href: "/dashboard",
         icon: "solar:widget-5-bold-duotone",
-        description: "Resumen general del Espacio De Trabajo"
+        description: "Resumen general del Espacio de trabajo"
     },
     {
       label: "Prompts",

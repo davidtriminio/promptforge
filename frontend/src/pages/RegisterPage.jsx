@@ -47,7 +47,7 @@ const RegisterPage = () => {
                         <p className={"text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground"}>PromptForge</p>
                         <h1 className={"mt-2 text-3xl font-semibold tracking-tight text-foreground"}>Crea tu cuenta</h1>
                         <p className={"mt-2 text-sm text-muted-foreground"}>Empieza a organizar tus prompts en un
-                            Espacio De Trabajo privado.</p>
+                            Espacio de trabajo privado.</p>
                     </div>
                 </div>
 
@@ -71,7 +71,7 @@ const RegisterPage = () => {
                                         required: "Debe ingresar un nombre.",
                                         minLength: {
                                             value: 2,
-                                            message: "El nombre debe contener 2 o más carácteres.",
+                                            message: "El nombre debe tener al menos 2 carácteres.",
                                         },
                                     })}
                                 />
@@ -106,7 +106,7 @@ const RegisterPage = () => {
                                         required: "Debe ingresar una contraseña.",
                                         minLength: {
                                             value: 6,
-                                            message: "La contraseña debe contener al menos 6 carácteres",
+                                            message: "La contraseña debe tener al menos 6 carácteres",
                                         },
                                     })}
                                 />
@@ -129,7 +129,7 @@ const RegisterPage = () => {
                         <p className="mt-5 text-sm text-muted-foreground">
                             ¿Ya tienes una cuenta? {" "}
                             <Link to="/login" className={"font-medium text-foreground underline underline-offset-4"}>Iniciar
-                                Sesión</Link>
+                                sesión</Link>
                         </p>
                     </CardContent>
                 </Card>

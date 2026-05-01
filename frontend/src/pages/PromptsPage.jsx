@@ -39,7 +39,7 @@ const PromptsPage = () => {
     const [deletingPrompt, setDeletingPrompt] = useState(false)
 
     const formTitle = useMemo(() => {
-        return editingPrompt ? "Editar prompt" : "Crear Prompt"
+        return editingPrompt ? "Editar prompt" : "Crear prompt"
     });
 
     const loadPrompts = async (activeFilters = filters) => {
@@ -158,7 +158,7 @@ const PromptsPage = () => {
                 className={"rounded-lg border bg-white p-6 shadow-sm"}>
                 <h2 className={"text-lg font-semibold text-slate-900"}>{formTitle}</h2>
                 <p className={"mt-1 text-sm text-slate-600"}>
-                    {editingPrompt ? "Actualizar Prompt seleccionado." : "Agregar nuevo prompt a tu Espacio De Trabajo."}
+                    {editingPrompt ? "Actualizar prompt seleccionado." : "Agregar nuevo prompt a tu Espacio de trabajo."}
                 </p>
 
                 <div className={"mt-5"}>
@@ -179,11 +179,11 @@ const PromptsPage = () => {
                 />
 
             {loadingCategories ? (
-                <LoadingState message={"Cargando Categorías..."}/>
+                <LoadingState message={"Cargando categorías..."}/>
             ) : null}
 
             {loadingPrompts ? (
-                <LoadingState message={"Cargando Prompts..."}/>
+                <LoadingState message={"Cargando prompts..."}/>
             ) : (
                 <PromptList
                     prompts={prompts}

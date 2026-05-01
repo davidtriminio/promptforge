@@ -51,7 +51,7 @@ const PromptFilter = ({filters, categories, onApply}) => {
                                 <SelectValue placeholder={"Todas las Categorias"}/>
                             </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value={"__all__"}>todas las Categorias</SelectItem>
+                                    <SelectItem value={"__all__"}>Todas las Categorias</SelectItem>
                                     {categories.map((category) => (
                                         <SelectItem key={category._id} value={category._id}>
                                     {category.name}
@@ -87,8 +87,8 @@ const PromptFilter = ({filters, categories, onApply}) => {
                             </SelectTrigger>
 
                             <SelectContent>
-                                <SelectItem value={"newest"}>Más Nuevos</SelectItem>
-                                <SelectItem value={"oldest"}>Más Antiguos</SelectItem>
+                                <SelectItem value={"newest"}>Más nuevos</SelectItem>
+                                <SelectItem value={"oldest"}>Más antiguos</SelectItem>
                                 <SelectItem value={"updated"}>Recientemente Modificados</SelectItem>
                                 <SelectItem value={"title_asc"}>Título A-Z</SelectItem>
                                 <SelectItem value={"title_desc"}>Título Z-A</SelectItem>

@@ -54,7 +54,7 @@ const CategoriesPage = () => {
     return (
         <div className={"space-y-6"}>
             <PageHeader
-                eyebrow={"Espacio De Trabajo"}
+                eyebrow={"Espacio de trabajo"}
                 title={"Categories"}
                 description={"Administra las categorías que usarás para organizar tu biblioteca de prompts."}
                 icon={"solar:folder-with-files-bold-duotone"}
@@ -64,7 +64,7 @@ const CategoriesPage = () => {
 
 
             {loading ? (
-                <LoadingState message={"Cargando Categorías..."}/>
+                <LoadingState message={"Cargando categorías..."}/>
             ) : (
                 <CategoryManager
                     categories={categories}
