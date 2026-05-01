@@ -39,7 +39,7 @@ const Header = () => {
 
                         <span className={"min-w-0"}>
                             <span className={"block text-sm font-medium uppercase tracking-[0.22em] text-muted-foreground"}>
-                                Espacio De trabajo
+                                Espacio de trabajo
                             </span>
                             <span className={"block text-lg font-semibold tracking-tight text-foreground"}>
                                 PromptForge
