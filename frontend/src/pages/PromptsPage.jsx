@@ -14,6 +14,7 @@ import LoadingState from "../components/common/LoadingState.jsx";
 import PromptList from "../components/prompts/PromptList.jsx";
 import ConfirmModal from "../components/common/ConfirmModal.jsx";
 import PromptToolbar from "@/components/prompts/PromptToolbar.jsx";
+import AppShellSection from "@/components/common/AppShellSection.jsx";
 
 const defaultFilters = {
     search: "",
@@ -38,9 +39,9 @@ const PromptsPage = () => {
     const [deleteTarget, setDeleteTarget] = useState(null)
     const [deletingPrompt, setDeletingPrompt] = useState(false)
 
-    const formTitle = useMemo(() => {
-        return editingPrompt ? "Editar prompt" : "Crear prompt"
-    });
+    const formTitle = useMemo(
+        () => (editingPrompt ? "Editar prompt" : "Crear prompt") , [editingPrompt]
+    )
 
     const loadPrompts = async (activeFilters = filters) => {
         try {
@@ -108,10 +109,6 @@ const PromptsPage = () => {
         ?.scrollIntoView({behavior: "smooth", block: "start"})
     }
 
-    const handleAskDeletePrompt = (prompt) => {
-        setDeleteTarget(prompt)
-    }
-
     const handleConfirmDeletePrompt = async () => {
         if (!deleteTarget) return
 
@@ -138,9 +135,8 @@ const PromptsPage = () => {
         }
     }
 
-    const handleScrollToForm = () => {
-        document.getElementById("prompt-form-section")
-        ?.scrollIntoView({behavior: "smooth", block: "start"})
+    if(loadingCategories){
+        return <LoadingState message={"Cargando categorías..."}/>
     }
 
     return (
@@ -148,20 +144,25 @@ const PromptsPage = () => {
             <PromptToolbar
                 isEditing={Boolean(editingPrompt)}
                 onCancelEditing={()=> setEditingPrompt(null)}
-                onScrollToForm={handleScrollToForm}
+                onScrollToForm={() => document.getElementById("prompt-form-section")
+            ?.scrollIntoView({behavior: "smooth", block: "start"})}
                 />
 
             {error ? <ErrorAlert message={error}/> : null}
 
-            <section
-                id={"prompt-form-section"}
-                className={"rounded-lg border bg-white p-6 shadow-sm"}>
-                <h2 className={"text-lg font-semibold text-slate-900"}>{formTitle}</h2>
-                <p className={"mt-1 text-sm text-slate-600"}>
-                    {editingPrompt ? "Actualizar prompt seleccionado." : "Agregar nuevo prompt a tu Espacio de trabajo."}
-                </p>
+            <div className={"grid gap-6 xl:grid-cols-[380px_minmax(0,1fr)]"}>
+                <div
+                    id={"prompt-form-section"}
+                    className={"xl:sticky xl:top-24 self-start"}>
+                    <AppShellSection
+                    title={formTitle}
+                    description={
+                        editingPrompt
+                        ? "Actualiza el prompt seleccionado."
+                            : "Agrega un nuevo prompt a la biblioteca"
+                    }
+                    >
 
-                <div className={"mt-5"}>
                     <PromptForm
                         initialValues={editingPrompt}
                         categories={categories}
@@ -169,35 +170,35 @@ const PromptsPage = () => {
                         submitLabel={editingPrompt ? "Actualizar prompt" : "Crear prompt"}
                         isSubmitting={savingPrompt}
                     />
+                    </AppShellSection>
                 </div>
-            </section>
 
-            <PromptFilter
-                filters={filters}
-                categories={categories}
-                onApply={handleApplyFilters}
-                />
+                <div className={"space-y-6"}>
+                    <PromptFilter
+                        filters={filters}
+                        categories={categories}
+                        onApply={handleApplyFilters}
+                        />
 
-            {loadingCategories ? (
-                <LoadingState message={"Cargando categorías..."}/>
-            ) : null}
-
-            {loadingPrompts ? (
-                <LoadingState message={"Cargando prompts..."}/>
-            ) : (
-                <PromptList
-                    prompts={prompts}
-                    onEdit={handleEditPrompt}
-                    onDelete={handleAskDeletePrompt}
-                    onToggleFavorite={handleToggleFavorite}
-                />
-            )}
+                    {loadingPrompts ? (
+                        <LoadingState message={"Cargando prompts..."}/>
+                    ) : (
+                        <PromptList
+                            prompts={prompts}
+                            onEdit={handleEditPrompt}
+                            onDelete={setDeleteTarget}
+                            onToggleFavorite={handleToggleFavorite}
+                        />
+                    )}
+                </div>
+            </div>
 
             <ConfirmModal
                 isOpen={Boolean(deleteTarget)}
-                title={"Borrar prompt"}
-                message={`¿Seguro que quieres borrar el prompt "${deleteTarget?.title}"? Esta acción no se puede deshacer.`}
-                confirmText={"Delete"}
+                title={"Eliminar prompt"}
+                message={`¿Seguro que quieres eliminar el prompt "${deleteTarget?.title}"? Esta acción no se puede deshacer.`}
+                confirmText={"Eliminar"}
+                cancelText={"Cancelar"}
                 onConfirm={handleConfirmDeletePrompt}
                 onCancel={() => setDeleteTarget(null)}
                 isLoading={deletingPrompt}

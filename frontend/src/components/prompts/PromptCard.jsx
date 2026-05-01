@@ -54,7 +54,7 @@ const PromptCard = ({
                         size={"sm"}
                         onClick={()=>onDelete(prompt)}>
                         <Icon icon={"solar:trash-bin-trash-bold-duotone"} className={"mr-2 h-4 w-4"}/>
-                            Borrar
+                            Eliminar
                     </Button>
                 </CardAction>
             </CardHeader>
