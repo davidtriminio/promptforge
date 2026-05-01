@@ -29,7 +29,7 @@ const PromptCard = ({
                     </div>
 
                     <CardDescription>
-                        {prompt.description || "No hay descripción."}
+                        {prompt.description || "Sin descripción."}
                     </CardDescription>
                 </div>
 
@@ -44,8 +44,19 @@ const PromptCard = ({
                             icon={prompt.isFavorite
                                 ? "solar:star-bold-duotone"
                                 : "solar:star-outline"}
+                            className={"mr-2 h-4 w-4"}
                         />
-                        {prompt.isFavorite ? "En Favoritos" : "Favorito"}
+                        {prompt.isFavorite ? "Quitar Favoritos" : "Marcar Favorito"}
+                    </Button>
+                    
+                    <Button
+                    type={"button"}
+                    variant={"outline"}
+                    size={"sm"}
+                    onClick={() => onEdit(prompt)}
+                    >
+                        <Icon icon={"solar:pen-bold-duotone"} className={"mr-2 h-4 w-4"}/>
+                        Editar
                     </Button>
                     
                     <Button
@@ -59,7 +70,7 @@ const PromptCard = ({
                 </CardAction>
             </CardHeader>
             <CardContent>
-                <p className={"whitespace-pre-wrap text-sm leading-6 text-muted-foreground line-clamp-5"}>
+                <p className={"line-clamp-5 whitespace-pre-wrap text-sm leading-6 text-muted-foreground"}>
                     {prompt.content}
                 </p>
             </CardContent>
