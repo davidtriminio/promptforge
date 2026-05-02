@@ -1,6 +1,6 @@
 ﻿import {useAuth} from "../../hooks/useAuth.js";
 import {Link} from "react-router-dom";
-import {Sheet, SheetContent, SheetTrigger} from "@/components/ui/sheet.tsx";
+import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger} from "@/components/ui/sheet.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {Icon} from "@iconify/react";
 import Sidebar from "@/components/layout/Sidebar.jsx";
@@ -14,16 +14,21 @@ const Header = () => {
                     <Sheet>
                         <SheetTrigger asChild>
                             <Button
-                            type={"button"}
-                            variant={"outline"}
-                            size={"icon"}
-                            className={"lg:hidden"}
+                                aria-label={"Abrir menú de navegación"}
+                                type={"button"}
+                                variant={"outline"}
+                                size={"icon"}
+                                className={"lg:hidden"}
                             >
                                 <Icon icon={"solar:hamburger-menu-linear"} className={"h-5 w-5"}/>
                             </Button>
                         </SheetTrigger>
 
                         <SheetContent side={"left"} className={"w-[320px] border-r p-0"}>
+                            <SheetHeader className={"sr-only"}>
+                                <SheetTitle>Menú principal</SheetTitle>
+                                <SheetDescription>Navega entre panel, prompts y categorías.</SheetDescription>
+                            </SheetHeader>
                             <div className={"h-full p-4"}>
                                 <Sidebar/>
                             </div>
@@ -31,14 +36,16 @@ const Header = () => {
                     </Sheet>
 
                     <Link to={"/dashboard"} className={"flex items-center gap-3"}>
-                        <span className={"flex h-11 w-11 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-sm"}>
+                        <span
+                            className={"flex h-11 w-11 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-sm"}>
                             <Icon icon={"solar:document-add-bold-duotone"}
                                   className={"h-5 w-5"}
-                                  />
+                            />
                         </span>
 
                         <span className={"min-w-0"}>
-                            <span className={"block text-sm font-medium uppercase tracking-[0.22em] text-muted-foreground"}>
+                            <span
+                                className={"block text-sm font-medium uppercase tracking-[0.22em] text-muted-foreground"}>
                                 Espacio de trabajo
                             </span>
                             <span className={"block text-lg font-semibold tracking-tight text-foreground"}>
@@ -53,13 +60,13 @@ const Header = () => {
                         <p className={"text-sm font-medium text-foreground"}>{user?.name || "Usuario"}</p>
                         <p className={"text-xs text-muted-foreground"}>{user?.email || "Sin Correo"}</p>
                     </div>
-                    
+
                     <Button type={"button"} variant={"outline"} onClick={logout}>
                         <Icon icon={"solar:logout-2-outline"}
                               className={"mr-2 h-4 w-4"}/>
-                            Cerrar Sesión
+                        Cerrar Sesión
                     </Button>
-                    
+
                 </div>
 
             </div>
