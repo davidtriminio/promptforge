@@ -11,7 +11,7 @@ const Sidebar = ({onNavigate}) => {
                 <h2 className={"mt-2 text-lg font-semibold tracking-tight text-foreground"}>PromptForge</h2>
                 <p className={"mt-1 text-sm text-muted-foreground"}>Tu sistema privado para guardar y reutilizar prompts.</p>
             </div>
-            <nav className={"mt-4 flex flex-1 flex-col gap-2"}>
+            <nav aria-label="Navegación principal del espacio de trabajo" className={"mt-4 flex flex-1 flex-col gap-2"}>
                 {workspaceNavigation.map((item) => (
                     <NavLink
                     key={item.href}
