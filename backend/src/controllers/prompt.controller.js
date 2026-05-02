@@ -36,7 +36,7 @@ export const createPrompt = async (req, res) => {
 
         if (!isCategoryValid) {
             return res.status(400).json({
-                message: "Invalid category"
+                message: "La categoría seleccionada no es válida"
             })
         }
 
@@ -49,7 +49,7 @@ export const createPrompt = async (req, res) => {
             tags: normalizeTags(tags)
         })
         return res.status(201).json({
-            message: "Prompt created successfully.",
+            message: "Prompt creado correctamente.",
             prompt
         })
     } catch (e) {
@@ -87,7 +87,7 @@ export const getPrompts = async (req, res) => {
         if (category) {
             if (!isValidId(category)) {
                 return res.status(400).json({
-                    message: "Invalid category ID."
+                    message: "El ID de la categoría no es válido."
                 })
             }
 
@@ -98,7 +98,7 @@ export const getPrompts = async (req, res) => {
 
             if (!isCategoryValid) {
                 return res.status(400).json({
-                    message: "Invalid category."
+                    message: "La categoría seleccionada no es válida."
                 })
             }
 
@@ -202,7 +202,7 @@ export const getPromptById = async (req, res) => {
 
         if (!prompt) {
             return res.status(404).json({
-                message: "Prompt not found."
+                message: "No se encontró el prompt."
             })
         }
 
@@ -245,7 +245,7 @@ export const updatePrompt = async (req, res) => {
 
             if (!isCategoryValid) {
                 return res.status(400).json({
-                    message: "Invalid category"
+                    message: "La categoría seleccionada no es válida"
                 })
             }
         }
@@ -263,12 +263,12 @@ export const updatePrompt = async (req, res) => {
 
         if (!prompt) {
             return res.status(404).json({
-                message: "Prompt not found."
+                message: "No se encontró el prompt."
             })
         }
 
         return res.status(200).json({
-            message: "Prompt updated successfully.",
+            message: "Prompt actualizado correctamente.",
             prompt
         })
     } catch (e) {
@@ -295,12 +295,12 @@ export const deletePrompt = async (req, res) => {
 
         if (!prompt) {
             return res.status(404).json({
-                message: "Prompt not found"
+                message: "No se encontró el prompt"
             })
         }
 
         return res.status(200).json({
-            message: "Prompt deleted successfully."
+            message: "Prompt eliminado correctamente."
         })
     } catch (e) {
         return res.status(500).json({
@@ -326,7 +326,7 @@ export const toggleFavoritePrompt = async (req, res) => {
 
         if (!prompt) {
             return res.status(404).json({
-                message: "Prompt not found."
+                message: "No se encontró el prompt."
             })
         }
 
@@ -335,7 +335,7 @@ export const toggleFavoritePrompt = async (req, res) => {
         await prompt.save()
 
         return res.status(200).json({
-            message: "Favorite status updated successfully.",
+            message: "El estado de favorito se actualizó correctamente.",
             prompt
         })
     } catch (e) {
