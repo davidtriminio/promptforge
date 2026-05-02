@@ -33,7 +33,7 @@ const PromptCard = ({
                     </CardDescription>
                 </div>
 
-                <CardAction className={"flex flex-wrap gap-2"}>
+                <div className={"flex flex-wrap gap-2 pt-2"}>
                     <Button
                         type={"button"}
                         variant={prompt.isFavorite ? "default" : "outline"}
@@ -67,10 +67,10 @@ const PromptCard = ({
                         <Icon icon={"solar:trash-bin-trash-bold-duotone"} className={"mr-2 h-4 w-4"}/>
                             Eliminar
                     </Button>
-                </CardAction>
+                </div>
             </CardHeader>
             <CardContent>
-                <p className={"line-clamp-5 whitespace-pre-wrap text-sm leading-6 text-muted-foreground"}>
+                <p className={"whitespace-pre-wrap break-words text-sm leading-6 text-muted-foreground lg:text-[15px]"}>
                     {prompt.content}
                 </p>
             </CardContent>
