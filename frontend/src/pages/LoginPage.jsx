@@ -7,6 +7,7 @@ import {Icon} from "@iconify/react";
 import ErrorAlert from "@/components/common/ErrorAlert.jsx";
 import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
+import {getApiErrorMessage} from "@/utils/getApiErrorMessage.js";
 
 const LoginPage = () => {
     const navigate = useNavigate()
@@ -26,7 +27,7 @@ const LoginPage = () => {
             navigate("/dashboard")
         } catch (e) {
             setServerError(
-                e.response?.data?.message || "No se puede iniciar sesión."
+                getApiErrorMessage(e, "No se puede iniciar sesión.")
             )
         }
     }
@@ -70,17 +71,20 @@ const LoginPage = () => {
                             {serverError ? <ErrorAlert message={serverError}/> : null}
 
                             <div className={"space-y-2"}>
-                                <label className={"text-sm font-medium text-foreground"}>Correo Electrónico</label>
+                                <label htmlFor="login-email" className={"text-sm font-medium text-foreground"}>Correo Electrónico</label>
                                 <Input
+                                    id="login-email"
                                     type={"email"}
                                     placeholder={"tu@email.com"}
+                                    aria-invalid={Boolean(errors.email)}
+                                    aria-describedby={errors.email ? "login-email-error" : undefined}
                                     {...register("email", {
                                         required: "Debe ingresar un correo."
                                     })}
                                 />
 
                                 {errors.email ? (
-                                    <p className={"text-sm text-destructive"}>{errors.email.message}</p>
+                                    <p id="login-email-error" className={"text-sm text-destructive"}>{errors.email.message}</p>
                                 ) : null
                                 }
                             </div>
