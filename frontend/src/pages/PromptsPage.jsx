@@ -15,6 +15,7 @@ import PromptList from "../components/prompts/PromptList.jsx";
 import ConfirmModal from "../components/common/ConfirmModal.jsx";
 import PromptToolbar from "@/components/prompts/PromptToolbar.jsx";
 import AppShellSection from "@/components/common/AppShellSection.jsx";
+import {getApiErrorMessage} from "@/utils/getApiErrorMessage.js";
 
 const defaultFilters = {
     search: "",
@@ -40,7 +41,7 @@ const PromptsPage = () => {
     const [deletingPrompt, setDeletingPrompt] = useState(false)
 
     const formTitle = useMemo(
-        () => (editingPrompt ? "Editar prompt" : "Crear prompt") , [editingPrompt]
+        () => (editingPrompt ? "Editar prompt" : "Crear prompt"), [editingPrompt]
     )
 
     const loadPrompts = async (activeFilters = filters) => {
@@ -55,7 +56,7 @@ const PromptsPage = () => {
             const data = await getPromptRequest(params)
             setPrompts(data.prompts || [])
         } catch (e) {
-            setError(e.response?.data?.message || "No se pudieron cargar los prompts.")
+            setError(getApiErrorMessage(e, "No se pudieron cargar los prompts."))
         } finally {
             setLoadingPrompts(false)
         }
@@ -67,7 +68,7 @@ const PromptsPage = () => {
             const data = await getCategoriesRequest()
             setCategories(data.categories || [])
         } catch (e) {
-            setError(e.response?.data?.message || "No se pudieron cargar las categorías.")
+            setError(getApiErrorMessage(e, "No se pudieron cargar las categorías."))
         } finally {
             setLoadingCategories(false)
         }
@@ -97,7 +98,7 @@ const PromptsPage = () => {
             setEditingPrompt(null)
             await loadPrompts()
         } catch (e) {
-            setError(e.response?.data?.message || "No se pudo guardar el prompt.")
+            setError(getApiErrorMessage(e, "No se pudo guardar el prompt."))
         } finally {
             setSavingPrompt(false)
         }
@@ -119,7 +120,7 @@ const PromptsPage = () => {
             setDeleteTarget(null)
             await loadPrompts()
         } catch (e) {
-            setError(e.response?.data?.message || "No se pudo eliminar el prompt.")
+            setError(getApiErrorMessage(e, "No se pudo eliminar el prompt."))
         } finally {
             setDeletingPrompt(false)
         }
@@ -131,11 +132,11 @@ const PromptsPage = () => {
             await toggleFavoritePromptRequest(prompt._id)
             await loadPrompts()
         } catch (e) {
-            setError(e.response?.data?.message || "No se pudo actualizar el favorito.")
+            setError(getApiErrorMessage(e, "No se pudo actualizar el favorito."))
         }
     }
 
-    if(loadingCategories){
+    if (loadingCategories) {
         return <LoadingState message={"Cargando categorías..."}/>
     }
 
@@ -143,10 +144,10 @@ const PromptsPage = () => {
         <div className="space-y-6">
             <PromptToolbar
                 isEditing={Boolean(editingPrompt)}
-                onCancelEditing={()=> setEditingPrompt(null)}
+                onCancelEditing={() => setEditingPrompt(null)}
                 onScrollToForm={() => document.getElementById("prompt-form-section")
-            ?.scrollIntoView({behavior: "smooth", block: "start"})}
-                />
+                ?.scrollIntoView({behavior: "smooth", block: "start"})}
+            />
 
             {error ? <ErrorAlert message={error}/> : null}
 
@@ -155,21 +156,21 @@ const PromptsPage = () => {
                     id={"prompt-form-section"}
                     className={"xl:sticky xl:top-24 self-start"}>
                     <AppShellSection
-                    title={formTitle}
-                    description={
-                        editingPrompt
-                        ? "Actualiza el prompt seleccionado."
-                            : "Agrega un nuevo prompt a la biblioteca"
-                    }
+                        title={formTitle}
+                        description={
+                            editingPrompt
+                                ? "Actualiza el prompt seleccionado."
+                                : "Agrega un nuevo prompt a la biblioteca"
+                        }
                     >
 
-                    <PromptForm
-                        initialValues={editingPrompt}
-                        categories={categories}
-                        onSubmit={handleSubmitPrompt}
-                        submitLabel={editingPrompt ? "Actualizar prompt" : "Crear prompt"}
-                        isSubmitting={savingPrompt}
-                    />
+                        <PromptForm
+                            initialValues={editingPrompt}
+                            categories={categories}
+                            onSubmit={handleSubmitPrompt}
+                            submitLabel={editingPrompt ? "Actualizar prompt" : "Crear prompt"}
+                            isSubmitting={savingPrompt}
+                        />
                     </AppShellSection>
                 </div>
 
@@ -178,7 +179,7 @@ const PromptsPage = () => {
                         filters={filters}
                         categories={categories}
                         onApply={handleApplyFilters}
-                        />
+                    />
 
                     {loadingPrompts ? (
                         <LoadingState message={"Cargando prompts..."}/>
