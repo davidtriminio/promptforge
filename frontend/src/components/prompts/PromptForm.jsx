@@ -10,7 +10,8 @@ const PromptForm = ({
                         categories,
                         onSubmit,
                         submitLabel = "Guardar prompt",
-                        isSubmitting = false
+                        isSubmitting = false,
+                        draftKey = null
                     }) => {
     const {
         register,
@@ -41,6 +42,44 @@ const PromptForm = ({
 
     const selectedCategory = watch("category")
 
+    const watchedValues = watch()
+
+    useEffect(() => {
+        if(!draftKey || initialValues?._id) return
+
+        const savedDraft = localStorage.getItem(draftKey)
+        if(!savedDraft) return;
+
+        try {
+            const parsedDraft = JSON.parse(savedDraft)
+            reset({
+                title: parsedDraft.title || "",
+                description: parsedDraft.description || "",
+                content: parsedDraft.content || "",
+                category: parsedDraft.category || "",
+                tags: parsedDraft.tags || ""
+            })
+        } catch {
+            localStorage.removeItem(draftKey)
+        }
+
+    }, [draftKey, initialValues, reset])
+
+    useEffect(() => {
+        if (!draftKey || initialValues?._id) return
+
+        const hasContent = Object.values(watchedValues).some(
+            (value) => String(value || "").trim() !== ""
+        )
+
+        if(!hasContent){
+            localStorage.removeItem(draftKey)
+            return
+        }
+
+        localStorage.setItem(draftKey, JSON.stringify(watchedValues))
+    }, [draftKey, initialValues, watchedValues])
+
     const fieldIds = {
         title: "prompt-title",
         description: "prompt-description",
@@ -49,7 +88,7 @@ const PromptForm = ({
         tags: "prompt-tags",
     }
 
-    const submitHandler = (values) => {
+    const submitHandler = async (values) => {
         const payload = {
             title: values.title,
             description: values.description,
@@ -58,7 +97,11 @@ const PromptForm = ({
             tags: values.tags
                 ? values.tags.split(",").map((tag) => tag.trim()).filter(Boolean) : []
         }
-        onSubmit(payload)
+        await onSubmit(payload)
+
+        if (draftKey){
+            localStorage.removeItem(draftKey)
+        }
     }
 
     return (

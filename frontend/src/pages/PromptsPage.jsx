@@ -170,6 +170,7 @@ const PromptsPage = () => {
                             onSubmit={handleSubmitPrompt}
                             submitLabel={editingPrompt ? "Actualizar prompt" : "Crear prompt"}
                             isSubmitting={savingPrompt}
+                            draftKey={editingPrompt? null : "promptforge_prompt_draft"}
                         />
                     </AppShellSection>
                 </div>
