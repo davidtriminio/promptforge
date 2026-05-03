@@ -108,6 +108,7 @@ const PromptForm = ({
                 <label htmlFor={fieldIds.content} className={"text-sm font-medium text-foreground"}>Contenido del
                     prompt</label>
                 <Textarea
+                    id="prompt-content"
                     rows={10}
                     maxLength={10000}
                     className={"min-h-56 lg:min-h-72"}
@@ -162,14 +163,14 @@ const PromptForm = ({
                         maxLength={300}
                         placeholder={"marketing, ai, linkeding"}
                         aria-invalid={Boolean(errors.tags)}
-                        aria-describedby={errors.tags ? "prompt-tags-error" : undefined}
+                        aria-describedby={errors.tags ? "prompt-tags-error" : "prompt-tags-help"}
                         {...register("tags", {
                             validate: (value) => {
                                 if (!value.trim()) return true
 
                                 const tags = value
                                 .split(",")
-                                .map((tag) => trag.trim())
+                                .map((tag) => tag.trim())
                                 .filter(Boolean)
 
                                 if (tags.length > 10) {

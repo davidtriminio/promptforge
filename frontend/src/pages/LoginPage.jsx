@@ -82,7 +82,7 @@ const LoginPage = () => {
                                     {...register("email", {
                                         required: "Debe ingresar un correo.",
                                         pattern: {
-                                            value:/^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                                            value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
                                             message: "Ingresa un correo electrónico válido."
                                         }
                                     })}
@@ -102,6 +102,7 @@ const LoginPage = () => {
                                     placeholder="Tu contraseña"
                                     aria-invalid={Boolean(errors.password)}
                                     aria-describedby={errors.password ? "login-password-error" : undefined}
+                                    maxLength={128}
                                     {...register("password", {
                                             required: "Debe ingresar una contraseña."
                                         }
