@@ -28,7 +28,7 @@ const RegisterPage = () => {
             navigate("/dashboard")
         } catch (e) {
             setServerError(
-                getApiErrorMessage(e || "No se pudo completar el registro.")
+                getApiErrorMessage(e, "No se pudo completar el registro.")
             )
         }
     }
@@ -69,6 +69,7 @@ const RegisterPage = () => {
                                     id="register-name"
                                     type="text"
                                     placeholder={"Tu Nombre"}
+                                    maxLength={50}
                                     aria-invalid={Boolean(errors.name)}
                                     aria-describedby={errors.name ? "register-name-error" : undefined}
                                     {...register("name", {
@@ -92,10 +93,15 @@ const RegisterPage = () => {
                                     id="register-email"
                                     type="email"
                                     placeholder={"tu@email.com"}
+                                    maxLength={254}
                                     aria-invalid={Boolean(errors.email)}
                                     aria-describedby={errors.email ? "register-email-error" : undefined}
                                     {...register("email", {
                                         required: "Debe ingresar un correo.",
+                                        pattern: {
+                                            value:/^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                                            message: "Ingresa un correo electrónico válido."
+                                        }
                                     })}
                                 />
                                 {errors.email ? (
@@ -108,7 +114,11 @@ const RegisterPage = () => {
                             <div className={"space-y-2"}>
                                 <label className="text-sm font-medium text-foreground">Contraseña</label>
                                 <Input
+                                    id="register-passwored"
                                     type="password"
+                                    maxLength={128}
+                                    aria-invalid={Boolean(errors.password)}
+                                    aria-describedby={errors.password ? "register-password-error" : undefined}
                                     {...register("password", {
                                         required: "Debe ingresar una contraseña.",
                                         minLength: {
@@ -118,9 +128,7 @@ const RegisterPage = () => {
                                     })}
                                 />
                                 {errors.password ? (
-                                    <p className="text-sm text-destructive">
-                                        {errors.password.message}
-                                    </p>
+                                    <p className="text-sm text-destructive">{errors.password.message}</p>
                                 ) : null}
                             </div>
 
