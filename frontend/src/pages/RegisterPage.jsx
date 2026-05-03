@@ -27,9 +27,7 @@ const RegisterPage = () => {
             await registerUser(formData)
             navigate("/dashboard")
         } catch (e) {
-            setServerError(
-                getApiErrorMessage(e, "No se pudo completar el registro.")
-            )
+            setServerError(getApiErrorMessage(e, "No se pudo completar el registro."))
         }
     }
     return (
@@ -99,7 +97,7 @@ const RegisterPage = () => {
                                     {...register("email", {
                                         required: "Debe ingresar un correo.",
                                         pattern: {
-                                            value:/^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                                            value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
                                             message: "Ingresa un correo electrónico válido."
                                         }
                                     })}
