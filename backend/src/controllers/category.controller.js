@@ -35,7 +35,7 @@ export const createCategory = async (req, res) => {
         })
     } catch (e) {
         return res.status(500).json({
-            message: `Error creating category.`
+            message: "No se pudo crear la categoría."
         })
     }
 }
@@ -107,7 +107,7 @@ export const updateCategory = async (req, res) => {
         })
     } catch (e) {
         return res.status(500).json({
-            message: `Error updating category.`
+            message: "No se pudo actualizar la categoría."
         })
     }
 }
@@ -145,7 +145,7 @@ export const deleteCategory = async (req, res) => {
         })
     } catch (e) {
         return res.status(500).json({
-            message: `Error deleting category.`
+            message: "No se pudo eliminar la categoría."
         })
     }
 }
