@@ -151,7 +151,7 @@ const PromptsPage = () => {
 
             {error ? <ErrorAlert message={error}/> : null}
 
-            <div className={"grid gap-6 xl:grid-cols-[380px_minmax(0,1fr)]"}>
+            <div className={"grid gap-6 xl:grid-cols-[340px_minmax(0,1fr)] 2xl:grid-cols-[360px_minmax(0,1fr)]"}>
                 <div
                     id={"prompt-form-section"}
                     className={"xl:sticky xl:top-24 self-start"}>

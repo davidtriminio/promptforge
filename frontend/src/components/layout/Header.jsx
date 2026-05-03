@@ -9,7 +9,8 @@ const Header = () => {
     const {user, logout} = useAuth()
     return (
         <header className={"sticky top-0 z-30 border-b border-border/60 bg-background/90 backdrop-blur-xl"}>
-            <div className={"mx-auto flex h-18 max-w-7xl items-center justify-between gap-4 px-4 lg:px-6"}>
+            <div
+                className={"mx-auto flex h-18 max-w-[1600px] items-center justify-between gap-4 px-4 lg:px-6 2xl:px-8"}>
                 <div className={"flex items-center gap-3"}>
                     <Sheet>
                         <SheetTrigger asChild>
