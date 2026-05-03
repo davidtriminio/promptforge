@@ -1,6 +1,6 @@
-﻿import mongoose from "mongoose";
-import Prompt from "../models/Prompt.model.js";
-import Category from "../models/Category.model.js";
+﻿import mongoose from "mongoose"
+import Prompt from "../models/Prompt.model.js"
+import Category from "../models/Category.model.js"
 
 const normalizeTags = (tags = []) => {
     return [...new Set(
@@ -48,20 +48,20 @@ export const createPrompt = async (req, res) => {
             content,
             tags: normalizeTags(tags)
         })
+
         return res.status(201).json({
             message: "Prompt creado correctamente.",
             prompt
         })
     } catch (e) {
         return res.status(500).json({
-            message: "Error creating prompt"
+            message: "No se pudo crear el prompt."
         })
     }
 }
 
 export const getPrompts = async (req, res) => {
     try {
-
         const {
             search = "",
             category,
@@ -112,7 +112,7 @@ export const getPrompts = async (req, res) => {
         if (favorite !== undefined) {
             if (favorite !== "true" && favorite !== "false") {
                 return res.status(400).json({
-                    message: "Favorite must be true or false."
+                    message: "El valor de favorito debe ser true o false."
                 })
             }
 
@@ -142,7 +142,7 @@ export const getPrompts = async (req, res) => {
             limitNumber > 100
         ) {
             return res.status(400).json({
-                message: "Page and limit must be valid positive integers."
+                message: "Page y limit deben ser enteros positivos válidos."
             })
         }
 
@@ -180,7 +180,7 @@ export const getPrompts = async (req, res) => {
         })
     } catch (e) {
         return res.status(500).json({
-            message: `Error fetching prompts.`
+            message: "No se pudieron cargar los prompts."
         })
     }
 }
@@ -191,7 +191,7 @@ export const getPromptById = async (req, res) => {
 
         if (!isValidId(id)) {
             return res.status(400).json({
-                message: "Invalid prompt Id"
+                message: "El ID del prompt no es válido."
             })
         }
 
@@ -211,7 +211,7 @@ export const getPromptById = async (req, res) => {
         })
     } catch (e) {
         return res.status(500).json({
-            message: "Error fetching prompt."
+            message: "No se pudo cargar el prompt."
         })
     }
 }
@@ -222,7 +222,7 @@ export const updatePrompt = async (req, res) => {
 
         if (!isValidId(id)) {
             return res.status(400).json({
-                message: "Invalid prompt id."
+                message: "El ID del prompt no es válido."
             })
         }
 
@@ -273,7 +273,7 @@ export const updatePrompt = async (req, res) => {
         })
     } catch (e) {
         return res.status(500).json({
-            message: "Error updating prompt."
+            message: "No se pudo actualizar el prompt."
         })
     }
 }
@@ -284,7 +284,7 @@ export const deletePrompt = async (req, res) => {
 
         if (!isValidId(id)) {
             return res.status(400).json({
-                message: "Invalid prompt id."
+                message: "El ID del prompt no es válido."
             })
         }
 
@@ -304,7 +304,7 @@ export const deletePrompt = async (req, res) => {
         })
     } catch (e) {
         return res.status(500).json({
-            message: "Error deleting prompt."
+            message: "No se pudo eliminar el prompt."
         })
     }
 }
@@ -315,7 +315,7 @@ export const toggleFavoritePrompt = async (req, res) => {
 
         if (!isValidId(id)) {
             return res.status(400).json({
-                message: "Invalid prompt id."
+                message: "El ID del prompt no es válido."
             })
         }
 
@@ -339,6 +339,8 @@ export const toggleFavoritePrompt = async (req, res) => {
             prompt
         })
     } catch (e) {
-        return res.status(500).json({message: "Error updating favorite status."})
+        return res.status(500).json({
+            message: "No se pudo actualizar el estado de favorito."
+        })
     }
 }

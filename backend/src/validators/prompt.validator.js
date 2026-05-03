@@ -23,8 +23,8 @@ export const createPromptValidator = [
 
     body("tags")
     .optional()
-    .isArray()
-    .withMessage("Las etiquetas deben ser un arreglo."),
+    .isArray({max: 10})
+    .withMessage("Puedes enviar un máximo de 10 etiquetas."),
 
     body("tags.*")
     .optional()
@@ -61,16 +61,16 @@ export const updatePromptValidator = [
 
     body("tags")
     .optional()
-    .isArray()
-    .withMessage("Las etiquetas deben ser un arreglo."),
+    .isArray({max: 10})
+    .withMessage("Puedes enviar un máximo de 10 etiquetas."),
 
     body("tags.*")
     .optional()
     .isString()
     .withMessage("Cada etiqueta debe ser una cadena de texto.")
     .trim()
-    .isLength({min: 1, max: 300})
-    .withMessage("Cada etiqueta debe tener entre 1 y 300 caracteres."),
+    .isLength({min: 1, max: 30})
+    .withMessage("Cada etiqueta debe tener entre 1 y 30 caracteres."),
 
     body("category")
     .optional({nullable: true})
