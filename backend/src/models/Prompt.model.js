@@ -38,18 +38,13 @@ const promptSchema = new mongoose.Schema({
         default: [],
         validate: [
             {
-                validator: (value) => value.length <= 10,
+                validator: (tags) => tags.length <= 10,
                 message: "Solo puedes guardar hasta 10 etiquetas."
             },
             {
-                validator: (value) =>
-                    value.every(
-                        (tag) =>
-                            typeof tag === "string" &&
-                            tag.trim().length >= 1 &&
-                            tag.trim().length <= 30
-                    ),
-                message: "Cada etiqueta debe tener entre 1 y 30 caracteres."
+                validator: (tags) =>
+                    tags.every((tag) => tag.trim().length <= 30),
+                message: "Cada etiqueta no puede superar los 30 caracteres."
             }
         ]
     },
@@ -62,9 +57,9 @@ const promptSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     }
-}, { timestamps: true })
+}, {timestamps: true})
 
-promptSchema.index({ user: 1, createdAt: -1 })
+promptSchema.index({user: 1, createdAt: -1})
 
 export const Prompt = mongoose.model("Prompt", promptSchema)
 
