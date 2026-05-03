@@ -8,7 +8,7 @@
     if(data?.message) return data.message
 
     if(!error?.response){
-        return "No se pudo conectar con el servidor. Verifica tu conexión e intentálo de nuevo."
+        return "No se pudo conectar con el servidor. Verifica tu conexión e inténtalo de nuevo."
     }
     return fallback
 }
