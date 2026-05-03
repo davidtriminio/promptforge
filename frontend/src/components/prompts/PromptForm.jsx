@@ -73,10 +73,7 @@ const PromptForm = ({
                     aria-describedby={errors.title ? "prompt-title-error" : undefined}
                     {...register("title", {
                         required: "Debe ingresar un título",
-                        minLength: {
-                            value: 3,
-                            message: "El nombre debe tener al menos 3 caracteres."
-                        },
+                        minLength: {value: 3, message: "El título debe tener al menos 3 caracteres."},
                         maxLength: {value: 100, message: "El título no puede superar 100 caracteres."}
                     })}
                 />
@@ -91,6 +88,7 @@ const PromptForm = ({
                 <Textarea
                     id={fieldIds.description}
                     rows={4}
+                    maxLength={300}
                     placeholder={"Describe brevemente para qué sirve este prompt"}
                     aria-invalid={Boolean(errors.description)}
                     aria-describedby={errors.description ? "prompt-description-error" : undefined}
@@ -98,6 +96,11 @@ const PromptForm = ({
                         maxLength: {value: 300, message: "La descripción no puede exceder 300 caracteres."}
                     })}
                 />
+
+                {errors.description ? (
+                        <p id={"prompt-description-error"}
+                           className={"mt-1 text-sm text-red-600"}>{errors.description.message}</p>)
+                    : null}
             </div>
 
             <div className={"space-y-2"}>
@@ -105,6 +108,8 @@ const PromptForm = ({
                     prompt</label>
                 <Textarea
                     rows={10}
+                    maxLength={10000}
+                    className={"min-h-56 lg:min-h-72"}
                     placeholder={"Escribe aquí el contenido principal del prompt"}
                     aria-invalid={Boolean(errors.content)}
                     aria-describedby={errors.content ? "prompt-content-error" : undefined}
@@ -153,11 +158,40 @@ const PromptForm = ({
                     <Input
                         id={fieldIds.tags}
                         type={"text"}
+                        maxLength={300}
                         placeholder={"marketing, ai, linkeding"}
                         aria-invalid={Boolean(errors.tags)}
                         aria-describedby={errors.tags ? "prompt-tags-error" : undefined}
-                        {...register("tags")}
+                        {...register("tags", {
+                            validate: (value) => {
+                                if (!value.trim()) return true
+
+                                const tags = value
+                                .split(",")
+                                .map((tag) => trag.trim())
+                                .filter(Boolean)
+
+                                if (tags.length > 10) {
+                                    return "Puedes agregar un máximo de 10 etiquetas."
+                                }
+
+                                const invalidTag = tags.find((tag) => tag.length > 30)
+                                if (invalidTag) {
+                                    return "Cada etiqueta puede tener un máximo de 30 caracteres."
+                                }
+
+                                return true
+                            }
+                        })}
                     />
+
+                    <p id="prompt-tags-help" className={"text-xs leading-5 text-muted-foreground"}>
+                        Separa cada etiqueta con comas. Ejemplo: marketing, ai, linkedin
+                    </p>
+
+                    {errors.tags ? (
+                        <p id={"prompt-tags-error"} className={"mt-1 text-sm text-red-600"}>{errors.tags.message}</p>
+                    ) : null}
                 </div>
             </div>
 
