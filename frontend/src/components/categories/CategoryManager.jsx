@@ -25,17 +25,17 @@ const CategoryManager = ({
         }
 
         if(trimmedName.length < 2){
-            setFormError("El nombre de la categoría debe tener al menos 1 caracteres.")
+            setFormError("El nombre de la categoría debe tener al menos 2 caracteres.")
             return
         }
 
         if(trimmedName.length > 40){
-            setFormError("")
+            setFormError("El nombre de la categoría no puede superar 40 caracteres.")
             return
         }
 
         setFormError("")
-        onCreate({name: trimmedName}, color)
+        onCreate({name: trimmedName, color})
         setName("")
         setColor("#6366f1")
     }
@@ -55,8 +55,10 @@ const CategoryManager = ({
                     <Input
                         id="category-name"
                         type={"text"}
+                        maxLength={40}
                         placeholder={"Nombre de la categoría"}
                         value={name}
+                        aria-invalid={Boolean(formError)}
                         onChange={(event) => setName(event.target.value)}
                     />
                     <label htmlFor="category-color" className={"sr-only"}>Color de la categoría</label>
