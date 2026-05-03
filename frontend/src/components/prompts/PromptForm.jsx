@@ -68,6 +68,7 @@ const PromptForm = ({
                 <Input
                     id={fieldIds.title}
                     type={"text"}
+                    maxLength={100}
                     placeholder={"Ej. Prompt para landing de SaaS"}
                     aria-invalid={Boolean(errors.title)}
                     aria-describedby={errors.title ? "prompt-title-error" : undefined}
