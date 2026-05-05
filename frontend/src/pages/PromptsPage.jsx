@@ -15,7 +15,10 @@ import PromptList from "../components/prompts/PromptList.jsx";
 import ConfirmModal from "../components/common/ConfirmModal.jsx";
 import PromptToolbar from "@/components/prompts/PromptToolbar.jsx";
 import AppShellSection from "@/components/common/AppShellSection.jsx";
+import {getApiErrorMessage} from "@/utils/getApiErrorMessage.js";
+import {cn} from "@/lib/utils.ts";
 
+const PROMPT_DRAFT_KEY = "promptforge_prompt_draft"
 const defaultFilters = {
     search: "",
     category: "",
@@ -39,8 +42,10 @@ const PromptsPage = () => {
     const [deleteTarget, setDeleteTarget] = useState(null)
     const [deletingPrompt, setDeletingPrompt] = useState(false)
 
+    const [isFormOpen, setIsFormOpen] = useState(false)
+
     const formTitle = useMemo(
-        () => (editingPrompt ? "Editar prompt" : "Crear prompt") , [editingPrompt]
+        () => (editingPrompt ? "Editar prompt" : "Crear prompt"), [editingPrompt]
     )
 
     const loadPrompts = async (activeFilters = filters) => {
@@ -55,7 +60,7 @@ const PromptsPage = () => {
             const data = await getPromptRequest(params)
             setPrompts(data.prompts || [])
         } catch (e) {
-            setError(e.response?.data?.message || "No se pudieron cargar los prompts.")
+            setError(getApiErrorMessage(e, "No se pudieron cargar los prompts."))
         } finally {
             setLoadingPrompts(false)
         }
@@ -67,11 +72,32 @@ const PromptsPage = () => {
             const data = await getCategoriesRequest()
             setCategories(data.categories || [])
         } catch (e) {
-            setError(e.response?.data?.message || "No se pudieron cargar las categorías.")
+            setError(getApiErrorMessage(e, "No se pudieron cargar las categorías."))
         } finally {
             setLoadingCategories(false)
         }
     }
+
+    useEffect(() => {
+        const savedDraft = localStorage.getItem(PROMPT_DRAFT_KEY)
+
+        if (!savedDraft) return
+
+        try {
+            const parsedDraft = JSON.parse(savedDraft)
+            const hasContent = Object.values(parsedDraft || {}).some(
+                (value) => String(value || "").trim() !== ""
+            )
+
+            if (hasContent) {
+                setIsFormOpen(true)
+            }
+        } catch {
+            localStorage.removeItem(PROMPT_DRAFT_KEY)
+        }
+    }, [])
+
+
 
     useEffect(() => {
         loadPrompts(defaultFilters),
@@ -95,9 +121,10 @@ const PromptsPage = () => {
             }
 
             setEditingPrompt(null)
+            setIsFormOpen(false)
             await loadPrompts()
         } catch (e) {
-            setError(e.response?.data?.message || "No se pudo guardar el prompt.")
+            setError(getApiErrorMessage(e, "No se pudo guardar el prompt."))
         } finally {
             setSavingPrompt(false)
         }
@@ -105,8 +132,12 @@ const PromptsPage = () => {
 
     const handleEditPrompt = (prompt) => {
         setEditingPrompt(prompt)
-        document.getElementById("prompt-form-section")
-        ?.scrollIntoView({behavior: "smooth", block: "start"})
+        setIsFormOpen(true)
+
+        window.requestAnimationFrame(() => {
+            document.getElementById("prompt-form-section")
+            ?.scrollIntoView({behavior: "smooth", block: "start"})
+        })
     }
 
     const handleConfirmDeletePrompt = async () => {
@@ -119,7 +150,7 @@ const PromptsPage = () => {
             setDeleteTarget(null)
             await loadPrompts()
         } catch (e) {
-            setError(e.response?.data?.message || "No se pudo eliminar el prompt.")
+            setError(getApiErrorMessage(e, "No se pudo eliminar el prompt."))
         } finally {
             setDeletingPrompt(false)
         }
@@ -131,11 +162,28 @@ const PromptsPage = () => {
             await toggleFavoritePromptRequest(prompt._id)
             await loadPrompts()
         } catch (e) {
-            setError(e.response?.data?.message || "No se pudo actualizar el favorito.")
+            setError(getApiErrorMessage(e, "No se pudo actualizar el favorito."))
         }
     }
 
-    if(loadingCategories){
+    const handleOpenCreateForm = () => {
+        setEditingPrompt(null)
+        setIsFormOpen(true)
+
+        window.requestAnimationFrame(() => {
+            document.getElementById("prompt-form-section")
+            ?.scrollIntoView({behavior: "smooth", block: "start"})
+        })
+    }
+
+
+    const handleCloseForm = () => {
+        setEditingPrompt(null)
+        setIsFormOpen(false)
+    }
+
+
+    if (loadingCategories) {
         return <LoadingState message={"Cargando categorías..."}/>
     }
 
@@ -143,42 +191,62 @@ const PromptsPage = () => {
         <div className="space-y-6">
             <PromptToolbar
                 isEditing={Boolean(editingPrompt)}
-                onCancelEditing={()=> setEditingPrompt(null)}
-                onScrollToForm={() => document.getElementById("prompt-form-section")
-            ?.scrollIntoView({behavior: "smooth", block: "start"})}
-                />
+                isFormOpen={isFormOpen}
+                onCancelEditing={handleCloseForm}
+                onToggleForm={() => setIsFormOpen((prev) => !prev)}
+                onCreatePrompt={handleOpenCreateForm}
+                onScrollToForm={() => {
+                    setIsFormOpen(true)
+                    window.requestAnimationFrame(() => {
+                        document.getElementById("prompt-form-section")
+                        ?.scrollIntoView({behavior: "smooth", block: "start"})
+                    })
+                }}
+            />
+
 
             {error ? <ErrorAlert message={error}/> : null}
 
-            <div className={"grid gap-6 xl:grid-cols-[380px_minmax(0,1fr)]"}>
-                <div
-                    id={"prompt-form-section"}
-                    className={"xl:sticky xl:top-24 self-start"}>
-                    <AppShellSection
-                    title={formTitle}
-                    description={
-                        editingPrompt
-                        ? "Actualiza el prompt seleccionado."
-                            : "Agrega un nuevo prompt a la biblioteca"
-                    }
+            <div
+                className={cn(
+                    "grid gap-6",
+                    isFormOpen || editingPrompt
+                        ? "xl:grid-cols-[340px_minmax(0,1fr)] 2xl:grid-cols-[360px_minmax(0,1fr)]"
+                        : "grid-cols-1"
+                )}
+            >
+                {isFormOpen || editingPrompt ? (
+                    <div
+                        id={"prompt-form-section"}
+                        className={"xl:sticky xl:top-24 self-start"}
                     >
+                        <AppShellSection
+                            title={formTitle}
+                            description={
+                                editingPrompt
+                                    ? "Actualiza el prompt seleccionado."
+                                    : "Agrega un nuevo prompt a la biblioteca"
+                            }
+                        >
+                            <PromptForm
+                                initialValues={editingPrompt}
+                                categories={categories}
+                                onSubmit={handleSubmitPrompt}
+                                submitLabel={editingPrompt ? "Actualizar prompt" : "Crear prompt"}
+                                isSubmitting={savingPrompt}
+                                draftKey={editingPrompt ? null : PROMPT_DRAFT_KEY}
 
-                    <PromptForm
-                        initialValues={editingPrompt}
-                        categories={categories}
-                        onSubmit={handleSubmitPrompt}
-                        submitLabel={editingPrompt ? "Actualizar prompt" : "Crear prompt"}
-                        isSubmitting={savingPrompt}
-                    />
-                    </AppShellSection>
-                </div>
+                            />
+                        </AppShellSection>
+                    </div>
+                ) : null}
 
                 <div className={"space-y-6"}>
                     <PromptFilter
                         filters={filters}
                         categories={categories}
                         onApply={handleApplyFilters}
-                        />
+                    />
 
                     {loadingPrompts ? (
                         <LoadingState message={"Cargando prompts..."}/>

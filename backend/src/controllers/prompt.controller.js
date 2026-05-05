@@ -1,6 +1,6 @@
-﻿import mongoose from "mongoose";
-import Prompt from "../models/Prompt.model.js";
-import Category from "../models/Category.model.js";
+﻿import mongoose from "mongoose"
+import Prompt from "../models/Prompt.model.js"
+import Category from "../models/Category.model.js"
 
 const normalizeTags = (tags = []) => {
     return [...new Set(
@@ -36,7 +36,7 @@ export const createPrompt = async (req, res) => {
 
         if (!isCategoryValid) {
             return res.status(400).json({
-                message: "Invalid category"
+                message: "La categoría seleccionada no es válida"
             })
         }
 
@@ -48,20 +48,20 @@ export const createPrompt = async (req, res) => {
             content,
             tags: normalizeTags(tags)
         })
+
         return res.status(201).json({
-            message: "Prompt created successfully.",
+            message: "Prompt creado correctamente.",
             prompt
         })
     } catch (e) {
         return res.status(500).json({
-            message: "Error creating prompt"
+            message: "No se pudo crear el prompt."
         })
     }
 }
 
 export const getPrompts = async (req, res) => {
     try {
-
         const {
             search = "",
             category,
@@ -87,7 +87,7 @@ export const getPrompts = async (req, res) => {
         if (category) {
             if (!isValidId(category)) {
                 return res.status(400).json({
-                    message: "Invalid category ID."
+                    message: "El ID de la categoría no es válido."
                 })
             }
 
@@ -98,7 +98,7 @@ export const getPrompts = async (req, res) => {
 
             if (!isCategoryValid) {
                 return res.status(400).json({
-                    message: "Invalid category."
+                    message: "La categoría seleccionada no es válida."
                 })
             }
 
@@ -112,7 +112,7 @@ export const getPrompts = async (req, res) => {
         if (favorite !== undefined) {
             if (favorite !== "true" && favorite !== "false") {
                 return res.status(400).json({
-                    message: "Favorite must be true or false."
+                    message: "El valor de favorito debe ser true o false."
                 })
             }
 
@@ -142,7 +142,7 @@ export const getPrompts = async (req, res) => {
             limitNumber > 100
         ) {
             return res.status(400).json({
-                message: "Page and limit must be valid positive integers."
+                message: "Page y limit deben ser enteros positivos válidos."
             })
         }
 
@@ -180,7 +180,7 @@ export const getPrompts = async (req, res) => {
         })
     } catch (e) {
         return res.status(500).json({
-            message: `Error fetching prompts.`
+            message: "No se pudieron cargar los prompts."
         })
     }
 }
@@ -191,7 +191,7 @@ export const getPromptById = async (req, res) => {
 
         if (!isValidId(id)) {
             return res.status(400).json({
-                message: "Invalid prompt Id"
+                message: "El ID del prompt no es válido."
             })
         }
 
@@ -202,7 +202,7 @@ export const getPromptById = async (req, res) => {
 
         if (!prompt) {
             return res.status(404).json({
-                message: "Prompt not found."
+                message: "No se encontró el prompt."
             })
         }
 
@@ -211,7 +211,7 @@ export const getPromptById = async (req, res) => {
         })
     } catch (e) {
         return res.status(500).json({
-            message: "Error fetching prompt."
+            message: "No se pudo cargar el prompt."
         })
     }
 }
@@ -222,7 +222,7 @@ export const updatePrompt = async (req, res) => {
 
         if (!isValidId(id)) {
             return res.status(400).json({
-                message: "Invalid prompt id."
+                message: "El ID del prompt no es válido."
             })
         }
 
@@ -245,7 +245,7 @@ export const updatePrompt = async (req, res) => {
 
             if (!isCategoryValid) {
                 return res.status(400).json({
-                    message: "Invalid category"
+                    message: "La categoría seleccionada no es válida"
                 })
             }
         }
@@ -263,17 +263,17 @@ export const updatePrompt = async (req, res) => {
 
         if (!prompt) {
             return res.status(404).json({
-                message: "Prompt not found."
+                message: "No se encontró el prompt."
             })
         }
 
         return res.status(200).json({
-            message: "Prompt updated successfully.",
+            message: "Prompt actualizado correctamente.",
             prompt
         })
     } catch (e) {
         return res.status(500).json({
-            message: "Error updating prompt."
+            message: "No se pudo actualizar el prompt."
         })
     }
 }
@@ -284,7 +284,7 @@ export const deletePrompt = async (req, res) => {
 
         if (!isValidId(id)) {
             return res.status(400).json({
-                message: "Invalid prompt id."
+                message: "El ID del prompt no es válido."
             })
         }
 
@@ -295,16 +295,16 @@ export const deletePrompt = async (req, res) => {
 
         if (!prompt) {
             return res.status(404).json({
-                message: "Prompt not found"
+                message: "No se encontró el prompt"
             })
         }
 
         return res.status(200).json({
-            message: "Prompt deleted successfully."
+            message: "Prompt eliminado correctamente."
         })
     } catch (e) {
         return res.status(500).json({
-            message: "Error deleting prompt."
+            message: "No se pudo eliminar el prompt."
         })
     }
 }
@@ -315,7 +315,7 @@ export const toggleFavoritePrompt = async (req, res) => {
 
         if (!isValidId(id)) {
             return res.status(400).json({
-                message: "Invalid prompt id."
+                message: "El ID del prompt no es válido."
             })
         }
 
@@ -326,7 +326,7 @@ export const toggleFavoritePrompt = async (req, res) => {
 
         if (!prompt) {
             return res.status(404).json({
-                message: "Prompt not found."
+                message: "No se encontró el prompt."
             })
         }
 
@@ -335,10 +335,12 @@ export const toggleFavoritePrompt = async (req, res) => {
         await prompt.save()
 
         return res.status(200).json({
-            message: "Favorite status updated successfully.",
+            message: "El estado de favorito se actualizó correctamente.",
             prompt
         })
     } catch (e) {
-        return res.status(500).json({message: "Error updating favorite status."})
+        return res.status(500).json({
+            message: "No se pudo actualizar el estado de favorito."
+        })
     }
 }

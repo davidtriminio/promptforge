@@ -18,7 +18,7 @@ export const createCategory = async (req, res) => {
 
         if (existingCategory) {
             return res.status(400).json({
-                message: "Category already exist."
+                message: "La categoría ya existe."
             })
         }
 
@@ -30,12 +30,12 @@ export const createCategory = async (req, res) => {
         })
 
         return res.status(201).json({
-            message: "Category created successfully.",
+            message: "Categoría creada correctamente.",
             category
         })
     } catch (e) {
         return res.status(500).json({
-            message: `Error creating category.`
+            message: "No se pudo crear la categoría."
         })
     }
 }
@@ -52,7 +52,7 @@ export const getCategories = async (req, res) => {
         })
     } catch (e) {
         return res.status(500).json({
-            message: `Failed fetching categories.`
+            message: `No se pudieron cargar las categorías.`
         })
     }
 }
@@ -63,7 +63,7 @@ export const updateCategory = async (req, res) => {
 
         if (!isValidId(id)) {
             return res.status(400).json({
-                message: "Invalid category ID."
+                message: "El ID de la categoría no es válido."
             })
         }
 
@@ -74,7 +74,7 @@ export const updateCategory = async (req, res) => {
 
         if (!category) {
             return res.status(404).json({
-                message: "Category not found."
+                message: "No se encontró la categoría."
             })
         }
 
@@ -89,7 +89,7 @@ export const updateCategory = async (req, res) => {
 
             if (duplicatedCategory) {
                 return res.status(409).json({
-                    message: "Category already exists."
+                    message: "La categoría ya existe."
                 })
             }
             category.name = req.body.name
@@ -103,11 +103,11 @@ export const updateCategory = async (req, res) => {
         await category.save()
 
         return res.status(200).json({
-            message: "Category updated successfully."
+            message: "Categoría actualizada correctamente."
         })
     } catch (e) {
         return res.status(500).json({
-            message: `Error updating category.`
+            message: "No se pudo actualizar la categoría."
         })
     }
 }
@@ -118,7 +118,7 @@ export const deleteCategory = async (req, res) => {
 
         if (!isValidId(id)) {
             return res.status(400).json({
-                message: "Invalid category ID."
+                message: "El ID de la categoría no es válido."
             })
         }
 
@@ -129,7 +129,7 @@ export const deleteCategory = async (req, res) => {
 
         if (!category) {
             return res.status(404).json({
-                message: "Category not found."
+                message: "No se encontró la categoría."
             })
         }
 
@@ -141,11 +141,11 @@ export const deleteCategory = async (req, res) => {
         })
 
         return res.status(200).json({
-            message: "Category deleted successfully."
+            message: "Categoría eliminada correctamente."
         })
     } catch (e) {
         return res.status(500).json({
-            message: `Error deleting category.`
+            message: "No se pudo eliminar la categoría."
         })
     }
 }

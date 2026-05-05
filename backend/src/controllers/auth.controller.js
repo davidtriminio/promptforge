@@ -8,7 +8,7 @@ export const register = async (req, res) => {
 
     if (existingUser) {
         return res.status(409).json({
-            message: "Email already exist."
+            message: "Ya existe una cuenta con ese correo electrónico."
         })
     }
 
@@ -24,7 +24,7 @@ export const register = async (req, res) => {
     const token = generateToken(user._id)
 
     return res.status(201).json({
-        message: "User registered successfully.",
+        message: "Usuario registrado correctamente.",
         token,
         user: {
             id: user._id,
@@ -41,20 +41,20 @@ export const login = async (req, res) => {
 
     if (!user) {
         return res.status(401).json({
-            message: "Invalid email or password."
+            message: "Correo o contraseña incorrectos."
         })
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password)
     if(!isPasswordValid){
         return res.status(401).json({
-            message: "Invalid email or password"
+            message: "Correo o contraseña incorrectos."
         })
     }
 
     const token = generateToken(user._id)
     return res.status(200).json({
-        message: "Login successfully",
+        message: "Inicio de sesión correcto.",
         token,
         user: {
             id: user._id,

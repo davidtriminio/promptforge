@@ -4,6 +4,7 @@ import ErrorAlert from "@/components/common/ErrorAlert.jsx";
 import LoadingState from "@/components/common/LoadingState.jsx";
 import CategoryManager from "@/components/categories/CategoryManager.jsx";
 import PageHeader from "@/components/common/PageHeader.jsx";
+import {getApiErrorMessage} from "@/utils/getApiErrorMessage.js";
 
 const CategoriesPage = () => {
     const [categories, setCategories] = useState([])
@@ -18,7 +19,7 @@ const CategoriesPage = () => {
             const data = await getCategoriesRequest()
             setCategories(data.categories || [])
         } catch (e) {
-            setError(e.response?.data?.message || "No se puedieron cargar las categorías.")
+            setError(getApiErrorMessage(e, "No se pudieron cargar las categorías."))
         } finally {
             setLoading(false)
         }
@@ -35,7 +36,7 @@ const CategoriesPage = () => {
             await createCategoryRequest(payload)
             await loadCategories()
         } catch (e) {
-            setError(e.response?.data?.message || "No se pudieron cargar las categorías.")
+            setError(getApiErrorMessage(e, "No se pudieron cargar las categorías."))
         } finally {
             setCreating(false)
         }
@@ -47,7 +48,7 @@ const CategoriesPage = () => {
             await deleteCategoryRequest(category._id)
             await loadCategories()
         } catch (e) {
-            setError(e.response?.data?.message || "No se pudo eliminar la categoría.")
+            setError(getApiErrorMessage(e, "No se pudo eliminar la categoría."))
         }
     }
 
@@ -55,7 +56,7 @@ const CategoriesPage = () => {
         <div className={"space-y-6"}>
             <PageHeader
                 eyebrow={"Espacio de trabajo"}
-                title={"Categories"}
+                title={"Categorías"}
                 description={"Administra las categorías que usarás para organizar tu biblioteca de prompts."}
                 icon={"solar:folder-with-files-bold-duotone"}
             />

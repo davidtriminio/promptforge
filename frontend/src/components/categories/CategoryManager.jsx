@@ -12,16 +12,30 @@ const CategoryManager = ({
 }) => {
     const [name, setName] = useState("")
     const [color, setColor] = useState("#6366f1")
+    const [formError, setFormError] = useState("")
 
     const handleSubmit = (event) => {
         event.preventDefault()
-        if (!name.trim()) return
 
-        onCreate({
-            name: name.trim(),
-            color
-        })
+        const trimmedName = name.trim()
 
+        if(!trimmedName){
+            setFormError("Escribe un nombre para la categoría.")
+            return
+        }
+
+        if(trimmedName.length < 2){
+            setFormError("El nombre de la categoría debe tener al menos 2 caracteres.")
+            return
+        }
+
+        if(trimmedName.length > 40){
+            setFormError("El nombre de la categoría no puede superar 40 caracteres.")
+            return
+        }
+
+        setFormError("")
+        onCreate({name: trimmedName, color})
         setName("")
         setColor("#6366f1")
     }
@@ -37,13 +51,19 @@ const CategoryManager = ({
 
             <CardContent className={"space-y-5"}>
                 <form onSubmit={handleSubmit} className={"flex flex-col gap-3 md:flex-row"}>
+                    <label htmlFor="category-name" className={"sr-only"}>Nombre de la categoría</label>
                     <Input
+                        id="category-name"
                         type={"text"}
+                        maxLength={40}
                         placeholder={"Nombre de la categoría"}
                         value={name}
+                        aria-invalid={Boolean(formError)}
                         onChange={(event) => setName(event.target.value)}
                     />
+                    <label htmlFor="category-color" className={"sr-only"}>Color de la categoría</label>
                     <input
+                        id="category-color"
                         type={"color"}
                         className={"h-10 w-full rounded-md border border-input bg-background px-1 md:w-16"}
                         value={color}
@@ -57,6 +77,8 @@ const CategoryManager = ({
                         {isCreating ? "Creando..." : "Agregar"}
                     </Button>
                 </form>
+
+                {formError ? <p className={"text-sm text-destructive"} role={"alert"}>{formError}</p> : null }
 
                 <div className={"flex flex-wrap gap-2"}>
                     {categories.map((category) => (

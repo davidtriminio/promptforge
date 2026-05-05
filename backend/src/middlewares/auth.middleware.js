@@ -8,7 +8,7 @@ const protect = async (req, res, next) => {
 
         if (!authHeader || !authHeader.startsWith("Bearer ")) {
             return res.status(401).json({
-                message: "Not authorized, token missing."
+                message: "No autorizado. Falta el token de acceso."
             })
         }
 
@@ -18,14 +18,14 @@ const protect = async (req, res, next) => {
 
         const user = await User.findById(decoded.id)
         if(!user){
-            return res.status(401).json("Not authorized. User not found.")
+            return res.status(401).json("No autorizado. No se encontró el usuario.")
         }
 
         req.user = user
         next()
     } catch (e) {
         return res.status(401).json({
-            message: "Not authorized, token failed."
+            message: "No autorizado. El token no es válido o expiró."
         })
     }
 }

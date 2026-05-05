@@ -1,4 +1,4 @@
-﻿import mongoose from "mongoose";
+﻿import mongoose from "mongoose"
 
 const promptSchema = new mongoose.Schema({
     user: {
@@ -15,28 +15,38 @@ const promptSchema = new mongoose.Schema({
     },
     title: {
         type: String,
-        required: [true, "Title is required."],
+        required: [true, "El título es obligatorio."],
         trim: true,
-        minLength: [3, "Title must be at least 3 characters."],
-        maxLength: [100, "Title cannot exceed 100 characters."]
+        minLength: [3, "El título debe tener al menos 3 caracteres."],
+        maxLength: [100, "El título no puede superar los 100 caracteres."]
     },
     description: {
         type: String,
-        required: true,
         trim: true,
-        maxLength: [300, "Description cannot exceed 300 characters."],
+        maxLength: [300, "La descripción no puede superar los 300 caracteres."],
         default: ""
     },
     content: {
         type: String,
-        required: [true, "Prompt is required."],
+        required: [true, "El prompt es obligatorio."],
         trim: true,
-        minLength: [10, "Prompt content must be at least 10 characters."],
-        maxLength: [10000, "Prompt cannot exceed 10000 characters."]
+        minLength: [10, "El contenido del prompt debe tener al menos 10 caracteres."],
+        maxLength: [10000, "El prompt no puede superar los 10000 caracteres."]
     },
     tags: {
         type: [String],
-        default: []
+        default: [],
+        validate: [
+            {
+                validator: (tags) => tags.length <= 10,
+                message: "Solo puedes guardar hasta 10 etiquetas."
+            },
+            {
+                validator: (tags) =>
+                    tags.every((tag) => tag.trim().length <= 30),
+                message: "Cada etiqueta no puede superar los 30 caracteres."
+            }
+        ]
     },
     currentVersion: {
         type: Number,

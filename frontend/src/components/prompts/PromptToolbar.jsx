@@ -4,17 +4,41 @@ import PageHeader from "@/components/common/PageHeader.jsx";
 
 const PromptToolbar = ({
                            isEditing = false,
+                           isFormOpen = false,
                            onCancelEditing,
+                           onToggleForm,
+                           onCreatePrompt,
                            onScrollToForm
-}) => {
+                       }) => {
     const action = (
         <div className={"flex flex-wrap gap-2"}>
-            <Button type={"button"} onClick={onScrollToForm}>
+            <Button
+                type={"button"}
+                onClick={() => {
+                    if (isEditing) {
+                        onScrollToForm?.()
+                        return
+                    }
+
+                    if (isFormOpen) {
+                        onToggleForm?.()
+                        return
+                    }
+
+                    onCreatePrompt?.()
+                }}
+            >
                 <Icon
                     icon={"solar:add-circle-bold-duotone"}
-                    className={"mr-2 h-4 w-4"}/>
-                {isEditing ? "Ir al formulario" : "Nuevo prompt"}
+                    className={"mr-2 h-4 w-4"}
+                />
+                {isEditing
+                    ? "Ir al formulario"
+                    : isFormOpen
+                        ? "Ocultar formulario"
+                        : "Crear prompt"}
             </Button>
+
 
             {isEditing ? (
                 <Button type={"button"} variant={"outline"} onClick={onCancelEditing}>
