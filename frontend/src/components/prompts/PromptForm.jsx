@@ -4,6 +4,12 @@ import {Input} from "@/components/ui/input.tsx";
 import {Textarea} from "@/components/ui/textarea.tsx";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select.tsx";
 import {Button} from "@/components/ui/button.tsx";
+import {
+    clearPromptDraft,
+    formatPromptDraftDate,
+    readPromptDraft,
+    writePromptDraft
+} from "@/utils/promptDraftStorage.js";
 
 const getPromptFormValues = (initialValues) => ({
     title: initialValues?.title || "",
@@ -33,39 +39,36 @@ const PromptForm = ({
     })
 
     const [isDraftReady, setIsDraftReady] = useState(false)
+    const [draftSavedAt, setDraftSavedAt] = useState(null)
 
     useEffect(() => {
         const baseValues = getPromptFormValues(initialValues)
 
         if (!draftKey || initialValues?._id) {
             reset(baseValues)
+            setDraftSavedAt(null)
             setIsDraftReady(true)
             return
         }
 
-        const savedDraft = localStorage.getItem(draftKey)
+        const savedDraft = readPromptDraft(draftKey)
 
         if (!savedDraft) {
             reset(baseValues)
+            setDraftSavedAt(null)
             setIsDraftReady(true)
             return
         }
 
-        try {
-            const parsedDraft = JSON.parse(savedDraft)
-            reset({
-                title: parsedDraft.title || "",
-                description: parsedDraft.description || "",
-                content: parsedDraft.content || "",
-                category: parsedDraft.category || "",
-                tags: parsedDraft.tags || ""
-            })
-        } catch {
-            localStorage.removeItem(draftKey)
-            reset(baseValues)
-        } finally {
-            setIsDraftReady(true)
-        }
+        reset({
+            title: savedDraft.values.title || "",
+            description: savedDraft.values.description || "",
+            content: savedDraft.values.content || "",
+            category: savedDraft.values.category || "",
+            tags: savedDraft.values.tags || ""
+        })
+        setDraftSavedAt(savedDraft.savedAt)
+        setIsDraftReady(true)
     }, [draftKey, initialValues, reset])
 
     const selectedCategory = watch("category")
@@ -74,17 +77,14 @@ const PromptForm = ({
     useEffect(() => {
         if (!draftKey || initialValues?._id || !isDraftReady) return
 
-        const hasContent = Object.values(watchedValues).some(
-            (value) => String(value || "").trim() !== ""
-        )
+        const timeoutId = window.setTimeout(() => {
+            const savedDraft = writePromptDraft(draftKey, watchedValues)
+            setDraftSavedAt(savedDraft?.savedAt || null)
+        }, 400)
 
-        if (!hasContent) {
-            localStorage.removeItem(draftKey)
-            return
-        }
-
-        localStorage.setItem(draftKey, JSON.stringify(watchedValues))
+        return () => window.clearTimeout(timeoutId)
     }, [draftKey, initialValues, isDraftReady, watchedValues])
+
 
 
     const fieldIds = {
@@ -93,6 +93,12 @@ const PromptForm = ({
         content: "prompt-content",
         category: "prompt-category",
         tags: "prompt-tags",
+    }
+
+    const handleClearDraft = () => {
+        clearPromptDraft(draftKey)
+        reset(getPromptFormValues(initialValues))
+        setDraftSavedAt(null)
     }
 
     const submitHandler = async (values) => {
@@ -107,7 +113,8 @@ const PromptForm = ({
         await onSubmit(payload)
 
         if (draftKey) {
-            localStorage.removeItem(draftKey)
+            clearPromptDraft(draftKey)
+            setDraftSavedAt(null)
         }
     }
 
@@ -247,13 +254,38 @@ const PromptForm = ({
                 </div>
             </div>
 
-            <div className={"flex justify-end"}>
-                <Button
-                    type={"submit"}
-                    disabled={isSubmitting}
-                >
-                    {isSubmitting ? "Guardando..." : submitLabel}
-                </Button>
+            <div className={"border-t pt-4 space-y-4"}>
+                <p className={"max-w-none text-sm leading-6 text-muted-foreground"}>
+                    {draftSavedAt
+                        ? `Borrador guardado automáticamente el ${formatPromptDraftDate(draftSavedAt)}. Expira en 72 horas si no lo guardas.`
+                        : "El borrador se guarda automáticamente en este navegador y expira en 72 horas."}
+                </p>
+
+                <div className={"flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"}>
+                    <div className={"flex"}>
+                        {draftKey && !initialValues?._id ? (
+                            <Button
+                                type={"button"}
+                                variant={"outline"}
+                                size={"sm"}
+                                className={"w-full sm:w-auto border-destructive/40 text-destructive hover:bg-destructive/10 hover:text-destructive"}
+                                onClick={handleClearDraft}
+                            >
+                                Limpiar borrador
+                            </Button>
+                        ) : null}
+                    </div>
+
+                    <div className={"flex sm:justify-end"}>
+                        <Button
+                            type={"submit"}
+                            disabled={isSubmitting}
+                            className={"w-full sm:w-auto"}
+                        >
+                            {isSubmitting ? "Guardando..." : submitLabel}
+                        </Button>
+                    </div>
+                </div>
             </div>
         </form>
     )
