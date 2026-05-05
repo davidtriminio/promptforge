@@ -1,9 +1,17 @@
-﻿import {useForm} from "react-hook-form";
-import {useEffect} from "react";
+import {useForm} from "react-hook-form";
+import {useEffect, useState} from "react";
 import {Input} from "@/components/ui/input.tsx";
 import {Textarea} from "@/components/ui/textarea.tsx";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select.tsx";
 import {Button} from "@/components/ui/button.tsx";
+
+const getPromptFormValues = (initialValues) => ({
+    title: initialValues?.title || "",
+    description: initialValues?.description || "",
+    content: initialValues?.content || "",
+    category: initialValues?.category?._id || "",
+    tags: initialValues?.tags?.join(", ") || ""
+})
 
 const PromptForm = ({
                         initialValues,
@@ -21,34 +29,27 @@ const PromptForm = ({
         watch,
         formState: {errors}
     } = useForm({
-        defaultValues: {
-            title: initialValues?.title || "",
-            description: initialValues?.description || "",
-            content: initialValues?.content || "",
-            category: initialValues?.category?._id || "",
-            tags: initialValues?.tags?.join(", ") || ""
-        }
+        defaultValues: getPromptFormValues(initialValues)
     })
 
-    useEffect(() => {
-        reset({
-            title: initialValues?.title || "",
-            description: initialValues?.description || "",
-            content: initialValues?.content || "",
-            category: initialValues?.category?._id || "",
-            tags: initialValues?.tags?.join(", ") || ""
-        })
-    }, [initialValues, reset]);
-
-    const selectedCategory = watch("category")
-
-    const watchedValues = watch()
+    const [isDraftReady, setIsDraftReady] = useState(false)
 
     useEffect(() => {
-        if(!draftKey || initialValues?._id) return
+        const baseValues = getPromptFormValues(initialValues)
+
+        if (!draftKey || initialValues?._id) {
+            reset(baseValues)
+            setIsDraftReady(true)
+            return
+        }
 
         const savedDraft = localStorage.getItem(draftKey)
-        if(!savedDraft) return;
+
+        if (!savedDraft) {
+            reset(baseValues)
+            setIsDraftReady(true)
+            return
+        }
 
         try {
             const parsedDraft = JSON.parse(savedDraft)
@@ -61,24 +62,30 @@ const PromptForm = ({
             })
         } catch {
             localStorage.removeItem(draftKey)
+            reset(baseValues)
+        } finally {
+            setIsDraftReady(true)
         }
-
     }, [draftKey, initialValues, reset])
 
+    const selectedCategory = watch("category")
+    const watchedValues = watch()
+
     useEffect(() => {
-        if (!draftKey || initialValues?._id) return
+        if (!draftKey || initialValues?._id || !isDraftReady) return
 
         const hasContent = Object.values(watchedValues).some(
             (value) => String(value || "").trim() !== ""
         )
 
-        if(!hasContent){
+        if (!hasContent) {
             localStorage.removeItem(draftKey)
             return
         }
 
         localStorage.setItem(draftKey, JSON.stringify(watchedValues))
-    }, [draftKey, initialValues, watchedValues])
+    }, [draftKey, initialValues, isDraftReady, watchedValues])
+
 
     const fieldIds = {
         title: "prompt-title",
@@ -99,7 +106,7 @@ const PromptForm = ({
         }
         await onSubmit(payload)
 
-        if (draftKey){
+        if (draftKey) {
             localStorage.removeItem(draftKey)
         }
     }
@@ -142,8 +149,8 @@ const PromptForm = ({
                 />
 
                 {errors.description ? (
-                        <p id={"prompt-description-error"}
-                           className={"mt-1 text-sm text-red-600"}>{errors.description.message}</p>)
+                    <p id={"prompt-description-error"}
+                       className={"mt-1 text-sm text-red-600"}>{errors.description.message}</p>)
                     : null}
             </div>
 
@@ -151,7 +158,7 @@ const PromptForm = ({
                 <label htmlFor={fieldIds.content} className={"text-sm font-medium text-foreground"}>Contenido del
                     prompt</label>
                 <Textarea
-                    id="prompt-content"
+                    id={fieldIds.content}
                     rows={10}
                     maxLength={10000}
                     className={"min-h-56 lg:min-h-72"}
@@ -204,7 +211,7 @@ const PromptForm = ({
                         id={fieldIds.tags}
                         type={"text"}
                         maxLength={300}
-                        placeholder={"marketing, ai, linkeding"}
+                        placeholder={"marketing, ai, linkedin"}
                         aria-invalid={Boolean(errors.tags)}
                         aria-describedby={errors.tags ? "prompt-tags-error" : "prompt-tags-help"}
                         {...register("tags", {
@@ -212,9 +219,9 @@ const PromptForm = ({
                                 if (!value.trim()) return true
 
                                 const tags = value
-                                .split(",")
-                                .map((tag) => tag.trim())
-                                .filter(Boolean)
+                                    .split(",")
+                                    .map((tag) => tag.trim())
+                                    .filter(Boolean)
 
                                 if (tags.length > 10) {
                                     return "Puedes agregar un máximo de 10 etiquetas."
