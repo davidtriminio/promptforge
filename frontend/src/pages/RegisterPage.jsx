@@ -7,6 +7,7 @@ import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/compo
 import ErrorAlert from "@/components/common/ErrorAlert.jsx";
 import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
+import {getApiErrorMessage} from "@/utils/getApiErrorMessage.js";
 
 const RegisterPage = () => {
     const navigate = useNavigate()
@@ -26,9 +27,7 @@ const RegisterPage = () => {
             await registerUser(formData)
             navigate("/dashboard")
         } catch (e) {
-            setServerError(
-                e.response?.data?.message || "No se pudo completar el registro."
-            )
+            setServerError(getApiErrorMessage(e, "No se pudo completar el registro."))
         }
     }
     return (
@@ -63,36 +62,48 @@ const RegisterPage = () => {
                         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                             {serverError ? <ErrorAlert message={serverError}/> : null}
                             <div className={"space-y-2"}>
-                                <label className={"text-sm font-medium text-foreground"}>Nombre</label>
+                                <label htmlFor="register-name" className={"text-sm font-medium text-foreground"}>Nombre</label>
                                 <Input
+                                    id="register-name"
                                     type="text"
                                     placeholder={"Tu Nombre"}
+                                    maxLength={50}
+                                    aria-invalid={Boolean(errors.name)}
+                                    aria-describedby={errors.name ? "register-name-error" : undefined}
                                     {...register("name", {
                                         required: "Debe ingresar un nombre.",
                                         minLength: {
                                             value: 2,
-                                            message: "El nombre debe tener al menos 2 carácteres.",
+                                            message: "El nombre debe tener al menos 2 caracteres.",
                                         },
                                     })}
                                 />
                                 {errors.name ? (
-                                    <p className="text-sm text-destructive">
+                                    <p id="register-name-error" className="text-sm text-destructive">
                                         {errors.name.message}
                                     </p>
                                 ) : null}
                             </div>
 
                             <div className={"space-y-2"}>
-                                <label className="text-sm font-medium text-foreground">Correo Electrónico</label>
+                                <label htmlFor="register-email" className="text-sm font-medium text-foreground">Correo Electrónico</label>
                                 <Input
+                                    id="register-email"
                                     type="email"
                                     placeholder={"tu@email.com"}
+                                    maxLength={254}
+                                    aria-invalid={Boolean(errors.email)}
+                                    aria-describedby={errors.email ? "register-email-error" : undefined}
                                     {...register("email", {
                                         required: "Debe ingresar un correo.",
+                                        pattern: {
+                                            value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                                            message: "Ingresa un correo electrónico válido."
+                                        }
                                     })}
                                 />
                                 {errors.email ? (
-                                    <p className="text-sm text-destructive">
+                                    <p id="register-email-error" className="text-sm text-destructive">
                                         {errors.email.message}
                                     </p>
                                 ) : null}
@@ -101,19 +112,21 @@ const RegisterPage = () => {
                             <div className={"space-y-2"}>
                                 <label className="text-sm font-medium text-foreground">Contraseña</label>
                                 <Input
+                                    id="register-passwored"
                                     type="password"
+                                    maxLength={128}
+                                    aria-invalid={Boolean(errors.password)}
+                                    aria-describedby={errors.password ? "register-password-error" : undefined}
                                     {...register("password", {
                                         required: "Debe ingresar una contraseña.",
                                         minLength: {
                                             value: 6,
-                                            message: "La contraseña debe tener al menos 6 carácteres",
+                                            message: "La contraseña debe tener al menos 6 caracteres",
                                         },
                                     })}
                                 />
                                 {errors.password ? (
-                                    <p className="text-sm text-destructive">
-                                        {errors.password.message}
-                                    </p>
+                                    <p className="text-sm text-destructive">{errors.password.message}</p>
                                 ) : null}
                             </div>
 

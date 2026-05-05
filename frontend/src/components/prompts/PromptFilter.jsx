@@ -38,6 +38,8 @@ const PromptFilter = ({filters, categories, onApply}) => {
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-5">
                         <Input
+                            id="prompt-search"
+                            maxLength={100}
                             placeholder={"Buscar Prompts"}
                             value={localFilters.search}
                             onChange={(event) => updateFilter("search", event.target.value)}/>
@@ -61,6 +63,9 @@ const PromptFilter = ({filters, categories, onApply}) => {
                         </Select>
 
                         <Input
+                            id="prompt-tag-filter"
+                            maxLength={30}
+                            aria-label="Filtrar por etiqueta"
                             placeholder={"Filtrar por Etiqueta"}
                             value={localFilters.tag}
                             onChange={(event) => updateFilter("tag", event.target.value)}
