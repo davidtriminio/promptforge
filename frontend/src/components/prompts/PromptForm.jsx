@@ -10,6 +10,7 @@ import {
     readPromptDraft,
     writePromptDraft
 } from "@/utils/promptDraftStorage.js";
+import QuickCategoryDialog from "@/components/categories/QuickCategoryDialog.jsx";
 
 const getPromptFormValues = (initialValues) => ({
     title: initialValues?.title || "",
@@ -23,8 +24,10 @@ const PromptForm = ({
                         initialValues,
                         categories,
                         onSubmit,
+                        onCreateCategory,
                         submitLabel = "Guardar prompt",
                         isSubmitting = false,
+                        isCreatingCategory = false,
                         draftKey = null
                     }) => {
     const {
@@ -40,6 +43,7 @@ const PromptForm = ({
 
     const [isDraftReady, setIsDraftReady] = useState(false)
     const [draftSavedAt, setDraftSavedAt] = useState(null)
+    const [isQuickCategoryOpen, setIsQuickCategoryOpen] = useState(false)
 
     useEffect(() => {
         const baseValues = getPromptFormValues(initialValues)
@@ -186,72 +190,71 @@ const PromptForm = ({
                 ) : null}
             </div>
 
-            <div className={"grid gap-4 md:grid-cols-2"}>
-                <div className={"space-y-2"}>
-                    <label id="prompt-category-label" htmlFor={fieldIds.category}
-                           className={"text-sm font-medium text-foreground"}>Categoría</label>
-                    <Select
-                        value={selectedCategory || "__none__"}
-                        onValueChange={(value) => setValue("category", value === "__none__" ? "" : value)
-                        }
+            <div className={"space-y-2"}>
+                <div className={"flex items-center justify-between gap-3"}>
+                    <label
+                        id="prompt-category-label"
+                        htmlFor={fieldIds.category}
+                        className={"text-sm font-medium text-foreground"}
                     >
-                        <SelectTrigger
-                            id={fieldIds.category}
-                            className={"w-full"}>
-                            <SelectValue placeholder={"Sin categoría"}/>
-                        </SelectTrigger>
+                        Categoría
+                    </label>
 
-                        <SelectContent>
-                            <SelectItem value={"__none__"}>Sin categoría</SelectItem>
-                            {categories.map((category) => (
-                                <SelectItem key={category._id} value={category._id}>
-                                    {category.name}
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
-                </div>
-
-                <div className={"space-y-2"}>
-                    <label htmlFor={fieldIds.tags} className={"text-sm font-medium text-foreground"}>Etiquetas</label>
-                    <Input
-                        id={fieldIds.tags}
-                        type={"text"}
-                        maxLength={300}
-                        placeholder={"marketing, ai, linkedin"}
-                        aria-invalid={Boolean(errors.tags)}
-                        aria-describedby={errors.tags ? "prompt-tags-error" : "prompt-tags-help"}
-                        {...register("tags", {
-                            validate: (value) => {
-                                if (!value.trim()) return true
-
-                                const tags = value
-                                    .split(",")
-                                    .map((tag) => tag.trim())
-                                    .filter(Boolean)
-
-                                if (tags.length > 10) {
-                                    return "Puedes agregar un máximo de 10 etiquetas."
-                                }
-
-                                const invalidTag = tags.find((tag) => tag.length > 30)
-                                if (invalidTag) {
-                                    return "Cada etiqueta puede tener un máximo de 30 caracteres."
-                                }
-
-                                return true
-                            }
-                        })}
-                    />
-
-                    <p id="prompt-tags-help" className={"text-xs leading-5 text-muted-foreground"}>
-                        Separa cada etiqueta con comas. Ejemplo: marketing, ai, linkedin
-                    </p>
-
-                    {errors.tags ? (
-                        <p id={"prompt-tags-error"} className={"mt-1 text-sm text-red-600"}>{errors.tags.message}</p>
+                    {onCreateCategory ? (
+                        <Button
+                            type={"button"}
+                            variant={"outline"}
+                            size={"sm"}
+                            onClick={() => setIsQuickCategoryOpen(true)}
+                        >
+                            Nueva categoría
+                        </Button>
                     ) : null}
                 </div>
+
+                <Select
+                    value={selectedCategory || "__none__"}
+                    onValueChange={(value) =>
+                        setValue("category", value === "__none__" ? "" : value, {
+                            shouldDirty: true,
+                            shouldValidate: true
+                        })
+                    }
+                >
+                    <SelectTrigger
+                        id={fieldIds.category}
+                        className={"w-full"}
+                    >
+                        <SelectValue placeholder={"Sin categoría"}/>
+                    </SelectTrigger>
+
+                    <SelectContent>
+                        <SelectItem value={"__none__"}>Sin categoría</SelectItem>
+                        {categories.map((category) => (
+                            <SelectItem key={category._id} value={category._id}>
+                                {category.name}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+
+                {onCreateCategory ? (
+                    <QuickCategoryDialog
+                        isOpen={isQuickCategoryOpen}
+                        onOpenChange={setIsQuickCategoryOpen}
+                        isCreating={isCreatingCategory}
+                        onCreate={async (payload) => {
+                            const createdCategory = await onCreateCategory(payload)
+
+                            setValue("category", createdCategory._id, {
+                                shouldDirty: true,
+                                shouldValidate: true
+                            })
+
+                            return createdCategory
+                        }}
+                    />
+                ) : null}
             </div>
 
             <div className={"border-t pt-4 space-y-4"}>
