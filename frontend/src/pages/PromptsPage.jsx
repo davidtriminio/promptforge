@@ -6,7 +6,7 @@ import {
     toggleFavoritePromptRequest,
     updatePromptRequest
 } from "../api/promptApi.js";
-import {getCategoriesRequest} from "../api/categoryApi.js";
+import {createCategoryRequest, getCategoriesRequest} from "../api/categoryApi.js";
 import ErrorAlert from "../components/common/ErrorAlert.jsx";
 import PromptForm from "../components/prompts/PromptForm.jsx";
 import PromptFilter from "../components/prompts/PromptFilter.jsx";
@@ -38,6 +38,7 @@ const PromptsPage = () => {
 
     const [editingPrompt, setEditingPrompt] = useState(null)
     const [savingPrompt, setSavingPrompt] = useState(false)
+    const [creatingCategory, setCreatingCategory] = useState(false)
 
     const [deleteTarget, setDeleteTarget] = useState(null)
     const [deletingPrompt, setDeletingPrompt] = useState(false)
@@ -47,6 +48,11 @@ const PromptsPage = () => {
     const formTitle = useMemo(
         () => (editingPrompt ? "Editar prompt" : "Crear prompt"), [editingPrompt]
     )
+
+    const sortCategoriesByName = (itenms) =>
+        [...itenms].sort((a,b) =>
+        a.name.localeCompare(b.name, "es", {sensitivity: "base"})
+        )
 
     const loadPrompts = async (activeFilters = filters) => {
         try {
@@ -108,6 +114,22 @@ const PromptsPage = () => {
         setFilters(nextFilters)
         loadPrompts(nextFilters)
     }
+
+    const handleQuickCreateCategory = async (payload) => {
+        try {
+            setCreatingCategory(true)
+            setError("")
+
+            const data = await createCategoryRequest(payload)
+            const createdCategory = data.category
+
+            setCategories((prev) => sortCategoriesByName([...prev, createdCategory]))
+            return createdCategory
+        } finally {
+            setCreatingCategory(false)
+        }
+    }
+
 
     const handleSubmitPrompt = async (payload) => {
         try {
@@ -234,6 +256,8 @@ const PromptsPage = () => {
                                 onSubmit={handleSubmitPrompt}
                                 submitLabel={editingPrompt ? "Actualizar prompt" : "Crear prompt"}
                                 isSubmitting={savingPrompt}
+                                onCreateCategory={handleQuickCreateCategory}
+                                isCreatingCategory={creatingCategory}
                                 draftKey={editingPrompt ? null : PROMPT_DRAFT_KEY}
 
                             />
