@@ -6,7 +6,21 @@ import categoryRoutes from "./routes/category.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
 
 const app = express()
-app.use(cors())
+
+const allowedOrigins = ENV.CORS_ORIGINS
+.split(",")
+.map((origin) => origin.trim())
+.filter(Boolean)
+
+app.use(cors({
+    origin(origin, callback){
+        if (!origin || allowedOrigins.includes(origin)){
+            return callback(null, true)
+        }
+        return callback(new Error("Origin no permitido por CORS"))
+    }
+}))
+
 app.use(express.json())
 
 app.get("/", (req, res) => {
