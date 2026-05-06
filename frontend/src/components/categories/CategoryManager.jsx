@@ -3,6 +3,7 @@ import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/compo
 import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {Icon} from "@iconify/react";
+import CategoryColorField from "@/components/categories/CategoryColorField.jsx";
 
 const CategoryManager = ({
                              categories,
@@ -50,28 +51,35 @@ const CategoryManager = ({
             </CardHeader>
 
             <CardContent className={"space-y-5"}>
-                <form onSubmit={handleSubmit} className={"flex flex-col gap-3 md:flex-row"}>
-                    <label htmlFor="category-name" className={"sr-only"}>Nombre de la categoría</label>
-                    <Input
-                        id="category-name"
-                        type={"text"}
-                        maxLength={40}
-                        placeholder={"Nombre de la categoría"}
-                        value={name}
-                        aria-invalid={Boolean(formError)}
-                        onChange={(event) => setName(event.target.value)}
-                    />
-                    <label htmlFor="category-color" className={"sr-only"}>Color de la categoría</label>
-                    <input
+                <form
+                    onSubmit={handleSubmit}
+                    className={"grid gap-3 md:grid-cols-[minmax(0,1fr)_220px_auto] md:items-end"}
+                >
+                    <div className={"space-y-2"}>
+                        <label htmlFor="category-name" className={"sr-only"}>Nombre de la categoría</label>
+                        <Input
+                            id="category-name"
+                            type={"text"}
+                            maxLength={40}
+                            placeholder={"Nombre de la categoría"}
+                            value={name}
+                            aria-invalid={Boolean(formError)}
+                            onChange={(event) => setName(event.target.value)}
+                        />
+                    </div>
+
+                    <CategoryColorField
                         id="category-color"
-                        type={"color"}
-                        className={"h-10 w-full rounded-md border border-input bg-background px-1 md:w-16"}
+                        label="Color"
                         value={color}
                         onChange={(event) => setColor(event.target.value)}
+                        showHelperText={false}
                     />
+
                     <Button
                         type={"submit"}
                         disabled={isCreating}
+                        className={"w-full md:w-auto"}
                     >
                         <Icon icon={"solar:add-circle-bold-duotone"} className={"mr-2 h-4 w-4"}/>
                         {isCreating ? "Creando..." : "Agregar"}
