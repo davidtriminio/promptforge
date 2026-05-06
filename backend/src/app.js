@@ -4,6 +4,7 @@ import authRoutes from "./routes/auth.routes.js";
 import promptRoutes from "./routes/prompt.routes.js";
 import categoryRoutes from "./routes/category.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
+import {ENV} from "./config/ENV.js";
 
 const app = express()
 
