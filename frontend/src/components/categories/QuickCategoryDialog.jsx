@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dialog.tsx";
 import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
+import CategoryColorField from "@/components/categories/CategoryColorField.jsx";
 
 const QuickCategoryDialog = ({
                                  isOpen,
@@ -86,18 +87,12 @@ const QuickCategoryDialog = ({
                         />
                     </div>
 
-                    <div className={"space-y-2"}>
-                        <label htmlFor="quick-category-color" className={"text-sm font-medium text-foreground"}>
-                            Color
-                        </label>
-                        <input
-                            id="quick-category-color"
-                            type={"color"}
-                            className={"h-10 w-full rounded-md border border-input bg-background px-1"}
-                            value={color}
-                            onChange={(event) => setColor(event.target.value)}
-                        />
-                    </div>
+                    <CategoryColorField
+                        id="quick-category-color"
+                        label="Color"
+                        value={color}
+                        onChange={(event) => setColor(event.target.value)}
+                    />
 
                     {formError ? (
                         <p className={"text-sm text-destructive"} role={"alert"}>
