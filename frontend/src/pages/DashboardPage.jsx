@@ -7,6 +7,7 @@ import CategoryBreakdown from "../components/dashboard/CategoryBreakdown.jsx";
 import LoadingState from "@/components/common/LoadingState.jsx";
 import ErrorAlert from "@/components/common/ErrorAlert.jsx";
 import PageHeader from "@/components/common/PageHeader.jsx";
+import useDocumentTitle from "@/hooks/useDocumentTitle.js";
 
 const DashboardPage = () => {
     const {user} = useAuth()
@@ -32,6 +33,8 @@ const DashboardPage = () => {
         loadDashboard()
     }, [])
 
+    useDocumentTitle("Dashboard")
+
     if (loading) {
         return <LoadingState message={"Cargando panel..."}/>
     }
@@ -48,6 +51,7 @@ const DashboardPage = () => {
 
     const recentPrompts = dashboardData?.recentPrompts || []
     const promptsByCategory = dashboardData?.promptsByCategory || []
+
     return (
         <div className="space-y-6">
             <PageHeader

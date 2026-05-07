@@ -8,6 +8,7 @@ import ErrorAlert from "@/components/common/ErrorAlert.jsx";
 import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {getApiErrorMessage} from "@/utils/getApiErrorMessage.js";
+import useDocumentTitle from "@/hooks/useDocumentTitle.js";
 
 const RegisterPage = () => {
     const navigate = useNavigate()
@@ -30,6 +31,9 @@ const RegisterPage = () => {
             setServerError(getApiErrorMessage(e, "No se pudo completar el registro."))
         }
     }
+
+    useDocumentTitle("Crear Cuenta")
+
     return (
         <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-muted/35 px-4 py-10">
             <div

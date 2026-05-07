@@ -5,6 +5,7 @@ import LoadingState from "@/components/common/LoadingState.jsx";
 import CategoryManager from "@/components/categories/CategoryManager.jsx";
 import PageHeader from "@/components/common/PageHeader.jsx";
 import {getApiErrorMessage} from "@/utils/getApiErrorMessage.js";
+import useDocumentTitle from "@/hooks/useDocumentTitle.js";
 
 const CategoriesPage = () => {
     const [categories, setCategories] = useState([])
@@ -24,6 +25,8 @@ const CategoriesPage = () => {
             setLoading(false)
         }
     }
+
+    useDocumentTitle("Categorías")
 
     useEffect(() => {
         loadCategories()

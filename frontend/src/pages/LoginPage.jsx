@@ -8,6 +8,7 @@ import ErrorAlert from "@/components/common/ErrorAlert.jsx";
 import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {getApiErrorMessage} from "@/utils/getApiErrorMessage.js";
+import useDocumentTitle from "@/hooks/useDocumentTitle.js";
 
 const LoginPage = () => {
     const navigate = useNavigate()
@@ -31,6 +32,8 @@ const LoginPage = () => {
             )
         }
     }
+
+    useDocumentTitle("Iniciar Sesión")
 
     return (
         <div
