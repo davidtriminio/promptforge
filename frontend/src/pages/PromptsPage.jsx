@@ -17,6 +17,7 @@ import PromptToolbar from "@/components/prompts/PromptToolbar.jsx";
 import AppShellSection from "@/components/common/AppShellSection.jsx";
 import {getApiErrorMessage} from "@/utils/getApiErrorMessage.js";
 import {cn} from "@/lib/utils.ts";
+import useDocumentTitle from "@/hooks/useDocumentTitle.js";
 
 const PROMPT_DRAFT_KEY = "promptforge_prompt_draft"
 const defaultFilters = {
@@ -53,6 +54,8 @@ const PromptsPage = () => {
         [...itenms].sort((a,b) =>
         a.name.localeCompare(b.name, "es", {sensitivity: "base"})
         )
+
+    useDocumentTitle("Prompts")
 
     const loadPrompts = async (activeFilters = filters) => {
         try {
