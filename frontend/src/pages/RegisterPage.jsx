@@ -70,6 +70,7 @@ const RegisterPage = () => {
                                 <Input
                                     id="register-name"
                                     type="text"
+                                    autoComplete={"name"}
                                     placeholder={"Tu Nombre"}
                                     maxLength={50}
                                     aria-invalid={Boolean(errors.name)}
@@ -94,6 +95,11 @@ const RegisterPage = () => {
                                 <Input
                                     id="register-email"
                                     type="email"
+                                    inputMode={"email"}
+                                    autoComplete={"email"}
+                                    autoCapitalize={"none"}
+                                    autoCorrect={"off"}
+                                    spellCheck={false}
                                     placeholder={"tu@email.com"}
                                     maxLength={254}
                                     aria-invalid={Boolean(errors.email)}
@@ -118,6 +124,10 @@ const RegisterPage = () => {
                                 <Input
                                     id="register-passwored"
                                     type="password"
+                                    autoComplete={"new-password"}
+                                    autoCapitalize={"none"}
+                                    autoCorrect={"off"}
+                                    spellCheck={false}
                                     maxLength={128}
                                     aria-invalid={Boolean(errors.password)}
                                     aria-describedby={errors.password ? "register-password-error" : undefined}
