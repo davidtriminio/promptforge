@@ -72,8 +72,8 @@ const PromptsPage = () => {
     )
 
     const sortCategoriesByName = (itenms) =>
-        [...itenms].sort((a,b) =>
-        a.name.localeCompare(b.name, "es", {sensitivity: "base"})
+        [...itenms].sort((a, b) =>
+            a.name.localeCompare(b.name, "es", {sensitivity: "base"})
         )
 
     useDocumentTitle("Prompts")
@@ -114,7 +114,7 @@ const PromptsPage = () => {
 
     useEffect(() => {
         const savedDraft = readPromptDraft(PROMPT_DRAFT_KEY)
-        if(savedDraft && window.matchMedia(DESKTOP_PROMPT_FORM_QUERY).matches){
+        if (savedDraft && window.matchMedia(DESKTOP_PROMPT_FORM_QUERY).matches) {
             setIsFormOpen(true)
         }
     }, []);
@@ -146,7 +146,6 @@ const PromptsPage = () => {
             localStorage.removeItem(PROMPT_DRAFT_KEY)
         }
     }, [])
-
 
 
     useEffect(() => {
@@ -309,7 +308,8 @@ const PromptsPage = () => {
                                         side={"right"}
                                         className={"h-[90dvh] !w-[90vw] !max-w-none overflow-y-auto border-l p-0"}
                                     >
-                                        <SheetHeader className={"border-b border-border/60 px-4 py-4 text-left sm:px-6"}>
+                                        <SheetHeader
+                                            className={"border-b border-border/60 px-4 py-4 text-left sm:px-6"}>
                                             <SheetTitle>{formTitle}</SheetTitle>
                                             <SheetDescription>{formDescription}</SheetDescription>
                                         </SheetHeader>
@@ -366,7 +366,13 @@ const PromptsPage = () => {
             <ConfirmModal
                 isOpen={Boolean(deleteTarget)}
                 title={"Eliminar prompt"}
-                message={`¿Seguro que quieres eliminar el prompt "${deleteTarget?.title}"? Esta acción no se puede deshacer.`}
+                message={
+                    <>
+                        ¿Seguro que quieres eliminar el prompt {" "}
+                        <span className={"font-medium break-all"}>{deleteTarget?.title}</span>?
+                        {" "}Esta acción no se puede deshacer.
+                    </>
+                }
                 confirmText={"Eliminar"}
                 cancelText={"Cancelar"}
                 onConfirm={handleConfirmDeletePrompt}
