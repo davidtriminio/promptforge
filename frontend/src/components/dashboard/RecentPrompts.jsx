@@ -25,10 +25,10 @@ const RecentPrompts = ({items = []}) => {
                         >
                             <div className="flex items-start justify-between gap-4">
                                 <div className={"space-y-1"}>
-                                    <h3 className={"font-medium text-foreground"}>
+                                    <h3 className={"min-w-0 break-all font-medium text-foreground"}>
                                         {prompt.title}
                                     </h3>
-                                    <p className="text-sm text-muted-foreground">
+                                    <p className="min-w-0 break-all text-muted-foreground">
                                         {prompt.description || "No hay descripción disponible."}
                                     </p>
                                 </div>
