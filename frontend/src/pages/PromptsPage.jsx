@@ -18,8 +18,29 @@ import AppShellSection from "@/components/common/AppShellSection.jsx";
 import {getApiErrorMessage} from "@/utils/getApiErrorMessage.js";
 import {cn} from "@/lib/utils.ts";
 import useDocumentTitle from "@/hooks/useDocumentTitle.js";
+import {readPromptDraft} from "@/utils/promptDraftStorage.js";
+import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle} from "@/components/ui/sheet.tsx";
 
 const PROMPT_DRAFT_KEY = "promptforge_prompt_draft"
+const DESKTOP_PROMPT_FORM_QUERY = "(min-width: 1280px)"
+
+const useMediaQuery = (query) => {
+    const [matches, setMatches] = useState(
+        () => typeof window !== "undefined" && window.matchMedia(query).matches
+    )
+
+    useEffect(() => {
+        const media = window.matchMedia(query)
+        const handleChange = (event) => setMatches(event.matches)
+
+        setMatches(media.matches)
+        media.addEventListener("change", handleChange)
+        return () => media.removeEventListener("change", handleChange)
+    }, [query])
+
+    return matches
+}
+
 const defaultFilters = {
     search: "",
     category: "",
@@ -87,6 +108,26 @@ const PromptsPage = () => {
         }
     }
 
+
+    const isDesktopPromptLayout = useMediaQuery(DESKTOP_PROMPT_FORM_QUERY)
+    const isFormVisible = isFormOpen || Boolean(editingPrompt)
+
+    useEffect(() => {
+        const savedDraft = readPromptDraft(PROMPT_DRAFT_KEY)
+        if(savedDraft && window.matchMedia(DESKTOP_PROMPT_FORM_QUERY).matches){
+            setIsFormOpen(true)
+        }
+    }, []);
+
+    const scrollToPromptForm = () => {
+        if (!isDesktopPromptLayout) return
+
+        window.requestAnimationFrame(() => {
+            document.getElementById("prompt-form-section")
+            ?.scrollIntoView({behavior: "smooth", block: "start"})
+        })
+    }
+
     useEffect(() => {
         const savedDraft = localStorage.getItem(PROMPT_DRAFT_KEY)
 
@@ -109,8 +150,8 @@ const PromptsPage = () => {
 
 
     useEffect(() => {
-        loadPrompts(defaultFilters),
-            loadCategories()
+        loadPrompts(defaultFilters)
+        loadCategories()
     }, []);
 
     const handleApplyFilters = (nextFilters) => {
@@ -158,12 +199,25 @@ const PromptsPage = () => {
     const handleEditPrompt = (prompt) => {
         setEditingPrompt(prompt)
         setIsFormOpen(true)
-
-        window.requestAnimationFrame(() => {
-            document.getElementById("prompt-form-section")
-            ?.scrollIntoView({behavior: "smooth", block: "start"})
-        })
+        scrollToPromptForm()
     }
+
+    const formDescription = editingPrompt
+        ? "Actualiza el prompt seleccionado."
+        : "Agrega un nuevo prompt a la biblioteca"
+
+    const promptFormContent = (
+        <PromptForm
+            initialValues={editingPrompt}
+            categories={categories}
+            onSubmit={handleSubmitPrompt}
+            submitLabel={editingPrompt ? "Actualizar prompt" : "Crear prompt"}
+            isSubmitting={savingPrompt}
+            onCreateCategory={handleQuickCreateCategory}
+            isCreatingCategory={creatingCategory}
+            draftKey={editingPrompt ? null : PROMPT_DRAFT_KEY}
+        />
+    )
 
     const handleConfirmDeletePrompt = async () => {
         if (!deleteTarget) return
@@ -194,11 +248,7 @@ const PromptsPage = () => {
     const handleOpenCreateForm = () => {
         setEditingPrompt(null)
         setIsFormOpen(true)
-
-        window.requestAnimationFrame(() => {
-            document.getElementById("prompt-form-section")
-            ?.scrollIntoView({behavior: "smooth", block: "start"})
-        })
+        scrollToPromptForm()
     }
 
 
@@ -253,17 +303,42 @@ const PromptsPage = () => {
                                     : "Agrega un nuevo prompt a la biblioteca"
                             }
                         >
-                            <PromptForm
-                                initialValues={editingPrompt}
-                                categories={categories}
-                                onSubmit={handleSubmitPrompt}
-                                submitLabel={editingPrompt ? "Actualizar prompt" : "Crear prompt"}
-                                isSubmitting={savingPrompt}
-                                onCreateCategory={handleQuickCreateCategory}
-                                isCreatingCategory={creatingCategory}
-                                draftKey={editingPrompt ? null : PROMPT_DRAFT_KEY}
+                            {!isDesktopPromptLayout ? (
+                                <Sheet open={isFormVisible} onOpenChange={(open) => !open && handleCloseForm()}>
+                                    <SheetContent
+                                        side={"right"}
+                                        className={"h-[90dvh] !w-[90vw] !max-w-none overflow-y-auto border-l p-0"}
+                                    >
+                                        <SheetHeader className={"border-b border-border/60 px-4 py-4 text-left sm:px-6"}>
+                                            <SheetTitle>{formTitle}</SheetTitle>
+                                            <SheetDescription>{formDescription}</SheetDescription>
+                                        </SheetHeader>
 
-                            />
+                                        <div className={"px-4 py-5 sm:px-6"}>
+                                            {promptFormContent}
+                                        </div>
+                                    </SheetContent>
+                                </Sheet>
+                            ) : null}
+
+                            <div className={cn(
+                                "grid gap-6",
+                                isFormVisible && isDesktopPromptLayout
+                                    ? "xl:grid-cols-[340px_minmax(0,1fr)] 2xl:grid-cols-[360px_minmax(0,1fr)]"
+                                    : "grid-cols-1"
+                            )}>
+                                {isFormVisible && isDesktopPromptLayout ? (
+                                    <div id="prompt-form-section" className={"self-start xl:sticky xl:top-24"}>
+                                        <AppShellSection title={formTitle} description={formDescription}>
+                                            {promptFormContent}
+                                        </AppShellSection>
+                                    </div>
+                                ) : null}
+
+                                <div className={"space-y-6"}>
+                                    {/* keep your filter + list here */}
+                                </div>
+                            </div>
                         </AppShellSection>
                     </div>
                 ) : null}

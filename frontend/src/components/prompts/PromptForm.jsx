@@ -172,7 +172,7 @@ const PromptForm = ({
                     id={fieldIds.content}
                     rows={10}
                     maxLength={10000}
-                    className={"min-h-56 lg:min-h-72"}
+                    className={"min-h-48 sm:min-h-56 lg:min-h-72"}
                     placeholder={"Escribe aquí el contenido principal del prompt"}
                     aria-invalid={Boolean(errors.content)}
                     aria-describedby={errors.content ? "prompt-content-error" : undefined}
@@ -191,7 +191,7 @@ const PromptForm = ({
             </div>
 
             <div className={"space-y-2"}>
-                <div className={"flex items-center justify-between gap-3"}>
+                <div className={"flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between"}>
                     <label
                         id="prompt-category-label"
                         htmlFor={fieldIds.category}
