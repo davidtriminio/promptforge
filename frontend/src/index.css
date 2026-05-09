@@ -118,13 +118,37 @@
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
+    * {
+        @apply border-border outline-ring/50;
     }
-  body {
-    @apply bg-background text-foreground;
+
+    html,
+    body,
+    * {
+        transition:
+                background-color 350ms ease,
+                color 350ms ease,
+                border-color 350ms ease,
+                box-shadow 350ms ease,
+                fill 350ms ease,
+                stroke 350ms ease;
     }
-  html {
-    @apply font-sans;
+
+    body {
+        @apply bg-background text-foreground;
+    }
+
+    html {
+        @apply font-sans;
+        color-scheme: light;
+    }
+
+    html.dark {
+        color-scheme: dark;
+    }
+
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+        animation-duration: 350ms;
     }
 }

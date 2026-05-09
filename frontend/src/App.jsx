@@ -1,12 +1,15 @@
 import './App.css'
 import {AuthProvider} from "./context/AuthContext.jsx";
 import AppRouter from "./routes/AppRouter.jsx";
+import {ThemeProvider} from "@/context/ThemeContext.jsx";
 
 function App() {
     return (
-        <AuthProvider>
-            <AppRouter/>
-        </AuthProvider>
+        <ThemeProvider>
+            <AuthProvider>
+                <AppRouter/>
+            </AuthProvider>
+        </ThemeProvider>
     )
 }
 

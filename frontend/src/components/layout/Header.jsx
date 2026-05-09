@@ -1,12 +1,14 @@
-﻿import {useAuth} from "../../hooks/useAuth.js";
+﻿import {useAuth} from "@/hooks/useAuth.js";
 import {Link} from "react-router-dom";
 import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger} from "@/components/ui/sheet.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {Icon} from "@iconify/react";
 import Sidebar from "@/components/layout/Sidebar.jsx";
+import {useTheme} from "@/hooks/useTheme.js";
 
 const Header = () => {
     const {user, logout} = useAuth()
+    const {theme, toggleTheme} = useTheme()
     return (
         <header className={"sticky top-0 z-30 border-b border-border/60 bg-background/90 backdrop-blur-xl"}>
             <div
@@ -66,6 +68,20 @@ const Header = () => {
                         <Icon icon={"solar:logout-2-outline"}
                               className={"mr-2 h-4 w-4"}/>
                         Cerrar Sesión
+                    </Button>
+
+                    <Button
+                        type={"button"}
+                        variant={"outline"}
+                        size={"icon"}
+                        aria-label={theme === "dark" ? "Activar modo claro" : "Activar modo oscuro"}
+                        onClick={toggleTheme}>
+                        <Icon
+                            icon={theme === "dark"
+                                ? "solar:sun-2-bold-duotone"
+                                : "solar:moon-stars-bold-duotone"}
+                            className={"h-5 w-5"}
+                        />
                     </Button>
 
                 </div>
