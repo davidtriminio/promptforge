@@ -18,7 +18,15 @@ function getENV(name, defaultValue = undefined) {
 
 export const ENV = {
     PORT: Number(getENV("PORT",5000)),
+    COOKIE_SECRET: getENV("COOKIE_SECRET"),
     NODE_ENV: getENV("NODE_ENV", "development"),
+    API_RATE_LIMIT_WINDOW_MS: Number(getENV("API_RATE_LIMIT_WINDOW_MS", "900000")),
+    API_RATE_LIMIT_MAX: Number(getENV("API_RATE_LIMIT_MAX", "200")),
+    AUTH_RATE_LIMIT_WINDOW_MS: Number(getENV("AUTH_RATE_LIMIT_WINDOW_MS", "900000")),
+    AUTH_RATE_LIMIT_MAX: Number(getENV("AUTH_RATE_LIMIT_MAX", "10")),
+    JSON_LIMIT: getENV("JSON_LIMIT", "100kb"),
+    URL_ENCODED_LIMIT: getENV("URL_ENCODED_LIMIT", "100kb"),
+    TRUST_PROXY: getENV("TRUST_PROXY", "false"),
     MONGO_URI: getENV("MONGO_URI"),
     JWT_SECRET: getENV("JWT_SECRET"),
     JWT_EXPIRES_IN: getENV("JWT_EXPIRES_IN", "7d"),
