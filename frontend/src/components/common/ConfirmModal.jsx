@@ -23,8 +23,8 @@ const ConfirmModal = ({
         <Dialog open={isOpen} onOpenChange={(open) => !open && onCancel()}>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>{title}</DialogTitle>
-                    <DialogDescription>{message}</DialogDescription>
+                    <DialogTitle className={"pr-10 break-words"}>{title}</DialogTitle>
+                    <DialogDescription className={"break-words"}>{message}</DialogDescription>
                 </DialogHeader>
 
                 <DialogFooter>

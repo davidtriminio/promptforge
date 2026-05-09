@@ -78,6 +78,11 @@ const LoginPage = () => {
                                 <Input
                                     id="login-email"
                                     type={"email"}
+                                    inputMode={"email"}
+                                    autoComplete={"username"}
+                                    autoCapitalize={"none"}
+                                    autoCorrect={"off"}
+                                    spellCheck={false}
                                     placeholder={"tu@email.com"}
                                     aria-invalid={Boolean(errors.email)}
                                     maxLength={254}
@@ -102,6 +107,10 @@ const LoginPage = () => {
                                 <Input
                                     id="login-password"
                                     type="password"
+                                    autoComplete={"current-password"}
+                                    autoCapitalize={"off"}
+                                    autoCorrect={"off"}
+                                    spellCheck={false}
                                     placeholder="Tu contraseña"
                                     aria-invalid={Boolean(errors.password)}
                                     aria-describedby={errors.password ? "login-password-error" : undefined}

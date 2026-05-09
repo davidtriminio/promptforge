@@ -172,7 +172,7 @@ const PromptForm = ({
                     id={fieldIds.content}
                     rows={10}
                     maxLength={10000}
-                    className={"min-h-56 lg:min-h-72"}
+                    className={"min-h-48 sm:min-h-56 lg:min-h-72"}
                     placeholder={"Escribe aquí el contenido principal del prompt"}
                     aria-invalid={Boolean(errors.content)}
                     aria-describedby={errors.content ? "prompt-content-error" : undefined}
@@ -191,7 +191,7 @@ const PromptForm = ({
             </div>
 
             <div className={"space-y-2"}>
-                <div className={"flex items-center justify-between gap-3"}>
+                <div className={"flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between"}>
                     <label
                         id="prompt-category-label"
                         htmlFor={fieldIds.category}
@@ -254,6 +254,51 @@ const PromptForm = ({
                             return createdCategory
                         }}
                     />
+                ) : null}
+            </div>
+
+            <div className={"space-y-2"}>
+                <label htmlFor={fieldIds.tags} className={"text-sm font-medium text-foreground"}>
+                    Etiquetas
+                </label>
+
+                <Input
+                    id={fieldIds.tags}
+                    type={"text"}
+                    maxLength={320}
+                    placeholder={"Ej. marketing, saas, landing, copy"}
+                    aria-invalid={Boolean(errors.tags)}
+                    aria-describedby={errors.tags ? "prompt-tags-error" : "prompt-tags-help"}
+                    {...register("tags", {
+                        validate: (value) => {
+                            if (!value?.trim()) return true
+
+                            const parsedTags = value
+                            .split(",")
+                            .map((tag) => tag.trim())
+                            .filter(Boolean)
+
+                            if (parsedTags.length > 10) {
+                                return "Solo puedes agregar hasta 10 etiquetas."
+                            }
+
+                            if (parsedTags.some((tag) => tag.length > 30)) {
+                                return "Cada etiqueta debe tener un máximo de 30 caracteres."
+                            }
+
+                            return true
+                        }
+                    })}
+                />
+
+                <p id="prompt-tags-help" className={"text-xs text-muted-foreground"}>
+                    Separa las etiquetas con comas. Máximo 10 etiquetas y 30 caracteres por etiqueta.
+                </p>
+
+                {errors.tags ? (
+                    <p id="prompt-tags-error" className={"text-sm text-red-600"}>
+                        {errors.tags.message}
+                    </p>
                 ) : null}
             </div>
 

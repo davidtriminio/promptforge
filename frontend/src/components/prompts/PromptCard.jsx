@@ -36,7 +36,7 @@ const PromptCard = ({
         <Card className={"border-border/70 shadow-sm"}>
             <CardHeader className={"gap-4"}>
                 <div className="flex flex-wrap items-center gap-2">
-                    <CardTitle className={"text-lg"}>{prompt.title}</CardTitle>
+                    <CardTitle className={"min-w-0 break-all text-lg"}>{prompt.title}</CardTitle>
                     {prompt.isFavorite ? (
                         <Badge variant={"secondary"}>Favorito</Badge>
                     ) : null}
@@ -44,14 +44,20 @@ const PromptCard = ({
             </CardHeader>
 
             <CardContent>
-                <CardDescription>
+                <CardDescription className={"whitespace-pre-wrap break-all"}>
                     {prompt.description || "Sin descripción."}
                 </CardDescription>
 
                 <div className={"space-y-2"}>
-                    <p className={"text-sm font-medium text-foreground"}>Prompt</p>
+                    <div className={"flex items-center gap-2 my-2"}>
+                        <Icon icon={"solar:document-text-bold-duotone"} className={"h-4 w-4"} />
+
+                        <p className={"text-sm font-semibold text-foreground"}>
+                            Contenido del prompt
+                        </p>
+                    </div>
                     <div className={"max-h-[26rem] overflow-auto rounded-2xl bg-muted/35 p-4 lg:max-h-[32rem]"}>
-                        <p className={"whitespace-pre-wrap break-words text-sm leading-6 text-foreground/90"}>
+                        <p className={"whitespace-pre-wrap break-all text-sm leading-6 text-foreground/90"}>
                             {prompt.content}
                         </p>
                     </div>
