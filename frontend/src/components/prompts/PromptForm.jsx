@@ -257,6 +257,51 @@ const PromptForm = ({
                 ) : null}
             </div>
 
+            <div className={"space-y-2"}>
+                <label htmlFor={fieldIds.tags} className={"text-sm font-medium text-foreground"}>
+                    Etiquetas
+                </label>
+
+                <Input
+                    id={fieldIds.tags}
+                    type={"text"}
+                    maxLength={320}
+                    placeholder={"Ej. marketing, saas, landing, copy"}
+                    aria-invalid={Boolean(errors.tags)}
+                    aria-describedby={errors.tags ? "prompt-tags-error" : "prompt-tags-help"}
+                    {...register("tags", {
+                        validate: (value) => {
+                            if (!value?.trim()) return true
+
+                            const parsedTags = value
+                            .split(",")
+                            .map((tag) => tag.trim())
+                            .filter(Boolean)
+
+                            if (parsedTags.length > 10) {
+                                return "Solo puedes agregar hasta 10 etiquetas."
+                            }
+
+                            if (parsedTags.some((tag) => tag.length > 30)) {
+                                return "Cada etiqueta debe tener un máximo de 30 caracteres."
+                            }
+
+                            return true
+                        }
+                    })}
+                />
+
+                <p id="prompt-tags-help" className={"text-xs text-muted-foreground"}>
+                    Separa las etiquetas con comas. Máximo 10 etiquetas y 30 caracteres por etiqueta.
+                </p>
+
+                {errors.tags ? (
+                    <p id="prompt-tags-error" className={"text-sm text-red-600"}>
+                        {errors.tags.message}
+                    </p>
+                ) : null}
+            </div>
+
             <div className={"border-t pt-4 space-y-4"}>
                 <p className={"max-w-none text-sm leading-6 text-muted-foreground"}>
                     {draftSavedAt
