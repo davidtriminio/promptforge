@@ -128,25 +128,6 @@ const PromptsPage = () => {
         })
     }
 
-    useEffect(() => {
-        const savedDraft = localStorage.getItem(PROMPT_DRAFT_KEY)
-
-        if (!savedDraft) return
-
-        try {
-            const parsedDraft = JSON.parse(savedDraft)
-            const hasContent = Object.values(parsedDraft || {}).some(
-                (value) => String(value || "").trim() !== ""
-            )
-
-            if (hasContent) {
-                setIsFormOpen(true)
-            }
-        } catch {
-            localStorage.removeItem(PROMPT_DRAFT_KEY)
-        }
-    }, [])
-
 
     useEffect(() => {
         loadPrompts(defaultFilters)
@@ -271,79 +252,54 @@ const PromptsPage = () => {
                 onCreatePrompt={handleOpenCreateForm}
                 onScrollToForm={() => {
                     setIsFormOpen(true)
-                    window.requestAnimationFrame(() => {
-                        document.getElementById("prompt-form-section")
-                        ?.scrollIntoView({behavior: "smooth", block: "start"})
-                    })
+                    scrollToPromptForm()
                 }}
             />
 
 
             {error ? <ErrorAlert message={error}/> : null}
 
+            {!isDesktopPromptLayout ? (
+                <Sheet open={isFormVisible} onOpenChange={(open) => !open && handleCloseForm()}>
+                    <SheetContent
+                        side={"right"}
+                        className={"h-[100dvh] w-full sm:max-w-none md:w-[720px] overflow-y-auto border-l p-0"}
+                    >
+                        <SheetHeader className={"border-b border-border/60 px-4 py-4 text-left sm:px-6"}>
+                            <SheetTitle>{formTitle}</SheetTitle>
+                            <SheetDescription>{formDescription}</SheetDescription>
+                        </SheetHeader>
+
+                        <div className={"px-4 py-5 sm:px-6"}>
+                            {promptFormContent}
+                        </div>
+                    </SheetContent>
+                </Sheet>
+            ) : null}
+
             <div
                 className={cn(
                     "grid gap-6",
-                    isFormOpen || editingPrompt
-                        ? "xl:grid-cols-[340px_minmax(0,1fr)] 2xl:grid-cols-[360px_minmax(0,1fr)]"
+                    isFormVisible && isDesktopPromptLayout
+                        ? "xl:grid-cols-[380px_minmax(0,1fr)] 2xl:grid-cols-[420px_minmax(0,1fr)]"
                         : "grid-cols-1"
                 )}
             >
-                {isFormOpen || editingPrompt ? (
+                {isFormVisible && isDesktopPromptLayout ? (
                     <div
                         id={"prompt-form-section"}
-                        className={"xl:sticky xl:top-24 self-start"}
+                        className={"self-start xl:sticky xl:top-24"}
                     >
                         <AppShellSection
                             title={formTitle}
-                            description={
-                                editingPrompt
-                                    ? "Actualiza el prompt seleccionado."
-                                    : "Agrega un nuevo prompt a la biblioteca"
-                            }
+                            description={formDescription}
                         >
-                            {!isDesktopPromptLayout ? (
-                                <Sheet open={isFormVisible} onOpenChange={(open) => !open && handleCloseForm()}>
-                                    <SheetContent
-                                        side={"right"}
-                                        className={"h-[90dvh] !w-[90vw] !max-w-none overflow-y-auto border-l p-0"}
-                                    >
-                                        <SheetHeader
-                                            className={"border-b border-border/60 px-4 py-4 text-left sm:px-6"}>
-                                            <SheetTitle>{formTitle}</SheetTitle>
-                                            <SheetDescription>{formDescription}</SheetDescription>
-                                        </SheetHeader>
-
-                                        <div className={"px-4 py-5 sm:px-6"}>
-                                            {promptFormContent}
-                                        </div>
-                                    </SheetContent>
-                                </Sheet>
-                            ) : null}
-
-                            <div className={cn(
-                                "grid gap-6",
-                                isFormVisible && isDesktopPromptLayout
-                                    ? "xl:grid-cols-[340px_minmax(0,1fr)] 2xl:grid-cols-[360px_minmax(0,1fr)]"
-                                    : "grid-cols-1"
-                            )}>
-                                {isFormVisible && isDesktopPromptLayout ? (
-                                    <div id="prompt-form-section" className={"self-start xl:sticky xl:top-24"}>
-                                        <AppShellSection title={formTitle} description={formDescription}>
-                                            {promptFormContent}
-                                        </AppShellSection>
-                                    </div>
-                                ) : null}
-
-                                <div className={"space-y-6"}>
-                                    {/* keep your filter + list here */}
-                                </div>
-                            </div>
+                            {promptFormContent}
                         </AppShellSection>
                     </div>
                 ) : null}
 
-                <div className={"space-y-6"}>
+                <div className={"min-w-0 space-y-6"}>
                     <PromptFilter
                         filters={filters}
                         categories={categories}
