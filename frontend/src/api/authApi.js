@@ -1,4 +1,6 @@
-﻿export const registerRequest = async (payload) => {
+﻿import getAxiosClient from "@/api/axiosClient.js";
+
+export const registerRequest = async (payload) => {
     const { default: getAxiosClient } = await import("./axiosClient.js")
     const axiosClient = await getAxiosClient()
     const {data} = await axiosClient.post("/auth/register", payload)
@@ -16,5 +18,20 @@ export const meRequest = async () => {
     const { default: getAxiosClient } = await import("./axiosClient.js")
     const axiosClient = await getAxiosClient()
     const {data} = await  axiosClient.post("/auth/me")
+    return data
+}
+
+export const refreshRequest = async () => {
+    const {default: getAxiosClient} = await import("./axiosClient.js")
+    const axiosClient = await getAxiosClient()
+    const {data} = await axiosClient.post("/auth/refresh")
+    return data
+}
+
+
+export const logoutRequest = async () => {
+    const {default: getAxiosClient} = await import("./axiosClient.js")
+    const axiosClient = await getAxiosClient()
+    const {data} = await axiosClient.post("/auth/logout")
     return data
 }

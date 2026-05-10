@@ -29,6 +29,22 @@ const userSchema = new mongoose.Schema({
             type: String,
             enum: ["user", "admin"],
             default: "user"
+        },
+        refreshTokenHash: {
+            type: String,
+            default: null
+        },
+        refreshTokenExpiresAt: {
+            type: Date,
+            default: null
+        },
+        failedLoginAttemps: {
+            type: Number,
+            default: 0
+        },
+        lockUntil:{
+            type: Date,
+            default: null
         }
     },
     {timestamps: true}
