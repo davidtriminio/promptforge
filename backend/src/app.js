@@ -13,6 +13,7 @@ import hpp from "hpp"
 import mongoSanitize from "express-mongo-sanitize"
 import csrf from "csurf"
 
+const isProduction = ENV.NODE_ENV === "production"
 const app = express()
 
 if (ENV.TRUST_PROXY === "true"){
@@ -25,6 +26,12 @@ const allowedOrigins = ENV.CORS_ORIGINS
 .split(",")
 .map((origin) => origin.trim())
 .filter(Boolean)
+
+const cspConnectSrc = [
+    "'self'",
+    ENV.BACKEND_URL,
+    ENV.FRONTEND_URL
+].filter(Boolean)
 
 const apiLimiter = rateLimit({
     windowMs: ENV.API_RATE_LIMIT_WINDOW_MS,
@@ -53,7 +60,27 @@ const authSpeedLimiter = slowDown({
 })
 
 app.use(helmet({
-    crossOriginResourcePolicy: {policy: "cross-origin"}
+    crossOriginResourcePolicy: {policy: "cross-origin"},
+    contentSecurityPolicy: {
+        useDefaults: true,
+        directives: {
+            "default-src": ["'self'"],
+            "script-src": ["'self'"],
+            "style-src": isProduction
+                ? ["'self'"]
+                : ["'self'", "'unsafe-inline'"],
+            "img-src": isProduction
+                ? ["'self'", "data:"]
+                : ["'self'", "data:", "blob:"],
+            "font-src": isProduction
+                ? ["'self'"]
+                : ["'self'", "data:"],
+            "connect-src": cspConnectSrc,
+            "object-src": ["'none'"],
+            "frame-ancestors": ["'none'"]
+        }
+    },
+    referrerPolicy: {policy: "no-referrer"}
 }))
 
 app.use(cors({

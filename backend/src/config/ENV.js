@@ -18,8 +18,8 @@ function getENV(name, defaultValue = undefined) {
 
 export const ENV = {
     PORT: Number(getENV("PORT",5000)),
-    COOKIE_SECRET: getENV("COOKIE_SECRET"),
     NODE_ENV: getENV("NODE_ENV", "development"),
+    COOKIE_SECRET: getENV("COOKIE_SECRET"),
     API_RATE_LIMIT_WINDOW_MS: Number(getENV("API_RATE_LIMIT_WINDOW_MS", "900000")),
     API_RATE_LIMIT_MAX: Number(getENV("API_RATE_LIMIT_MAX", "200")),
     AUTH_RATE_LIMIT_WINDOW_MS: Number(getENV("AUTH_RATE_LIMIT_WINDOW_MS", "900000")),
@@ -35,4 +35,6 @@ export const ENV = {
     COOKIE_SECURE: getENV("COOKIE_SECURE", "false"),
     COOKIE_SAME_SITE: getENV("COOKIE_SAME_SITE", "lax"),
     CSRF_COOKIE_NAME: getENV("CSRF_COOKIE_NAME", "promptforge_csrf"),
+    FRONTEND_URL: getENV("FRONTEND_URL"),
+    BACKEND_URL: getENV("BACKEND_URL"),
 }
