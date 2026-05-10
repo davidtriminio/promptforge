@@ -4,15 +4,18 @@ import User from "../models/User.model.js";
 
 const protect = async (req, res, next) => {
     try {
-        const authHeader = req.headers.authorization
+        const token =
+            req.cookies?.[ENV.COOKIE_NAME] ||
+            (req.headers.authorization?.startsWith("Bearer ")
+            ? req.headers.authorization.split(" ")[1]
+                    : null
+            )
 
-        if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        if (!token) {
             return res.status(401).json({
                 message: "No autorizado. Falta el token de acceso."
             })
         }
-
-        const token = authHeader.split(" ")[1]
 
         const decoded = jwt.verify(token, ENV.JWT_SECRET)
 

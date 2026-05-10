@@ -30,5 +30,9 @@ export const ENV = {
     MONGO_URI: getENV("MONGO_URI"),
     JWT_SECRET: getENV("JWT_SECRET"),
     JWT_EXPIRES_IN: getENV("JWT_EXPIRES_IN", "7d"),
-    CORS_ORIGINS: getENV("CORS_ORIGINS", "http://localhost:5173")
+    CORS_ORIGINS: getENV("CORS_ORIGINS", "http://localhost:5173"),
+    COOKIE_NAME: getENV("COOKIE_NAME", "promptforge_token"),
+    COOKIE_SECURE: getENV("COOKIE_SECURE", "false"),
+    COOKIE_SAME_SITE: getENV("COOKIE_SAME_SITE", "lax"),
+    CSRF_COOKIE_NAME: getENV("CSRF_COOKIE_NAME", "promptforge_csrf"),
 }

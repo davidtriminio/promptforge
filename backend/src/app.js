@@ -11,6 +11,7 @@ import helmet from "helmet";
 import cookieParser from "cookie-parser";
 import hpp from "hpp"
 import mongoSanitize from "express-mongo-sanitize"
+import csrf from "csurf"
 
 const app = express()
 
@@ -66,6 +67,14 @@ app.use(cors({
 }))
 
 app.use(cookieParser(ENV.COOKIE_SECRET))
+const csrfProtection = csrf({
+    cookie: {
+        key: ENV.CSRF_COOKIE_NAME,
+        httpOnly: false,
+        secure: ENV.COOKIE_SECURE === "true",
+        sameSite: ENV.COOKIE_SAME_SITE
+    }
+})
 app.use(express.json({limit: ENV.JSON_LIMIT}))
 app.use(express.urlencoded({extended: false, limit: ENV.URL_ENCODED_LIMIT}))
 app.use((req, res, next) => {
@@ -84,6 +93,12 @@ app.use("/api", apiLimiter)
 app.use("/api/auth", authSpeedLimiter)
 app.use("/api/auth", authLimiter)
 
+app.get("/api/csrf-token", csrfProtection, (req,res) => {
+    res.status(200).json({
+        csrfToken: req.csrfToken()
+    })
+})
+
 app.get("/", (req, res) => {
     res.status(200).json({
         message: "PromptForge API is running."
@@ -91,7 +106,7 @@ app.get("/", (req, res) => {
 })
 
 app.use("/api/auth", authRoutes)
-app.use("/api/prompts", promptRoutes)
-app.use("/api/categories", categoryRoutes)
+app.use("/api/prompts",csrfProtection, promptRoutes)
+app.use("/api/categories", csrfProtection, categoryRoutes)
 app.use("/api/dashboard", dashboardRoutes)
 export default app

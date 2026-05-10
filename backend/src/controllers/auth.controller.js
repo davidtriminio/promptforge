@@ -1,6 +1,16 @@
 ﻿import User from "../models/User.model.js";
 import bcrypt from "bcryptjs"
 import generateToken from "../utils/generateToken.js";
+import {ENV} from "../config/ENV.js";
+
+const buildAuthCookieOptions = () => ({
+    httpOnly: true,
+    secure: ENV.COOKIE_SECURE === "true",
+    sameSite: ENV.COOKIE_SAME_SITE,
+    signed: false,
+    path: "/",
+    maxAge: 7 * 24 * 60 * 1000
+})
 
 export const register = async (req, res) => {
     const {name, email, password} = req.body
@@ -22,10 +32,10 @@ export const register = async (req, res) => {
     })
 
     const token = generateToken(user._id)
+    res.cookie(ENV.COOKIE_NAME, token, buildAuthCookieOptions())
 
-    return res.status(201).json({
+    return res.status(200).json({
         message: "Usuario registrado correctamente.",
-        token,
         user: {
             id: user._id,
             name: user.name,
@@ -53,9 +63,10 @@ export const login = async (req, res) => {
     }
 
     const token = generateToken(user._id)
+    res.cookie(ENV.COOKIE_NAME, token, buildAuthCookieOptions())
+
     return res.status(200).json({
         message: "Inicio de sesión correcto.",
-        token,
         user: {
             id: user._id,
             name: user.name,
@@ -73,5 +84,18 @@ export const getMe = async(req,res) => {
             email: req.user.email,
             role: req.user.role
         }
+    })
+}
+
+export const logout = async (req, res) => {
+    res.clearCookie(ENV.COOKIE_NAME, {
+        httpOnly: true,
+        secure: ENV.COOKIE_SECURE === "true",
+        sameSite: ENV.COOKIE_SAME_SITE,
+        path: "/"
+    })
+
+    return res.status(200).json({
+        message: "Sesión cerrada correctamente."
     })
 }

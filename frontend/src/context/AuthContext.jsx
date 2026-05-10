@@ -1,6 +1,5 @@
 ﻿import {createContext, useEffect, useMemo, useState} from "react";
-import {loginRequest, meRequest, registerRequest} from "../api/authApi.js";
-import {storage} from "../utils/storage.js";
+import {loginRequest, logoutRequest, meRequest, registerRequest} from "../api/authApi.js";
 
 export const AuthContext = createContext(null)
 
@@ -12,7 +11,6 @@ export const AuthProvider = ({children}) => {
         try {
             const data = await registerRequest(formData)
 
-            storage.setToken(data.token)
             setUser(data.user)
 
             return data
@@ -25,7 +23,6 @@ export const AuthProvider = ({children}) => {
         try {
             const data = await loginRequest(formData)
 
-            storage.setToken(data.token)
             setUser(data.user)
 
             return data
@@ -35,23 +32,18 @@ export const AuthProvider = ({children}) => {
     }
 
     const logout = async () => {
-        storage.removeToken()
-        setUser(null)
+        try {
+            await logoutRequest()
+        } finally {
+            setUser(null)
+        }
     }
 
     const loadAuthenticatedUser = async () => {
-        const token = storage.getToken()
-
-        if (!token) {
-            setAuthLoading(false)
-            return
-        }
-
         try {
             const data = await meRequest()
             setUser(data.user)
         } catch (e) {
-            storage.removeToken()
             setUser(null)
         } finally {
             setAuthLoading(false)
