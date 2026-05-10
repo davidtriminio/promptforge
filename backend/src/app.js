@@ -13,8 +13,8 @@ import hpp from "hpp"
 import mongoSanitize from "express-mongo-sanitize"
 import csrf from "csurf"
 
-const isProduction = ENV.NODE_ENV === "production"
 const app = express()
+const isProduction = ENV.NODE_ENV === "production"
 
 if (ENV.TRUST_PROXY === "true"){
     app.set("trust proxy", 1)
@@ -80,7 +80,12 @@ app.use(helmet({
             "frame-ancestors": ["'none'"]
         }
     },
-    referrerPolicy: {policy: "no-referrer"}
+    referrerPolicy: {policy: "no-referrer"},
+    hsts: isProduction ? {
+        maxAge: 31536000,
+        includeSubDomains: true,
+        preload: true
+    } : false
 }))
 
 app.use(cors({
@@ -136,4 +141,23 @@ app.use("/api/auth", csrfProtection, authRoutes)
 app.use("/api/prompts",csrfProtection, promptRoutes)
 app.use("/api/categories", csrfProtection, categoryRoutes)
 app.use("/api/dashboard", dashboardRoutes)
+
+app.use((err, req, res, next) => {
+    if (err.code === "EBADCSRFTOKEN") {
+        return res.status(403).json({
+            message: "Token CSRF inválido o faltante."
+        })
+    }
+
+    if (err.message === "Origin no permitido por CORS") {
+        return res.status(403).json({
+            message: "Origin no permitido por CORS."
+        })
+    }
+
+    return res.status(500).json({
+        message: "Error interno del servidor."
+    })
+})
+
 export default app
