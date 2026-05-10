@@ -226,10 +226,26 @@ export const updatePrompt = async (req, res) => {
             })
         }
 
-        const updateData = {...req.body}
+        const updateData = {}
 
-        if (updateData.tags) {
-            updateData.tags = normalizeTags(updateData.tags)
+        if (req.body.title !== undefined) {
+            updateData.title = req.body.title
+        }
+
+        if (req.body.description !== undefined) {
+            updateData.description = req.body.description
+        }
+
+        if (req.body.content !== undefined) {
+            updateData.content = req.body.content
+        }
+
+        if (req.body.tags !== undefined) {
+            updateData.tags = normalizeTags(req.body.tags)
+        }
+
+        if (req.body.category !== undefined) {
+            updateData.category = req.body.category
         }
 
         if (updateData.category === null) {
