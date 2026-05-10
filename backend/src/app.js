@@ -1,17 +1,18 @@
-﻿import express from "express"
-import cors from "cors"
-import authRoutes from "./routes/auth.routes.js";
-import promptRoutes from "./routes/prompt.routes.js";
-import categoryRoutes from "./routes/category.routes.js";
-import dashboardRoutes from "./routes/dashboard.routes.js";
-import {ENV} from "./config/ENV.js";
+﻿import express from "express";
+import cors from "cors";
 import rateLimit from "express-rate-limit";
 import slowDown from "express-slow-down";
 import helmet from "helmet";
 import cookieParser from "cookie-parser";
-import hpp from "hpp"
-import mongoSanitize from "express-mongo-sanitize"
-import csrf from "csurf"
+import hpp from "hpp";
+import mongoSanitize from "express-mongo-sanitize";
+import csrf from "csurf";
+
+import {ENV} from "./config/ENV.js";
+import authRoutes from "./routes/auth.routes.js";
+import promptRoutes from "./routes/prompt.routes.js";
+import categoryRoutes from "./routes/category.routes.js";
+import dashboardRoutes from "./routes/dashboard.routes.js";
 
 const app = express()
 const isProduction = ENV.NODE_ENV === "production"
@@ -59,6 +60,22 @@ const authSpeedLimiter = slowDown({
     delayMs: () => 500
 })
 
+const csrfProtection = csrf({
+    cookie: {
+        key: ENV.CSRF_COOKIE_NAME,
+        httpOnly: false,
+        secure: ENV.COOKIE_SECURE === "true",
+        sameSite: ENV.COOKIE_SAME_SITE
+    }
+})
+
+const sanitizevalue = (value) => {
+    if (!value || typeof value !== "object"){
+        return value
+    }
+    return mongoSanitize.sanitize(value)
+}
+
 app.use(helmet({
     crossOriginResourcePolicy: {policy: "cross-origin"},
     contentSecurityPolicy: {
@@ -81,11 +98,13 @@ app.use(helmet({
         }
     },
     referrerPolicy: {policy: "no-referrer"},
-    hsts: isProduction ? {
-        maxAge: 31536000,
-        includeSubDomains: true,
-        preload: true
-    } : false
+    hsts: isProduction
+        ? {
+            maxAge: 31536000,
+            includeSubDomains: true,
+            preload: true
+        }
+        : false
 }))
 
 app.use(cors({
@@ -99,31 +118,28 @@ app.use(cors({
 }))
 
 app.use(cookieParser(ENV.COOKIE_SECRET))
-const csrfProtection = csrf({
-    cookie: {
-        key: ENV.CSRF_COOKIE_NAME,
-        httpOnly: false,
-        secure: ENV.COOKIE_SECURE === "true",
-        sameSite: ENV.COOKIE_SAME_SITE
-    }
-})
 app.use(express.json({limit: ENV.JSON_LIMIT}))
 app.use(express.urlencoded({extended: false, limit: ENV.URL_ENCODED_LIMIT}))
+
 app.use((req, res, next) => {
-    if(req.body){
-        req.body = mongoSanitize.sanitize(req.body)
+    if (req.body && typeof req.body === "object"){
+        req.body = sanitizevalue(req.body)
     }
 
-    if (req.params){
-        req.params = mongoSanitize.sanitize(req.params)
+    if (req.params && typeof req.params === "object"){
+        req.params = sanitizevalue(req.params)
     }
+
     next()
 })
 app.use(hpp())
 
 app.use("/api", apiLimiter)
-app.use("/api/auth", authSpeedLimiter)
-app.use("/api/auth", authLimiter)
+
+app.use("/api/auth/login", authSpeedLimiter)
+app.use("/api/auth/login", authLimiter)
+app.use("/api/auth/register", authSpeedLimiter)
+app.use("/api/auth/register", authLimiter)
 
 app.get("/api/csrf-token", csrfProtection, (req,res) => {
     res.status(200).json({
@@ -143,6 +159,8 @@ app.use("/api/categories", csrfProtection, categoryRoutes)
 app.use("/api/dashboard", dashboardRoutes)
 
 app.use((err, req, res, next) => {
+    console.error("[APP ERROR]", err)
+
     if (err.code === "EBADCSRFTOKEN") {
         return res.status(403).json({
             message: "Token CSRF inválido o faltante."
@@ -159,5 +177,4 @@ app.use((err, req, res, next) => {
         message: "Error interno del servidor."
     })
 })
-
 export default app

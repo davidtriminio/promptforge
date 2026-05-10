@@ -17,7 +17,7 @@ export const loginRequest = async (payload) => {
 export const meRequest = async () => {
     const { default: getAxiosClient } = await import("./axiosClient.js")
     const axiosClient = await getAxiosClient()
-    const {data} = await  axiosClient.post("/auth/me")
+    const {data} = await  axiosClient.get("/auth/me")
     return data
 }
 
