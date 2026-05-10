@@ -122,8 +122,12 @@ app.use((req, res, next) => {
 app.use(hpp())
 
 app.use("/api", apiLimiter)
-app.use("/api/auth", authSpeedLimiter)
-app.use("/api/auth", authLimiter)
+
+app.use("/api/auth/login", authSpeedLimiter)
+app.use("/api/auth/login", authLimiter)
+
+app.use("/api/auth/register", authSpeedLimiter)
+app.use("/api/auth/register", authLimiter)
 
 app.get("/api/csrf-token", csrfProtection, (req,res) => {
     res.status(200).json({
