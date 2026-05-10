@@ -9,7 +9,7 @@ const buildAuthCookieOptions = () => ({
     sameSite: ENV.COOKIE_SAME_SITE,
     signed: false,
     path: "/",
-    maxAge: 7 * 24 * 60 * 1000
+    maxAge: 7 * 24 * 60 * 60 * 1000
 })
 
 export const register = async (req, res) => {

@@ -23,7 +23,7 @@ export const meRequest = async () => {
 
 export const logoutRequest = async () => {
     const {default: getAxiosClient} = await import("./axiosClient.js")
-    const axiosClient = getAxiosClient()
-    const {data} = await axiosClient.post("/api/logout")
+    const axiosClient = await getAxiosClient()
+    const {data} = await axiosClient.post("/auth/logout")
     return data
 }
