@@ -5,11 +5,10 @@ import User from "../models/User.model.js";
 const protect = async (req, res, next) => {
     try {
         const token =
-            req.cookies?.[ENV.COOKIE_NAME] ||
+            req.cookies?.[ENV.ACCESS_COOKIE_NAME] ||
             (req.headers.authorization?.startsWith("Bearer ")
             ? req.headers.authorization.split(" ")[1]
-                    : null
-            )
+                    : null)
 
         if (!token) {
             return res.status(401).json({
@@ -17,9 +16,9 @@ const protect = async (req, res, next) => {
             })
         }
 
-        const decoded = jwt.verify(token, ENV.JWT_SECRET)
-
+        const decoded = jwt.verify(token, ENV.JWT_ACCESS_SECRET)
         const user = await User.findById(decoded.id)
+
         if(!user){
             return res.status(401).json("No autorizado. No se encontró el usuario.")
         }

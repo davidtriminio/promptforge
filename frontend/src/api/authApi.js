@@ -21,6 +21,14 @@ export const meRequest = async () => {
     return data
 }
 
+export const refreshRequest = async () => {
+    const {default: getAxiosClient} = await import("./axiosClient.js")
+    const axiosClient = await getAxiosClient()
+    const {data} = await axiosClient.post("/auth/refresh")
+    return data
+}
+
+
 export const logoutRequest = async () => {
     const {default: getAxiosClient} = await import("./axiosClient.js")
     const axiosClient = await getAxiosClient()
