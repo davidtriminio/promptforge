@@ -8,7 +8,7 @@ const router = Router()
 
 router.post("/register", registerValidator, validate, register)
 router.post("/login", loginValidator, validate, login)
-router.post("/me", protect, getMe)
-router.post("/logout", logout)
+router.get("/me", protect, getMe)
+router.post("/logout", protect, logout)
 
 export default router

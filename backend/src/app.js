@@ -105,7 +105,7 @@ app.get("/", (req, res) => {
     })
 })
 
-app.use("/api/auth", authRoutes)
+app.use("/api/auth", csrfProtection, authRoutes)
 app.use("/api/prompts",csrfProtection, promptRoutes)
 app.use("/api/categories", csrfProtection, categoryRoutes)
 app.use("/api/dashboard", dashboardRoutes)
