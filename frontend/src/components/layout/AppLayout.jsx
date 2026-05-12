@@ -22,7 +22,7 @@ const AppLayout = () => {
                     </div>
 
                     <div
-                        className=className={"min-w-0 overflow-hidden rounded-[30px] border border-border/70 bg-background/90 shadow-xl shadow-black/5 backdrop-blur-xl dark:shadow-black/20"}>
+                        className={"min-w-0 overflow-hidden rounded-[30px] border border-border/70 bg-background/90 shadow-xl shadow-black/5 backdrop-blur-xl dark:shadow-black/20"}>
                         <Header/>
 
                         <main id="main-content" className={"min-w-0 px-4 py-6 sm:px-6 lg:px-8"}>
