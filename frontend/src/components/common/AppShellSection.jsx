@@ -2,14 +2,14 @@
 import {cn} from "@/lib/utils.ts";
 
 const AppShellSection = ({
-    title,
-    description,
-    children,
-    className,
-    contentClassName
-}) => {
+                             title,
+                             description,
+                             children,
+                             className,
+                             contentClassName
+                         }) => {
     return (
-        <Card className={cn("border-border/70 shadow-sm", className)}>
+        <Card className={cn("border-border/70 bg-card/95 shadow-sm", className)}>
             {title || description ? (
                 <CardHeader>
                     {title ? <CardTitle className={"text-base"}>{title}</CardTitle> : null}
