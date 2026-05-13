@@ -35,8 +35,19 @@ const PromptFilter = ({filters, categories, onApply}) => {
     return (
         <Card className={"border-border/70 shadow-sm"}>
             <CardContent className={"pt-6"}>
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-5">
+                <div className={"mb-4 flex items-center justify-between gap-3"}>
+                    <div>
+                        <p className={"text-sm font-semibold text-foreground"}>
+                            Filtrar biblioteca
+                        </p>
+
+                        <p className={"text-sm text-muted-foreground"}>
+                            Busca, ordena y filtra rápidamente la colección de prompts.
+                        </p>
+                    </div>
+                </div>
+                <form onSubmit={handleSubmit} className="space-y-5">
+                    <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-[1.4fr_repeat(4,minmax(0,1fr))]">
                         <Input
                             id="prompt-search"
                             maxLength={100}
@@ -48,18 +59,18 @@ const PromptFilter = ({filters, categories, onApply}) => {
                         <Select
                             value={localFilters.category || "__all__"}
                             onValueChange={(value) =>
-                        updateFilter("category", value === "__all__" ? "" : value)}>
+                                updateFilter("category", value === "__all__" ? "" : value)}>
                             <SelectTrigger className={"w-full"}>
                                 <SelectValue placeholder={"Todas las Categorias"}/>
                             </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value={"__all__"}>Todas las Categorias</SelectItem>
-                                    {categories.map((category) => (
-                                        <SelectItem key={category._id} value={category._id}>
-                                    {category.name}
-                                        </SelectItem>
-                                        ))}
-                                </SelectContent>
+                            <SelectContent>
+                                <SelectItem value={"__all__"}>Todas las Categorias</SelectItem>
+                                {categories.map((category) => (
+                                    <SelectItem key={category._id} value={category._id}>
+                                        {category.name}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
                         </Select>
 
                         <Input
@@ -69,7 +80,7 @@ const PromptFilter = ({filters, categories, onApply}) => {
                             placeholder={"Filtrar por Etiqueta"}
                             value={localFilters.tag}
                             onChange={(event) => updateFilter("tag", event.target.value)}
-                            />
+                        />
 
                         <Select
                             value={localFilters.favorite || "__all__"}
@@ -86,7 +97,7 @@ const PromptFilter = ({filters, categories, onApply}) => {
 
                         <Select
                             value={localFilters.sort}
-                            onValueChange={(value)=> updateFilter("sort", value)}>
+                            onValueChange={(value) => updateFilter("sort", value)}>
                             <SelectTrigger className={"w-full"}>
                                 <SelectValue placeholder={"Ordenar por"}/>
                             </SelectTrigger>

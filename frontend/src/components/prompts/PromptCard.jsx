@@ -1,11 +1,4 @@
-﻿import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle
-} from "@/components/ui/card.tsx";
+﻿import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "@/components/ui/card.tsx";
 import {Badge} from "@/components/ui/badge.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {Icon} from "@iconify/react";
@@ -33,7 +26,8 @@ const PromptCard = ({
     }
 
     return (
-        <Card className={"border-border/70 shadow-sm"}>
+        <Card
+            className={"border-border/70 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lg dark:hover:shadow-black/20"}>
             <CardHeader className={"gap-4"}>
                 <div className="flex flex-wrap items-center gap-2">
                     <CardTitle className={"min-w-0 break-all text-lg"}>{prompt.title}</CardTitle>
@@ -50,20 +44,21 @@ const PromptCard = ({
 
                 <div className={"space-y-2"}>
                     <div className={"flex items-center gap-2 my-2"}>
-                        <Icon icon={"solar:document-text-bold-duotone"} className={"h-4 w-4"} />
+                        <Icon icon={"solar:document-text-bold-duotone"} className={"h-4 w-4"}/>
 
                         <p className={"text-sm font-semibold text-foreground"}>
                             Contenido del prompt
                         </p>
                     </div>
-                    <div className={"max-h-[26rem] overflow-auto rounded-2xl bg-muted/35 p-4 lg:max-h-[32rem]"}>
+                    <div
+                        className={"max-h-[24rem] overflow-auto rounded-3xl border border-border/60 bg-muted/30 p-4 lg:max-h-[30rem]"}>
                         <p className={"whitespace-pre-wrap break-all text-sm leading-6 text-foreground/90"}>
                             {prompt.content}
                         </p>
                     </div>
                 </div>
 
-                <div className={"flex flex-wrap gap-2 pt-2"}>
+                <div className={"flex flex-wrap gap-2 pt-4"}>
                     <Button
                         type={"button"}
                         variant={prompt.isFavorite ? "default" : "outline"}

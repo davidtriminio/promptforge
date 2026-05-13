@@ -10,10 +10,10 @@ const Header = () => {
     const {user, logout} = useAuth()
     const {theme, toggleTheme} = useTheme()
     return (
-        <header className={"sticky top-0 z-30 border-b border-border/60 bg-background/90 backdrop-blur-xl"}>
+        <header className={"sticky top-0 z-30 border-b border-border/70 bg-background/80 backdrop-blur-xl"}>
             <div
                 className={"mx-auto flex h-18 max-w-[1600px] items-center justify-between gap-4 px-4 lg:px-6 2xl:px-8"}>
-                <div className={"flex items-center gap-3"}>
+                <div className="flex items-center gap-2 sm:gap-3">
                     <Sheet>
                         <SheetTrigger asChild>
                             <Button
@@ -64,7 +64,7 @@ const Header = () => {
                         <p className={"text-xs text-muted-foreground"}>{user?.email || "Sin Correo"}</p>
                     </div>
 
-                    <Button type={"button"} variant={"outline"} onClick={logout}>
+                    <Button type={"button"} variant={"outline"} onClick={logout} className={"hidden sm:inline-flex"}>
                         <Icon icon={"solar:logout-2-outline"}
                               className={"mr-2 h-4 w-4"}/>
                         Cerrar Sesión
