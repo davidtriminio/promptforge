@@ -5,17 +5,17 @@ const THEME_KEY = "promptforge_theme"
 export const ThemeContext = createContext(null)
 
 const getPreferredTheme = () => {
-    if (typeof window === "undefined"){
+    if (typeof window === "undefined") {
         return "light"
     }
 
     const savedTheme = localStorage.getItem(THEME_KEY)
-    if (savedTheme === "light" || savedTheme === "dark"){
+    if (savedTheme === "light" || savedTheme === "dark") {
         return savedTheme
     }
 
     return window.matchMedia("(prefers-color-scheme: dark)").matches
-    ? "dark"
+        ? "dark"
         : "light"
 }
 
@@ -29,7 +29,7 @@ export const ThemeProvider = ({children}) => {
     }, [theme])
 
     useEffect(() => {
-        if(localStorage.getItem(THEME_KEY)) return
+        if (localStorage.getItem(THEME_KEY)) return
 
         const media = window.matchMedia("(prefers-color-scheme: dark)")
         const handleChange = (event) => {
@@ -40,15 +40,28 @@ export const ThemeProvider = ({children}) => {
         return () => media.removeEventListener("change", handleChange)
     }, [])
 
-    const toggleTheme = () => {
-        setTheme((currentTheme) => currentTheme === "dark" ? "light" : "dark")
+    const runThemeTransition = (nextTheme) => {
+        const root = document.documentElement
+        root.setAttribute("data-theme-transition", "true")
+
+        setTheme(nextTheme)
+
+        window.setTimeout(() => {
+            root.removeAttribute("data-theme-transition")
+        }, 180)
     }
 
+    const toggleTheme = () => {
+        const nextTheme = theme === "dark" ? "light" : "dark"
+        runThemeTransition(nextTheme)
+    }
+
+
     const value = useMemo(() => ({
-       theme,
-       isDark: theme === "dark",
-       setTheme,
-       toggleTheme
+        theme,
+        isDark: theme === "dark",
+        setTheme,
+        toggleTheme
     }), [theme])
 
     return (

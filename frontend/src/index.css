@@ -49,7 +49,7 @@
 }
 
 :root {
-    --background: oklch(0.985 0.004 240);
+    --background: oklch(0.975 0.004 240);
     --foreground: oklch(0.19 0.014 248);
     --card: oklch(0.998 0.002 240);
     --card-foreground: oklch(0.19 0.014 248);
@@ -84,7 +84,7 @@
 }
 
 .dark {
-    --background: oklch(0.17 0.012 250);
+    --background: oklch(0.19 0.012 250);
     --foreground: oklch(0.95 0.004 240);
     --card: oklch(0.22 0.014 248);
     --card-foreground: oklch(0.95 0.004 240);
@@ -135,16 +135,31 @@
     a,
     input,
     textarea,
-    select {
+    select,
+    [data-theme-transition="true"] * {
         transition:
-                background-color 180ms ease,
-                color 180ms ease,
-                border-color 180ms ease,
-                box-shadow 180ms ease,
-                transform 180ms ease,
-                opacity 180ms ease;
+                background-color 300ms ease-out,
+                color 300ms ease-out,
+                border-color 300ms ease-out,
+                box-shadow 300ms ease-out;
     }
 
+    @media (prefers-reduced-motion: reduce) {
+        [data-slot="button"],
+        [data-slot="card"],
+        a,
+        input,
+        textarea,
+        select,
+        [data-theme-transition="true"] * {
+            transition: none;
+        }
+
+        ::view-transition-old(root),
+        ::view-transition-new(root) {
+            animation-duration: 0ms;
+        }
+    }
 
     body {
         @apply bg-background text-foreground;
@@ -161,6 +176,6 @@
 
     ::view-transition-old(root),
     ::view-transition-new(root) {
-        animation-duration: 350ms;
+        animation-duration: 300ms;
     }
 }
