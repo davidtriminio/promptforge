@@ -41,25 +41,25 @@ const RecentPrompts = ({items = []}) => {
                                 <div className="flex items-start justify-between gap-4">
                                     <div className={"space-y-2"}>
                                         <div className={"flex flex-wrap items-center gap-2"}>
-                                            <h3 className={"min-w-0 text-sm font-semibold text-foreground sm:text-base"}>
+                                            <h3 className={"min-w-0 text-sm font-semibold text-foreground sm:text-base [overflow-wrap:anywhere]"}>
                                                 {prompt.title}
                                             </h3>
 
                                             {prompt.isFavorite ? (
-                                                <Badge variant={"secondary"}>
+                                                <Badge variant={"secondary"} className={"shrink-0"}>
                                                     Favorito
                                                 </Badge>
                                             ) : null}
                                         </div>
 
-                                        <p className="line-clamp-2 text-sm leading-6 text-muted-foreground">
+                                        <p className="line-clamp-2 text-sm leading-6 text-muted-foreground [overflow-wrap:anywhere]">
                                             {prompt.description || "Aún no hay descripción disponible."}
                                         </p>
                                     </div>
 
                                     <Icon
                                         icon={"solar:arrow-right-up-linear"}
-                                        className={"mt-1 h-4 w-4 text-muted-foreground"}
+                                        className={"mt-1 h-4 w-4 shrink-0 text-muted-foreground"}
                                     />
                                 </div>
 
