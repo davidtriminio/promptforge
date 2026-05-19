@@ -46,7 +46,14 @@ const StatsCard = ({
                 </div>
 
                 <div className={"flex flex-wrap items-center gap-2"}>
-                    {trend ? <Badge variant={"secondary"}>{trend}</Badge> : null}
+                    {trend ? (
+                        <Badge
+                            variant={"secondary"}
+                            className={"h-auto max-w-full whitespace-normal px-2 py-1 text-left leading-5"}
+                        >
+                            {trend}
+                        </Badge>
+                    ) : null}
                     {hint ? <p className="text-sm text-muted-foreground">{hint}</p> : null}
                 </div>
             </CardContent>
