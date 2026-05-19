@@ -1,6 +1,6 @@
 ﻿import mongoose from "mongoose"
 import {connectDB} from "../config/db.js"
-import cleanupExpiredDemoUsers from "../utils/cleanupExpiredDemoUsers.js"
+import {cleanupExpiredDemoUsers} from "../utils/cleanupExpiredDemoUsers.js.js"
 
 const runDemoCleanup = async () => {
     try {
