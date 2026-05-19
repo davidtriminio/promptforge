@@ -5,6 +5,9 @@ import generateRefreshToken from "../utils/generateRefreshToken.js";
 import generateAccessToken from "../utils/generateAccessToken.js";
 import hashToken from "../utils/hashToken.js";
 import jwt from "jsonwebtoken";
+import crypto from 'crypto'
+import {createInitialDemoData} from "../utils/createInitialDemoData.js";
+
 
 const ACCESS_COOKIE_MAX_AGE_MS = 15 * 60 * 1000;
 const REFRESH_COOKIE_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
@@ -77,6 +80,41 @@ const registerFailedAttempt = async (user) => {
     await user.save()
 }
 
+const buildDemoCredentials = () => {
+    const demoId = crypto.randomUUID()
+    return{
+        name: `Demo ${demoId.slice(0, 8)}`,
+        email: `demo.${demoId}@promptforge.demo`,
+        password: crypto.randomUUID()
+    }
+}
+
+export const demoLogin = async (req, res) => {
+    try {
+        const {name, email, password} = buildDemoCredentials()
+        const salt = await bcrypt.genSalt(10)
+        const hashedPassword = await bcrypt.hash(password, salt)
+
+        const user = await User.create({
+            name,
+            email,
+            password: hashedPassword,
+            isDemo: true
+        })
+
+        await createInitialDemoData(user._id)
+        await issueAuthCookies(res, user)
+
+        return res.status(201).json({
+            message: "Acceso demo creado correctamente.",
+            user: sanitizeUser(user)
+        })
+    } catch (e) {
+        return res.status(500).json({
+            message: "No se pudo iniciar la sesión demo."
+        })
+    }
+}
 
 export const register = async (req, res) => {
     const {name, email, password} = req.body
