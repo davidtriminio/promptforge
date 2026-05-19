@@ -1,5 +1,5 @@
 ﻿import {createContext, useEffect, useMemo, useState} from "react";
-import {loginRequest, logoutRequest, meRequest, registerRequest} from "../api/authApi.js";
+import {demoLoginRequest, loginRequest, logoutRequest, meRequest, registerRequest} from "../api/authApi.js";
 
 export const AuthContext = createContext(null)
 
@@ -25,6 +25,16 @@ export const AuthProvider = ({children}) => {
 
             setUser(data.user)
 
+            return data
+        } catch (e) {
+            throw e
+        }
+    }
+
+    const demoLogin = async () => {
+        try {
+            const data = await demoLoginRequest()
+            setUser(data.user)
             return data
         } catch (e) {
             throw e
@@ -60,6 +70,7 @@ export const AuthProvider = ({children}) => {
         isAuthenticated: Boolean(user),
         register,
         login,
+        demoLogin,
         logout,
         setUser
     }), [user, authLoading])

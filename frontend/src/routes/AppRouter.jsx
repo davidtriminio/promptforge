@@ -8,6 +8,7 @@ import AppLayout from "../components/layout/AppLayout.jsx";
 import DashboardPage from "../pages/DashboardPage.jsx";
 import PromptsPage from "../pages/PromptsPage.jsx";
 import CategoriesPage from "@/pages/CategoriesPage.jsx";
+import DemoAccessPage from "@/pages/DemoAccessPage.jsx";
 
 const AppRouter = () => {
     return (
@@ -16,6 +17,7 @@ const AppRouter = () => {
                 <Route element={<GuestRoute/>}>
                     <Route path="/login" element={<LoginPage/>}/>
                     <Route path="/register" element={<RegisterPage/>}/>
+                    <Route path="/demo" element={<DemoAccessPage/>}/>
                 </Route>
 
                 <Route element={<ProtectedRoute/>}>

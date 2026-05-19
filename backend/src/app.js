@@ -157,6 +157,8 @@ app.use("/api/auth", csrfProtection, authRoutes)
 app.use("/api/prompts",csrfProtection, promptRoutes)
 app.use("/api/categories", csrfProtection, categoryRoutes)
 app.use("/api/dashboard", dashboardRoutes)
+app.use("/api/auth/demo-login", authSpeedLimiter)
+app.use("/api/auth/demo-login", authLimiter)
 
 app.use((err, req, res, next) => {
     console.error("[APP ERROR]", err)
