@@ -1,6 +1,5 @@
 ﻿import User from "../models/User.model.js";
 import bcrypt from "bcryptjs"
-import generateToken from "../utils/generateToken.js";
 import {ENV} from "../config/ENV.js";
 import generateRefreshToken from "../utils/generateRefreshToken.js";
 import generateAccessToken from "../utils/generateAccessToken.js";
@@ -14,7 +13,8 @@ const sanitizeUser = (user) => ({
     id: user._id,
     name: user.name,
     email: user.email,
-    role: user.role
+    role: user.role,
+    isDemo: user.isDemo
 })
 
 const buildCookieOptions = (maxAge) => ({

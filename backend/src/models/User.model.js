@@ -30,6 +30,11 @@ const userSchema = new mongoose.Schema({
             enum: ["user", "admin"],
             default: "user"
         },
+        isDemo: {
+            type: Boolean,
+            default: false,
+            index: true
+        },
         refreshTokenHash: {
             type: String,
             default: null
